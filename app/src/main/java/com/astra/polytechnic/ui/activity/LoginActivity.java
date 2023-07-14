@@ -1,87 +1,121 @@
 package com.astra.polytechnic.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import com.astra.polytechnic.model.*;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.astra.polytechnic.R;
-import com.astra.polytechnic.repository.msMemberRepo;
-import com.astra.polytechnic.ui.fragment.BookDetailFragment;
-import com.astra.polytechnic.ui.fragment.HomeFragment;
-import com.astra.polytechnic.ui.fragment.HomeMemberFragment;
-import com.astra.polytechnic.ui.fragment.RequestDetailFragment;
+import com.astra.polytechnic.ViewModel.UserViewModel;
+import com.astra.polytechnic.helper.ValidationHelper;
+import com.astra.polytechnic.model.LoginModel;
+import com.astra.polytechnic.model.response.LoginResponse;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ImageView mbtnSignIn,mbtnSignUp,mbtnGuest;
-    private EditText mNim,mPassword;
-    private msMemberRepo mMsMemberRepo;
-    private msMember mMember;
+    private static final String TAG = "LoginActivity";
+
+    private ImageView mbtnSignIn;
+    private ImageView mbtnSignUp;
+    private ImageView mbtnGuest;
+    private EditText mNim;
+    private EditText mPassword;
+    //private msMemberRepo mMsMemberRepo;
+    private UserViewModel mUserViewModel;
+    private LoginModel mLoginModel;
+    String id_role;
+    public boolean validate(View v) {
+        boolean emailValidation = ValidationHelper.requiredTextInputValidation(mNim);
+        boolean passwordValidation = ValidationHelper.requiredTextInputValidation(mPassword);
+
+        return emailValidation && passwordValidation;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        SharedPreferences pref;
         mbtnSignIn = findViewById(R.id.btnSignIn);
         mbtnSignUp = findViewById(R.id.btnSignUp);
         mbtnGuest = findViewById(R.id.btnGuest);
         mNim =(EditText)findViewById(R.id.input_username_login);
         mPassword=(EditText) findViewById(R.id.input_password_login);
+        pref = getSharedPreferences("nomor",MODE_PRIVATE);
 
-        mbtnSignIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        if(pref.contains("nomor")&& pref.contains("password")){
+            Intent intent = new Intent(LoginActivity.this,DashboardActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
-                if (TextUtils.isEmpty(mNim.getText().toString())){
-                    Toast.makeText(LoginActivity.this,"Please enter email",Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                // If email is empty, return
-                if (TextUtils.isEmpty(mPassword.getText().toString())){
-                    Toast.makeText(LoginActivity.this,"Please enter password",Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-
-                mMsMemberRepo = msMemberRepo.get();
-                String username=mNim.getText().toString();
+            mbtnSignIn.setOnClickListener(view -> {
+                String nim=mNim.getText().toString();
                 String password=mPassword.getText().toString();
-                mMsMemberRepo.Login(username,password);
-                Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+
+                mUserViewModel.login(nim,password).observe(this, new Observer<LoginResponse>() {
+                    @Override
+                    public void onChanged(LoginResponse loginResponse) {
+                        if(loginResponse != null){
+                            if (loginResponse.getStatus() == 200) {
+                                // Set Shared Preference
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("email", loginResponse.getUser().getEmail());
+                                editor.putString("nomor",loginResponse.getUser().getNomor());
+                                editor.putString("nama",loginResponse.getUser().getNama());
+                                editor.putString("id_role",loginResponse.getUser().getId_role());
+                                editor.putString("id_prodi",loginResponse.getUser().getId_prodi());
+                                editor.apply();
+
+                                id_role = loginResponse.getUser().getId_role();
+                                CheckRole();
+                            } else{
+                                Toast.makeText(LoginActivity.this, "Data Tidak Ditemukan", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Data Tidak Ditemukan", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+            });
+            mbtnSignUp.setOnClickListener(v -> {
+                Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
-            }
-        });
-        mbtnSignUp.setOnClickListener(this);
-        mbtnGuest.setOnClickListener(this);
+            });
+        }
     }
 
+    public void CheckRole(){
+        if (id_role.equals("ROL06")) {
+            Intent intent = new Intent(LoginActivity.this, DashboardMemberActivity.class);
+            startActivity(intent);
+            finish();
+        } else if (id_role.equals("ROL01")) {
+            Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnSignUp:
-                startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
+                //startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
                 break;
             case R.id.btnGuest:
-                getSupportFragmentManager().beginTransaction()
-                        .setReorderingAllowed(false)
-                        .replace(R.id.fragment_try, RequestDetailFragment.class, null)
-                        .commit();
-//                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
+                //startActivity(new Intent(LoginActivity.this,DashboardActivity.class));
                 break;
         }
-    }
-
-    private void checkLogin(Context context){
-
     }
 }

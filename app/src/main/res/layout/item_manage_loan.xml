@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/item_manage_loan"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_margin="3dp"
+        app:cardElevation="3dp"
+        app:cardCornerRadius="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="125dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView14"
+                android:layout_width="70dp"
+                android:layout_height="90dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/borrow_book_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout2"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:orientation="vertical"
+                android:padding="5dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView14"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!-- Title, secondary and supporting text -->
+                <!-- Max Char is 16 -->
+                <TextView
+                    android:id="@+id/cv_name"
+                    android:layout_width="100dp"
+                    android:layout_height="30dp"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:text="M DANISH LUTHFIW"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="14sp"
+                    android:autoSizeMaxTextSize="17sp"
+                    android:paddingBottom="4dp"/>
+
+                <TextView
+                    android:id="@+id/cv_nim"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textSize="13sp"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?android:attr/textColorSecondary"
+                    tools:text="0320210067"
+                    android:paddingBottom="2dp"/>
+
+                <TextView
+                    android:id="@+id/cv_booking_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:textSize="13sp"
+                    android:textAppearance="?attr/textAppearanceBody2"
+                    android:textColor="?android:attr/textColorSecondary"
+                    tools:text="20 Juni 2023" />
+            </LinearLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:layout_marginEnd="16dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/materialCardView"
+                    android:layout_width="120dp"
+                    android:layout_height="25dp"
+                    app:cardBackgroundColor="#f69110"
+                    app:cardCornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/loan_status"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/inter_variablefont_slnt_wght"
+                        android:text="Unconfirmed"
+                        android:textColor="@color/white"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+                </com.google.android.material.card.MaterialCardView>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/materialCardView">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Book ID :"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+
+                    <TextView
+                        android:id="@+id/book_id_loan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="3dp"
+                        android:text="1231238"
+                        android:textColor="@color/black"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</RelativeLayout>

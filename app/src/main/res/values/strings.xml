@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Digital Library AstraTech</string>
+    <string name="username_login_signup">Username</string>
+    <string name="pass_login_signup">Password</string>
+    <string name="pass_desc">At least one Uppercase, one number, one symbol</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="username">Email</string>
+    <string name="book_title">Book Title</string>
+    <string name="book_author">Author</string>
+    <string name="book_publisher">Publisher</string>
+    <string name="book_author_detail">Publication Year</string>
+</resources>

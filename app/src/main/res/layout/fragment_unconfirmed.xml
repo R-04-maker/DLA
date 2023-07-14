@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_unconfirmed_booking"
+    tools:context=".ui.fragment.UnconfirmedFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:paddingHorizontal="20dp"
+        android:id="@+id/rv_unconfirmed_booking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal" />
+
+</FrameLayout>

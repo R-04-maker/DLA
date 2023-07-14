@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="1dp">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="120dp"
+        android:layout_height="200dp"
+        app:cardMaxElevation="2dp"
+        android:layout_centerInParent="true">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/cover_book_newest"
+                android:layout_width="120dp"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/no_cover_book"/>
+            <TextView
+                android:id="@+id/title_book_newest"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:text="Sistem Informasi"
+                android:layout_below="@+id/cover_book_newest"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:textColor="#000"
+                android:fontFamily="@font/inter_variablefont_slnt_wght"
+                android:autoSizeTextType="uniform"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeMaxTextSize="12sp"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

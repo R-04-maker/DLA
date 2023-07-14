@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/round_back" /> <!-- Tambahkan solid dengan warna transparan jika diperlukan -->
+    <corners android:radius="100dp" /> <!-- Atur radius sesuai dengan tingkat lengkungan yang diinginkan -->
+</shape>

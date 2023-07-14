@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="RecyclerViewDivider">
+        <item name="android:background">@drawable/divider</item>
+    </style>
+</resources>

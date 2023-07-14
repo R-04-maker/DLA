@@ -45,7 +45,7 @@ public class HomeFragment extends Fragment {
 
     // Components
     private RecyclerView mRvNewestBooks, mRvPopularBooks;
-    private TextView mNewestSeeAll, mPopularSeeAll, mBookCount, mVisitorCount, mHistoryCount;
+    private TextView mNewestSeeAll, mPopularSeeAll, mBookCount, mVisitorCount, mHistoryCount,mLoginName;
     private LinearLayout mScrollView;
     private ImageSlider mImageSlider;
     private List<SlideModel> mSlideModelList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
     private KoleksiViewModel mNewestViewModel, mNewestColectionVM,mDashboardVM;
 //    private KoleksiRepository mKoleksiRepository;
     private List<Koleksi> mNewestList, mCollectionList;
-
+    SharedPreferences pref;
     // Adapter
     private NewestAdapter mNewestAdapter = new NewestAdapter(Collections.emptyList());
     private CollectionAdapter mPopularAdapater = new CollectionAdapter(Collections.emptyList());
@@ -78,6 +78,10 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
+
+        pref= getActivity().getSharedPreferences("nomor", getActivity().MODE_PRIVATE);
+        mLoginName = view.findViewById(R.id.login_name);
+        mLoginName.setText(pref.getString("nama", null));
 
         mScrollView = view.findViewById(R.id.scroll);
 

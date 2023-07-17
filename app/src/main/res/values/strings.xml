@@ -11,4 +11,6 @@
     <string name="book_publisher">Publisher</string>
     <string name="book_author_detail">Publication Year</string>
     <string name="select">Select Prodi</string>
+    <string name="sorry_there_are_no_results">Sorry, there are no results.</string>
+    <string name="oopss_no_data_found">Oopss! No data found.</string>
 </resources>

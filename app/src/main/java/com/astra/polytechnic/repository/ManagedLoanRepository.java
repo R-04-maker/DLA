@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.astra.polytechnic.api.ApiUtils;
 import com.astra.polytechnic.dao.ManagedLoanDao;
@@ -11,6 +12,7 @@ import com.astra.polytechnic.model.Booking;
 import com.astra.polytechnic.model.Koleksi;
 import com.astra.polytechnic.model.response.BookingResponse;
 import com.astra.polytechnic.model.response.ListKoleksiResponse;
+import com.astra.polytechnic.model.response.ObjectResponse;
 import com.astra.polytechnic.service.ManagedLoanService;
 
 import java.util.List;
@@ -53,12 +55,36 @@ public class ManagedLoanRepository {
 
                 }
             }
-
             @Override
             public void onFailure(Call<BookingResponse> call, Throwable t) {
                 Log.e(TAG, "getUnconfirmedBook.onFailure: " + t.getMessage());
             }
         });
         return mManagedLoanDao.getListBooking();
+    }
+    public LiveData<List<Object[]>> getDetailBooking(int id){
+        Log.i(TAG, "getDetailBooking() called");
+
+        Call<ObjectResponse> call = mManagedLoanService.getDetailBooking(id);
+        call.enqueue(new Callback<ObjectResponse>() {
+            @Override
+            public void onResponse(Call<ObjectResponse>call, Response<ObjectResponse> response) {
+                ObjectResponse objectResponse = response.body();
+                if(objectResponse.getResult() == 200){
+                    mManagedLoanDao.setDetailBooking(objectResponse.getData());
+                    mManagedLoanDao.setBooksBooking(objectResponse.getListdata());
+                    Log.d(TAG, "onResponse: getDetailBooking.onResponse() Called" + objectResponse.getListdata());
+                }
+            }
+            @Override
+            public void onFailure(Call<ObjectResponse> call, Throwable t) {
+                Log.e(TAG, "getDetailBooking.onFailure: " + t.getMessage());
+            }
+        });
+        return mManagedLoanDao.getDetailBooking();
+    }
+    public LiveData<List<Object[]>> getDetailBooking(){
+        Log.d(TAG, "onResponse: getDetailBooking2.onResponse() Called");
+        return mManagedLoanDao.getBooksBooking();
     }
 }

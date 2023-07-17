@@ -3,6 +3,7 @@ package com.astra.polytechnic.ui.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -85,7 +86,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         } else {
                             Toast.makeText(LoginActivity.this, "Data Tidak Ditemukan", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
             });
@@ -93,10 +93,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(LoginActivity.this, SignUpActivity.class);
                 startActivity(intent);
             });
+            mbtnGuest.setOnClickListener(v -> {
+                Intent intent = new Intent(LoginActivity.this, LoanDetailActivity.class);
+                startActivity(intent);
+            });
         }
     }
 
     public void CheckRole(){
+        Log.d(TAG, "CheckRole: " + id_role);
         if (id_role.equals("ROL06")) {
             Intent intent = new Intent(LoginActivity.this, DashboardMemberActivity.class);
             startActivity(intent);
@@ -114,7 +119,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 //startActivity(new Intent(LoginActivity.this,SignUpActivity.class));
                 break;
             case R.id.btnGuest:
-                //startActivity(new Intent(LoginActivity.this,DashboardActivity.class));
+//                startActivity(new Intent(LoginActivity.this,LoanDetailActivity.class));
                 break;
         }
     }

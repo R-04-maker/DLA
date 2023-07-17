@@ -50,14 +50,11 @@ public class HomeFragment extends Fragment {
     private ImageSlider mImageSlider;
     private List<SlideModel> mSlideModelList = new ArrayList<>();
 
-
-    // Get Login Info
-    SharedPreferences mPreferences;
-
     // Data
     private KoleksiViewModel mNewestViewModel, mNewestColectionVM,mDashboardVM;
 //    private KoleksiRepository mKoleksiRepository;
     private List<Koleksi> mNewestList, mCollectionList;
+    // Get Login Info
     SharedPreferences pref;
     // Adapter
     private NewestAdapter mNewestAdapter = new NewestAdapter(Collections.emptyList());

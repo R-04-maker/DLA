@@ -10,6 +10,7 @@ import com.astra.polytechnic.api.ApiUtils;
 import com.astra.polytechnic.dao.KoleksiDao;
 import com.astra.polytechnic.model.Dashboard;
 import com.astra.polytechnic.model.Koleksi;
+import com.astra.polytechnic.model.Prodi;
 import com.astra.polytechnic.model.response.DashboardResponse;
 import com.astra.polytechnic.model.response.ListKoleksiResponse;
 import com.astra.polytechnic.service.KoleksiService;
@@ -51,6 +52,8 @@ public class KoleksiRepository {
                 ListKoleksiResponse listKoleksiResponse = response.body();
                 if(listKoleksiResponse.getResult() == 200){
                     mKoleksiDao.setListKoleksi(listKoleksiResponse.getData());
+//                    List<Koleksi> obj = listKoleksiResponse.getData();
+//                    Prodi prodi = obj.get(0).getIdProdi();
                     Log.d(TAG, "getKoleksiNewest.onResponse() called");
                 }
             }

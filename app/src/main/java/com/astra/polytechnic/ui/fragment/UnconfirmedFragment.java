@@ -1,5 +1,6 @@
 package com.astra.polytechnic.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import com.astra.polytechnic.helper.DLAHelper;
 import com.astra.polytechnic.helper.DateConverter;
 import com.astra.polytechnic.helper.DateType;
 import com.astra.polytechnic.model.Booking;
+import com.astra.polytechnic.ui.activity.LoanDetailActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -36,11 +38,11 @@ import java.util.List;
 public class UnconfirmedFragment extends Fragment {
     private static final String TAG = "UnconfirmedFragment";
     private RecyclerView mRvUnconfirmedLoan;
+    private View mEmptyData;
     private ManagedLoanViewModel mManagedLoanVM;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private List<Booking> mBookingList;
     private BookingAdapter mBookingAdapter = new BookingAdapter(Collections.emptyList());
-
     public static UnconfirmedFragment newInstance() {
         return new UnconfirmedFragment();
     }
@@ -57,6 +59,7 @@ public class UnconfirmedFragment extends Fragment {
         mRvUnconfirmedLoan = view.findViewById(R.id.rv_unconfirmed_booking);
         mRvUnconfirmedLoan.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvUnconfirmedLoan.setAdapter(mBookingAdapter);
+        mEmptyData = view.findViewById(R.id.layout_empty_data);
 
         return view;
     }
@@ -71,6 +74,9 @@ public class UnconfirmedFragment extends Fragment {
         mBookingList = DLAHelper.getUnconBookList(bookingList);
         mBookingAdapter = new BookingAdapter(mBookingList);
         mRvUnconfirmedLoan.setAdapter(mBookingAdapter);
+
+        mEmptyData.setVisibility(mBookingList.size() == 0 ? View.VISIBLE : View.GONE);
+        mRvUnconfirmedLoan.setVisibility(mBookingList.size() == 0 ? View.GONE : View.VISIBLE);
     }
     private class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingHolder>{
         private List<Booking> mBookingList;
@@ -129,8 +135,12 @@ public class UnconfirmedFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), mBooking.getIdbooking(), Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "onClick: " + mBooking.getIdbooking());
+//                Toast.makeText(getContext(), mBooking.getIdbooking(), Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "onClick: " + mBooking.getIdbooking());
+                Intent intent  = new Intent(getActivity(), LoanDetailActivity.class);
+                intent.putExtra("id_booking", mBooking.getIdbooking());
+                startActivity(intent);
+
             }
         }
     }

@@ -18,15 +18,15 @@ public class Koleksi {
 
     @SerializedName("id_kategori")
     @Expose
-    private String idKategori;
+    private Kategori idKategori;
 
     @SerializedName("id_rak")
     @Expose
-    private String idRak;
+    private Rak idRak;
 
     @SerializedName("id_prodi")
     @Expose
-    private String idProdi;
+    private Prodi idProdi;
 
     @SerializedName("gambar")
     @Expose
@@ -75,7 +75,7 @@ public class Koleksi {
     public Koleksi() {
     }
 
-    public Koleksi(String idKoleksi, String nama, String deskripsi, String idKategori, String idRak, String idProdi, String gambar, String tautan, int status, int statuspinjam, int bisapinjam, String creaby, String modiby, String modidate, String tahunTerbit, String penyumbang) {
+    public Koleksi(String idKoleksi, String nama, String deskripsi, Kategori idKategori, Rak idRak, Prodi idProdi, String gambar, String tautan, int status, int statuspinjam, int bisapinjam, String creaby, String modiby, String modidate, String tahunTerbit, String penyumbang) {
         this.idKoleksi = idKoleksi;
         this.nama = nama;
         this.deskripsi = deskripsi;
@@ -118,27 +118,27 @@ public class Koleksi {
         this.deskripsi = deskripsi;
     }
 
-    public String getIdKategori() {
+    public Kategori getIdKategori() {
         return idKategori;
     }
 
-    public void setIdKategori(String idKategori) {
+    public void setIdKategori(Kategori idKategori) {
         this.idKategori = idKategori;
     }
 
-    public String getIdRak() {
+    public Rak getIdRak() {
         return idRak;
     }
 
-    public void setIdRak(String idRak) {
+    public void setIdRak(Rak idRak) {
         this.idRak = idRak;
     }
 
-    public String getIdProdi() {
+    public Prodi getIdProdi() {
         return idProdi;
     }
 
-    public void setIdProdi(String idProdi) {
+    public void setIdProdi(Prodi idProdi) {
         this.idProdi = idProdi;
     }
 
@@ -192,6 +192,14 @@ public class Koleksi {
 
     public String getModiby() {
         return modiby;
+    }
+
+    public String getCreadate() {
+        return creadate;
+    }
+
+    public void setCreadate(String creadate) {
+        this.creadate = creadate;
     }
 
     public void setModiby(String modiby) {

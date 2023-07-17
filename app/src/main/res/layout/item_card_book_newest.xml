@@ -19,7 +19,7 @@
                 android:layout_height="150dp"
                 android:scaleType="centerCrop"
                 android:layout_centerHorizontal="true"
-                android:src="@drawable/no_cover_book"/>
+                android:src="@color/cardview_dark_background"/>
             <TextView
                 android:id="@+id/title_book_newest"
                 android:layout_width="100dp"

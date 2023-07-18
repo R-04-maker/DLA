@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/bg_dashboard"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/imageView11"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:src="@drawable/bg_settings"
+        android:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/imageView16"
+        android:layout_width="match_parent"
+        android:layout_height="550dp"
+        android:layout_marginTop="160dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/card_settings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView11"
+        app:srcCompat="@drawable/card_settings"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_arrow_back_24" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="105dp"
+        android:layout_marginTop="80dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="Book Loan"
+            android:layout_marginBottom="9dp"
+            android:fontFamily="@font/inter_bold"
+            android:textColor="@color/white"
+            android:textSize="30dp" />
+
+        <ImageView
+            android:id="@+id/imageView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_book" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="185dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/ediTextNIM"
+                android:layout_width="175dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:paddingLeft="5dp"
+                android:drawableLeft="@drawable/baseline_email_24"
+                android:drawableTint="@color/tab_layout_on"
+                android:inputType="number"
+                android:hint="NIM"
+                android:maxLength="10"
+                android:background="@drawable/background" />
+
+            <Spinner
+                android:id="@+id/ediTextProdi"
+                android:layout_width="175dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:paddingLeft="5dp"
+                android:hint="Program Study"
+                android:background="@drawable/background" />
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/ediTextName"
+            android:layout_width="359dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:paddingLeft="5dp"
+            android:inputType="text"
+            android:drawableLeft="@drawable/baseline_person_24"
+            android:drawableTint="@color/tab_layout_on"
+            android:hint="Name"
+            android:background="@drawable/background" />
+
+        <EditText
+            android:id="@+id/ediTextPhoneNumber"
+            android:layout_width="359dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:paddingLeft="5dp"
+            android:drawableLeft="@drawable/baseline_local_phone_24"
+            android:drawableTint="@color/tab_layout_on"
+            android:hint="Phone Number"
+            android:inputType="number"
+            android:maxLength="13"
+            android:background="@drawable/background" />
+        <EditText
+            android:id="@+id/ediTextDate"
+            android:layout_width="359dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="5dp"
+            android:paddingLeft="5dp"
+            android:drawableLeft="@drawable/baseline_calendar_today_24"
+            android:drawableTint="@color/tab_layout_on"
+            android:hint="Return Date"
+            android:background="@drawable/background" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_cart"
+            android:layout_width="359dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_book_loan"
+            android:paddingLeft="30dp"
+            android:paddingTop="45dp"
+            android:paddingRight="30dp"
+            android:paddingBottom="45dp"
+            android:scrollbars="horizontal" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/navbar_loan"
+        tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="-5dp"
+        android:layout_marginBottom="-8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageButton"
+        app:srcCompat="@drawable/btn_book"
+        tools:ignore="MissingConstraints" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,7 @@ public class LoanFragment extends Fragment {
     private int selectedTab = 1;
     private LinearLayout unconfirmedLayout;
     private LinearLayout confirmedLayout;
-    private LinearLayout finishedLayout;
+    private LinearLayout borrowedLayout;
 
     private TextView unconfirmedTxt;
     private TextView confirmedTxt;
@@ -67,11 +67,11 @@ public class LoanFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_loan, container, false);
         unconfirmedLayout = view.findViewById(R.id.unconfirmedLayout);
         confirmedLayout = view.findViewById(R.id.confirmedLayout);
-        finishedLayout = view.findViewById(R.id.finishedLayout);
+        borrowedLayout = view.findViewById(R.id.borrowedLayout);
 
         unconfirmedTxt = view.findViewById(R.id.unconfirmedTxt);
         confirmedTxt = view.findViewById(R.id.confirmedTxt);
-        finishedTxt = view.findViewById(R.id.finishedTxt);
+        finishedTxt = view.findViewById(R.id.borrowedTxt);
 
         getChildFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
@@ -88,7 +88,7 @@ public class LoanFragment extends Fragment {
                             .commit();
 
                     confirmedLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    finishedLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    borrowedLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
                     unconfirmedLayout.setBackgroundResource(R.drawable.round_back_home);
                     unconfirmedTxt.setVisibility(View.VISIBLE);
@@ -117,7 +117,7 @@ public class LoanFragment extends Fragment {
                             .commit();
 
                     unconfirmedLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-                    finishedLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                    borrowedLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
                     confirmedLayout.setBackgroundResource(R.drawable.round_back_home);
                     confirmedTxt.setVisibility(View.VISIBLE);
@@ -136,19 +136,19 @@ public class LoanFragment extends Fragment {
             }
         });
 
-        finishedLayout.setOnClickListener(new View.OnClickListener() {
+        borrowedLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(selectedTab != 3){
                     getChildFragmentManager().beginTransaction()
                             .setReorderingAllowed(true)
-                            .replace(R.id.fragment_loan_tab, FinishedFragment.class, null)
+                            .replace(R.id.fragment_loan_tab, BorrowedFragment.class, null)
                             .commit();
 
                     unconfirmedLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                     confirmedLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
-                    finishedLayout.setBackgroundResource(R.drawable.round_back_home);
+                    borrowedLayout.setBackgroundResource(R.drawable.round_back_home);
                     finishedTxt.setVisibility(View.VISIBLE);
 
                     unconfirmedTxt.setTextColor(getResources().getColor(R.color.white));
@@ -158,7 +158,7 @@ public class LoanFragment extends Fragment {
                     ScaleAnimation scaleAnimation = new ScaleAnimation(0.8f, 1.0f, 1f, 1f, Animation.RELATIVE_TO_SELF, 0.0f,  Animation.RELATIVE_TO_SELF, 0.0f);
                     scaleAnimation.setDuration(200);
                     scaleAnimation.setFillAfter(true);
-                    finishedLayout.startAnimation(scaleAnimation);
+                    borrowedLayout.startAnimation(scaleAnimation);
 
                     selectedTab = 3;
                 }

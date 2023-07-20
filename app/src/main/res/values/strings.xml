@@ -13,4 +13,7 @@
     <string name="select">Select Prodi</string>
     <string name="sorry_there_are_no_results">Sorry, there are no results.</string>
     <string name="oopss_no_data_found">Oopss! No data found.</string>
+    <string name="konfirmasi_tolak">Apakah anda yakin menolak pengajuan ?</string>
+    <string name="konfirmasi_title">Konfirmasi</string>
+    <string name="konfirmasi_terima">Apakah anda yakin menerima pengajuan ?</string>
 </resources>

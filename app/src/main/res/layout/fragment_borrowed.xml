@@ -3,19 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.ConfirmedFragment">
+    tools:context=".ui.fragment.BorrowedFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.recyclerview.widget.RecyclerView
         android:paddingHorizontal="20dp"
-        android:id="@+id/rv_confirmed_booking"
+        android:id="@+id/rv_finished_booking"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal" />
+
     <include
-        android:id="@+id/layout_empty_data_con"
+        android:id="@+id/layout_empty_data_fin"
         layout="@layout/layout_empty_data"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </FrameLayout>

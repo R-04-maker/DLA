@@ -133,7 +133,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/finishedLayout"
+            android:id="@+id/borrowedLayout"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_weight="1"
@@ -144,10 +144,10 @@
             android:paddingEnd="5dp">
 
             <TextView
-                android:id="@+id/finishedTxt"
+                android:id="@+id/borrowedTxt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Finished"
+                android:text="Borrowed"
                 android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold"

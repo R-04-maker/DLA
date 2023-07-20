@@ -11,4 +11,9 @@
     <color name="navbar_on">#2761ff</color>
     <color name="round_back">#e9efff</color>
     <color name="tab_layout_on">#0F4C75</color>
+    <color name="card_ditolak">#cc4f43</color>
+    <color name="card_diterima">#85ba5f</color>
+    <color name="card_dipinjam">#397ccb</color>
+    <color name="card_pengajuan">#f69110</color>
+    <color name="card_selesai">#323844</color>
 </resources>

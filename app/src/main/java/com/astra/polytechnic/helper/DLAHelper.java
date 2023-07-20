@@ -18,7 +18,7 @@ public class DLAHelper {
     public static List<Koleksi> getPopularBooks(List<Koleksi> koleksis){
         return koleksis == null ? Collections.emptyList() : koleksis.stream().limit(10).collect(Collectors.toList());
     }
-    public static List<Booking> getUnconBookList(List<Booking> bookingList){
+    public static List<Object[]> getUnconBookList(List<Object[]> bookingList){
         return bookingList == null ? Collections.emptyList() : bookingList.stream().collect(Collectors.toList());
     }
     public static List<Object[]> getBookDetailList(List<Object[]> booklistdetail){

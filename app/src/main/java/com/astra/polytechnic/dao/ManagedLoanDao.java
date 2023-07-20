@@ -11,15 +11,15 @@ import java.util.List;
 
 public class ManagedLoanDao {
     private static final String TAG = "ManagedLoanDao";
-    private MutableLiveData<List<Booking>> booking = new MutableLiveData<>();
+    private MutableLiveData<List<Object[]>> booking = new MutableLiveData<>();
     private MutableLiveData<List<Object[]>> detailProfileBooking = new MutableLiveData<>();
     private MutableLiveData<List<Object[]>> detailBooksBooking = new MutableLiveData<>();
 
 
-    public LiveData<List<Booking>> getListBooking(){
+    public LiveData<List<Object[]>> getListBooking(){
         return booking;
     }
-    public void setListBooking(List<Booking> bookingList){
+    public void setListBooking(List<Object[]> bookingList){
         this.booking.setValue(bookingList);
     }
     public LiveData<List<Object[]>> getDetailBooking(){

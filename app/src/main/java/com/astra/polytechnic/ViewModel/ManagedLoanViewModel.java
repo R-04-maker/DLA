@@ -9,6 +9,8 @@ import com.astra.polytechnic.repository.ManagedLoanRepository;
 
 import java.util.List;
 
+import okhttp3.MultipartBody;
+
 public class ManagedLoanViewModel extends ViewModel {
     private static final String TAG = "ManagedLoanViewModel";
     private ManagedLoanRepository mManagedLoanRepository;
@@ -16,8 +18,14 @@ public class ManagedLoanViewModel extends ViewModel {
     public ManagedLoanViewModel(){
         mManagedLoanRepository = ManagedLoanRepository.get();
     }
-    public LiveData<List<Booking>> getUnconfirmedBooking(){
+    public LiveData<List<Object[]>> getUnconfirmedBooking(){
         return mManagedLoanRepository.getUnconfirmedBook();
+    }
+    public LiveData<List<Object[]>> getConfirmedBooking(){
+        return mManagedLoanRepository.getConfirmedBook();
+    }
+    public LiveData<List<Object[]>> getBorrowedBooking(){
+        return mManagedLoanRepository.getBorrowedBooking();
     }
     public LiveData<List<Object[]>> getDetailBooking(int id){
         return mManagedLoanRepository.getDetailBooking(id);
@@ -25,4 +33,10 @@ public class ManagedLoanViewModel extends ViewModel {
     public LiveData<List<Object[]>> getBookDetailBooking(){
         return mManagedLoanRepository.getDetailBooking();
     }
-}
+    public LiveData<String> updateDetailBooking(int idBooking, String status){
+        return mManagedLoanRepository.updateDetailBooking(idBooking, status);
+    }
+    public LiveData<String> updateGambar(MultipartBody.Part multipartBody){
+        return mManagedLoanRepository.updateGambar(multipartBody);
+    }
+ }

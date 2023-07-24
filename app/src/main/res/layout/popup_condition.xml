@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheetContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:background="@drawable/bottom_sheet_back"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/choosetxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="15dp"
+        android:text = "Terms and Conditions"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="10dp"
+        android:text = "I may update our Teams and Condations from time to time.Thus,you are advised to review this page periodicaly for any changes"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="10dp"
+        android:text = "These terms and condations are effective as of 2023-07-12"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="10dp"
+        android:text = "Contact Us "
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="10dp"
+        android:text = "If you have questions or suggestions about my Terms and Conditions, do not hesitate to contact me at library@astra.ac.id"
+        android:textColor="@color/black"
+        android:textSize="15sp"/>
+    <ImageView
+        android:id="@+id/btnClose"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:contentDescription="Sign Up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnClose"
+        app:srcCompat="@drawable/btn_close"
+        android:clickable="true" />
+
+</LinearLayout>
+
+
+
+

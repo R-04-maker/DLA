@@ -1,6 +1,7 @@
 package com.astra.polytechnic.ViewModel;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.astra.polytechnic.model.Dashboard;
@@ -31,7 +32,17 @@ public class KoleksiViewModel extends ViewModel {
     public LiveData<List<Object[]>> getDetailAtribut(int id){
         return mKoleksiRepository.getDetailAtribut(id);
     }
-    public LiveData<List<Object[]>> getKlasifikasiDetail(int id){
+    public LiveData<List<Object[]>> getKlasifikasiDetail(int id) {
         return mKoleksiRepository.getKlasifikasiDetail(id);
     }
+
+    public LiveData<List<Koleksi>> getBukuByNama(){
+        return mKoleksiRepository.getBukuByNama();
+    }
+
+    // nihh harus pake mutablelivedata biar dia bisa sambil dibaca datanya secara realtime sama activity
+    public MutableLiveData<List<Koleksi>> getBukuByNamaMt(){
+        return mKoleksiRepository.getBukuByNamaMt();
+    }
+
 }

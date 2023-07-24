@@ -19,6 +19,9 @@
             android:name=".ui.activity.LoanDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activity.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.BookDetailActivity"
             android:exported="false" />
         <activity

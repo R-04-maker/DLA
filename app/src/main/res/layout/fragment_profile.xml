@@ -46,6 +46,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/login_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="50dp"
@@ -81,6 +82,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/library"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="190dp"
@@ -106,6 +108,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/condi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="230dp"
@@ -129,6 +132,7 @@
             android:textSize="15dp" />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/privacy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="270dp"

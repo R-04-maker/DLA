@@ -13,13 +13,14 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/cover_book_newest"
                 android:layout_width="120dp"
                 android:layout_height="150dp"
-                android:scaleType="centerCrop"
                 android:layout_centerHorizontal="true"
-                android:src="@color/cardview_dark_background"/>
+                android:scaleType="centerCrop"
+                android:src="@color/cardview_dark_background" />
             <TextView
                 android:id="@+id/title_book_newest"
                 android:layout_width="100dp"

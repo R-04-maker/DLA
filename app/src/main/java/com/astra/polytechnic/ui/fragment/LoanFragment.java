@@ -1,5 +1,6 @@
 package com.astra.polytechnic.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,14 +10,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.astra.polytechnic.R;
+import com.astra.polytechnic.ui.activity.DashboardActivity;
+import com.astra.polytechnic.ui.activity.LoanDetailActivity;
+import com.astra.polytechnic.ui.activity.LoginActivity;
+import com.astra.polytechnic.ui.activity.SearchActivity;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link LoanFragment#newInstance} factory method to
+ * Use the {@link LoanFragment#} factory method to
  * create an instance of this fragment.
  */
 public class LoanFragment extends Fragment {
@@ -33,6 +39,8 @@ public class LoanFragment extends Fragment {
     private TextView unconfirmedTxt;
     private TextView confirmedTxt;
     private TextView finishedTxt;
+
+    private EditText searchTxt;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -69,14 +77,20 @@ public class LoanFragment extends Fragment {
         confirmedLayout = view.findViewById(R.id.confirmedLayout);
         finishedLayout = view.findViewById(R.id.finishedLayout);
 
-        unconfirmedTxt = view.findViewById(R.id.unconfirmedTxt);
-        confirmedTxt = view.findViewById(R.id.confirmedTxt);
-        finishedTxt = view.findViewById(R.id.finishedTxt);
+        searchTxt = view.findViewById(R.id.searchBtn);
+        searchTxt.setFocusable(false);
+        searchTxt.setClickable(false);
 
         getChildFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_loan_tab, UnconfirmedFragment.class, null)
                 .commit();
+
+
+        unconfirmedTxt = view.findViewById(R.id.unconfirmedTxt);
+        confirmedTxt = view.findViewById(R.id.confirmedTxt);
+        finishedTxt = view.findViewById(R.id.finishedTxt);
+
 
         unconfirmedLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,6 +176,14 @@ public class LoanFragment extends Fragment {
 
                     selectedTab = 3;
                 }
+            }
+        });
+
+        searchTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
             }
         });
 

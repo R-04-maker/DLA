@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="70dp">
+
+    <ImageView
+        android:layout_gravity="center_horizontal"
+        android:layout_width="400dp"
+        android:layout_height="360dp"
+        android:src="@drawable/onboarding_book" />
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:text="Pencarian tidak ditemukan"
+        android:textAlignment="center"
+        android:fontFamily="@font/inter_bold"
+        android:textColor="@color/black"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/inter_bold"
+        android:text=""
+        android:textSize="15sp"
+        android:textAlignment="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheetContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:background="@drawable/bottom_sheet_back"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/choosetxt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="15dp"
+        android:text = "Privacy Policy"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="10dp"
+        android:text = "Politeknik Astra Library built the Astra Library app as a Free app.This SERVICE is provider by Astra Library at no cost and is for use as is."
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="10dp"
+        android:text = "This page is used to inform visitors regarding my polices with the collection,use,and disclosure of Personal Information if anyone decided to use my Service."
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="10dp"
+        android:text = "Information Collection and Use "
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="For a better experience,while using our Service,I may require you to provider us with certain personaly identifiable information,including but not limited to internet acces,camera permission,notification permission,Google Authentication Personal Data:username,email address and photo profile,Analytics Goole Analytics for Firebase Personal Data:Application updates and Tracker. The information that i request will be retained on your device and is not collected by me in any way."
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding ="10dp"
+        android:text = "Contact Us "
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="If you have any questions or suggestions about my Privacy Policy,contact me at DigitalLibrary@astra.ac.id"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+    <ImageView
+        android:id="@+id/btnClose"
+        android:layout_width="380dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="12dp"
+        android:contentDescription="Sign Up"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnClose"
+        app:srcCompat="@drawable/btn_close"
+        android:clickable="true" />
+
+</LinearLayout>
+
+
+
+

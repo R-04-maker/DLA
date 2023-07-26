@@ -38,10 +38,13 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
+            android:id="@+id/back_fragment_to_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingRight="10dp"
-            android:src="@drawable/baseline_arrow_back_24" />
+            android:src="@drawable/baseline_arrow_back_24"
+            android:clickable="true"
+            android:onClick="onImageViewClicked"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -208,7 +211,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="3dp"
@@ -230,11 +233,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:src="@drawable/baseline_person_24"/>
+                    android:src="@drawable/baseline_person_24" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -375,7 +380,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         app:cardCornerRadius="20dp"
         app:cardElevation="3dp"
@@ -387,18 +392,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="8dp"
+            android:layout_marginVertical="5dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:src="@drawable/baseline_list_24"/>
+                    android:src="@drawable/baseline_list_24" />
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -413,108 +420,140 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_detail_loan"
-                android:layout_marginVertical="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="120dp">
+                android:layout_marginVertical="3dp" />
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/inter_variablefont_slnt_wght"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:text="Total Amount :"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:gravity="end"/>
-                <TextView
-                    android:id="@+id/amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_variablefont_slnt_wght"
-                    android:textStyle="bold"
-                    android:padding="5dp"
-                    android:text="2"
-                    android:textColor="@color/black"
-                    android:textSize="15sp"
-                    android:gravity="end"/>
-            </LinearLayout>-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:id="@+id/image_result"
                     android:layout_width="100dp"
-                    android:layout_height="50dp"/>
+                    android:layout_height="50dp"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/try_textview"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
+                    android:text="tes"
                     android:textSize="10dp"
-                    android:text="tes"/>
+                    android:visibility="gone" />
             </LinearLayout>
-
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3">
+
+        <TextView
+            android:id="@+id/txtFotoSebelum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="Foto Sebelum Peminjaman"
+            android:textColor="#3a83a1"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/icon_ada"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="32dp"
+            android:src="@drawable/baseline_check_circle_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/txtFotoSetelah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="Foto Setelah Peminjaman"
+            android:textColor="#3a83a1"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/icon_ada_setelah"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="32dp"
+            android:src="@drawable/baseline_check_circle_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/btn_camera"
-            android:layout_width="200dp"
+            android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:layout_marginHorizontal="5dp"
-            android:fontFamily="@font/inter_variablefont_slnt_wght"
-            android:textStyle="bold"
             android:backgroundTint="@color/tab_layout_on"
-            android:textColor="@color/white"
             android:drawableLeft="@drawable/baseline_camera_alt_24"
+            android:fontFamily="@font/inter_variablefont_slnt_wght"
+            android:padding="5dp"
             android:text="Take Picture"
-            app:srcCompat="@drawable/baseline_camera_alt_24"
-            android:visibility="gone"/>
+            android:textSize="12dp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:visibility="visible"
+            app:srcCompat="@drawable/baseline_camera_alt_24" />
+
         <Button
             android:id="@+id/update_gambar"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:layout_marginHorizontal="5dp"
+            android:padding="5dp"
             android:text="Upload"
             android:textColor="@color/black"
-            android:visibility="visible"/>
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/btn_tolak"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:layout_marginHorizontal="5dp"
+            android:padding="5dp"
             android:text="Tolak"
             android:textColor="@color/black"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btn_terima"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:layout_marginHorizontal="5dp"
-            android:text="Terima"
             android:backgroundTint="@color/tab_layout_on"
+            android:padding="5dp"
+            android:text="Terima"
             android:textColor="@color/white"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

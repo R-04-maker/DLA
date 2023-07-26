@@ -3,7 +3,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="1dp">
+    android:layout_margin="1dp"
+    android:paddingHorizontal="1dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="120dp"
@@ -13,19 +14,26 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/cover_book_newest"
-                android:layout_width="120dp"
-                android:layout_height="150dp"
-                android:scaleType="centerCrop"
-                android:layout_centerHorizontal="true"
-                android:src="@color/cardview_dark_background"/>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_book_list"
+                android:layout_width="wrap_content"
+                app:cardCornerRadius="6dp"
+                app:cardMaxElevation="4dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/cover_book_newest"
+                    android:layout_width="115dp"
+                    android:layout_height="150dp"
+                    android:scaleType="centerCrop"
+                    android:layout_centerHorizontal="true"
+                    android:src="@color/cardview_dark_background"/>
+            </androidx.cardview.widget.CardView>
             <TextView
                 android:id="@+id/title_book_newest"
                 android:layout_width="100dp"
                 android:layout_height="30dp"
                 android:text="Sistem Informasi"
-                android:layout_below="@+id/cover_book_newest"
+                android:layout_below="@+id/card_book_list"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
                 android:layout_marginTop="5dp"

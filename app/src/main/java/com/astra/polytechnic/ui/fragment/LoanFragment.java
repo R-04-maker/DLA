@@ -1,5 +1,6 @@
 package com.astra.polytechnic.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,20 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.astra.polytechnic.R;
+import com.astra.polytechnic.ui.activity.SearchActivity;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link LoanFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class LoanFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private int selectedTab = 1;
@@ -30,34 +26,21 @@ public class LoanFragment extends Fragment {
     private LinearLayout confirmedLayout;
     private LinearLayout borrowedLayout;
 
-    private TextView unconfirmedTxt;
-    private TextView confirmedTxt;
-    private TextView finishedTxt;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private TextView unconfirmedTxt, confirmedTxt, finishedTxt;
+    private Button mBtnAllTransc;
 
     public LoanFragment() {
         // Required empty public constructor
     }
 
-    public static LoanFragment newInstance(String param1, String param2) {
+    public static LoanFragment newInstance() {
         LoanFragment fragment = new LoanFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -72,6 +55,8 @@ public class LoanFragment extends Fragment {
         unconfirmedTxt = view.findViewById(R.id.unconfirmedTxt);
         confirmedTxt = view.findViewById(R.id.confirmedTxt);
         finishedTxt = view.findViewById(R.id.borrowedTxt);
+
+        mBtnAllTransc = view.findViewById(R.id.btn_all_transaction);
 
         getChildFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
@@ -165,6 +150,13 @@ public class LoanFragment extends Fragment {
             }
         });
 
+        mBtnAllTransc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent  = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 }

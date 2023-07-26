@@ -63,9 +63,9 @@ public class ConfirmedFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getConfirmedData();
+        refresh();
     }
-    private void getConfirmedData(){
+    private void refresh(){
         mManagedLoanVM.getConfirmedBooking().observe(getViewLifecycleOwner(), this::updateUI);
     }
     private void updateUI(List<Object[]> bookingList){
@@ -122,17 +122,19 @@ public class ConfirmedFragment extends Fragment {
             }
             public void bind(Object[] booking){
                 mBooking = booking;
-                mEditableTitle = booking[9].toString();
-                if(mEditableTitle.length() > 15 ){
-                    mName.setText(mEditableTitle.substring(0,15));
-                }else {
-                    mName.setText(booking[9].toString());
+                mEditableTitle = booking[10] != null ? booking[10].toString() : "";
+
+                if (mEditableTitle.length() > 15) {
+                    mName.setText(mEditableTitle.substring(0, 15));
+                } else {
+                    mName.setText(mEditableTitle);
                 }
-                mNIM.setText(booking[9].toString());
-                String bookDate = DateConverter.fromDbDateTimeTo(DATE_FORMAT,booking[5].toString());
-                mDate.setText(bookDate.toString());
-                mStatus.setText(booking[3].toString());
-                mBookID.setText(booking[2].toString());
+
+                mNIM.setText(booking[11] != null ? booking[11].toString() : "");
+                String bookDate = booking[5] != null ? DateConverter.fromDbDateTimeTo(DATE_FORMAT, booking[5].toString()) : "";
+                mDate.setText(bookDate);
+                mStatus.setText(booking[3] != null ? booking[3].toString() : "");
+                mBookID.setText(booking[2] != null ? booking[2].toString() : "");
             }
 
             @Override
@@ -143,5 +145,17 @@ public class ConfirmedFragment extends Fragment {
 
             }
         }
+    }
+    @Override
+    public void onResume() {
+        Log.d(TAG, "onResume: Called");
+        super.onResume();
+        // Calling Data to Refresh Calling API
+        refresh();
+    }
+    @Override
+    public void onPause() {
+        Log.d(TAG, "onPause: Called");
+        super.onPause();
     }
 }

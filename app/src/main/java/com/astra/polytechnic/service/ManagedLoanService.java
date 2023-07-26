@@ -5,15 +5,11 @@ import com.astra.polytechnic.model.response.Responses;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
 public interface ManagedLoanService {
     @GET("getUnconfirmedBooking")
@@ -30,5 +26,5 @@ public interface ManagedLoanService {
     Call<Responses> updateGambar(@Query("encodedImage") String encodedImage); */
     @Multipart
     @POST("updateGambar")
-    Call<Responses> updateGambar(@Part MultipartBody.Part file);
+    Call<Responses> updateGambar(@Part MultipartBody.Part file, @Part("status") String status, @Part("id") int id);
 }

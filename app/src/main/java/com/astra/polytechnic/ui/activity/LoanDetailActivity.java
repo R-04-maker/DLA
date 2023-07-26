@@ -4,10 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
+import android.Manifest;
+
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,9 +19,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,21 +37,15 @@ import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.ManagedLoanViewModel;
 import com.astra.polytechnic.helper.DLAHelper;
 import com.astra.polytechnic.helper.DateConverter;
-import com.astra.polytechnic.model.Booking;
-import com.astra.polytechnic.ui.fragment.UnconfirmedFragment;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
-//import java.util.Base64;
 import android.util.Base64;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -63,14 +56,16 @@ public class LoanDetailActivity extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int PERMISSIONS_REQUEST_CAMERA = 2;
     private String mIdBooking,mStatusExtra;
-    private Button mBtnTolak, mBtnTerima, mBtnCamera, mUpdateGambar;
+    private Button mBtnTolak, mBtnTerima, mUpdateGambar,mBtnCamera;
+//    private ImageButton mBtnCamera;
     private MaterialCardView mMaterialCardView;
     private TextView mStatus,mBookingId,mBookingDate,mBookingReturn,mNIM,mName,mProdi,mHp,mTry;
+    private TextView mBtnModalFotoSebelum,mBtnModalFotoSetelah;
     private RecyclerView mRVDetailBooks;
     private ManagedLoanViewModel mManagedLoanViewModel;
     private List<Object[]> mDetailBooksList;
     private Bitmap imageBitmap;
-    private ImageView imageView;
+    private ImageView imageView,mBackButton;
 
     private BooksDetailAdapter mBooksDetailAdapter = new BooksDetailAdapter(Collections.emptyList());
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
@@ -95,6 +90,8 @@ public class LoanDetailActivity extends AppCompatActivity {
         mBtnTolak = findViewById(R.id.btn_tolak);
         mBtnCamera = findViewById(R.id.btn_camera);
 
+        mBackButton = findViewById(R.id.back_fragment_to_activity);
+
         mRVDetailBooks = findViewById(R.id.rv_detail_loan);
         mRVDetailBooks.setLayoutManager(new LinearLayoutManager(this));
         mRVDetailBooks.setAdapter(mBooksDetailAdapter);
@@ -102,6 +99,10 @@ public class LoanDetailActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image_result);
         mUpdateGambar = findViewById(R.id.update_gambar);
         mTry = findViewById(R.id.try_textview);
+        mTry.setVisibility(View.GONE);
+
+        mBtnModalFotoSebelum = findViewById(R.id.txtFotoSebelum);
+        mBtnModalFotoSetelah = findViewById(R.id.txtFotoSetelah);
 
         mManagedLoanViewModel = new ViewModelProvider(this).get(ManagedLoanViewModel.class);
 
@@ -129,11 +130,13 @@ public class LoanDetailActivity extends AppCompatActivity {
                 mBtnTerima.setVisibility(View.VISIBLE);
                 mBtnTolak.setVisibility(View.VISIBLE);
                 mBtnCamera.setVisibility(View.GONE);
+                mUpdateGambar.setVisibility(View.GONE);
             }else if(mStatusExtra.equals("Diterima")){
                 mMaterialCardView.setCardBackgroundColor(colorDiterima);
                 mBtnTolak.setVisibility(View.GONE);
                 mBtnTerima.setVisibility(View.GONE);
                 mBtnCamera.setVisibility(View.VISIBLE);
+                mUpdateGambar.setVisibility(View.VISIBLE);
             }else if(mStatusExtra.equals("Ditolak")){
                 mMaterialCardView.setCardBackgroundColor(colorDitolak);
             }else if(mStatusExtra.equals("Dipinjam")){
@@ -141,15 +144,17 @@ public class LoanDetailActivity extends AppCompatActivity {
                 mBtnTolak.setVisibility(View.GONE);
                 mBtnTerima.setVisibility(View.GONE);
                 mBtnCamera.setVisibility(View.VISIBLE);
+                mUpdateGambar.setVisibility(View.VISIBLE);
             }else if(mStatusExtra.equals("Selesai")){
                 mMaterialCardView.setCardBackgroundColor(colorSelesai);
                 mBtnTolak.setVisibility(View.GONE);
                 mBtnTerima.setVisibility(View.GONE);
+                mUpdateGambar.setVisibility(View.GONE);
+                mBtnCamera.setVisibility(View.GONE);
             }
         });
 
         mManagedLoanViewModel.getBookDetailBooking().observe(this,this::UpdateDetailBooks);
-
         mBtnTolak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,7 +190,6 @@ public class LoanDetailActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-
         mBtnTerima.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -221,48 +225,97 @@ public class LoanDetailActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-/*        PackageManager packageManager = getActivity().getPackageManager();
-        // Check apakah terdapat activity yg dapat menangani camera
-        final Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if(packageManager.resolveActivity(captureImage,PackageManager.MATCH_DEFAULT_ONLY) == null){
-            mBtnCamera.setEnabled(false);
-        }*/
         mBtnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: ");
+                // Memeriksa izin kamera sebelum memulai eksplsit intent camera
+                if(checkCameraPermission()){
                     dispatchTakePictureIntent();
-                // Membuat Intent untuk mengambil gambar menggunakan kamera
-//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-//                    // Membuat file tempat gambar akan disimpan
-//                    File photoFile = null;
-//                    try {
-//                        photoFile = createImageFile();
-//                    } catch (IOException ex) {
-//                        // Menghandle exception jika terjadi error saat membuat file
-//                        ex.printStackTrace();
-//                    }
-//                    // Melanjutkan hanya jika file tempat gambar berhasil dibuat
-//                    if (photoFile != null) {
-//                        Uri photoURI = FileProvider.getUriForFile(LoanDetailActivity.this,
-//                                "com.example.android.fileprovider",
-//                                photoFile);
-//                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-//                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-//                    }
-//                }
+                }else {
+                    requestCameraPermission();
+                }
             }
         });
         mUpdateGambar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String status1 = "Dipinjam";
+                String status2 = "Selesai";
+                Log.d(TAG, "onClic1k: " + mStatusExtra);
                 if(imageBitmap != null){
-                    uploadImageToServer(imageBitmap);
+                    Log.d(TAG, "onClick2: " + imageBitmap);
+                    if (mStatusExtra.equals("Diterima")) {
+                        Log.d(TAG, "onClick3: " + imageBitmap);
+                        // save image to coloumn gambar with status = "Dipinjam"
+                        uploadImageToServer(imageBitmap, status1);
+                    } else if(mStatusExtra.equals("Dipinjam")) {
+                        // save image to coloumn gambar_sesudah with status = "Selesai"
+                        uploadImageToServer(imageBitmap, status2);
+                    }
                 }else {
                     Toast.makeText(LoanDetailActivity.this, "No image captured!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        mBtnModalFotoSebelum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                        LoanDetailActivity.this, R.style.BottomSheetDialogTheme
+                );
+                View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                        .inflate(
+                                R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer)
+                        );
+                // Masukin resource foto pakai picasso
+                bottomSheetDialog.setContentView(bottomSheetView);
+                bottomSheetDialog.show();
+            }
+        });
+        mBtnModalFotoSetelah.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                        LoanDetailActivity.this, R.style.BottomSheetDialogTheme
+                );
+                View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                        .inflate(
+                                R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer)
+                        );
+                // Masukin resource foto pakai picasso
+                bottomSheetDialog.setContentView(bottomSheetView);
+                bottomSheetDialog.show();
+            }
+        });
+    }
+    private boolean checkCameraPermission() {
+        // Periksa izin kamera saat runtime (hanya diperlukan untuk Android 6.0 dan di atas)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int cameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA);
+            return cameraPermission == PackageManager.PERMISSION_GRANTED;
+        } else {
+            // Jika versi Android kurang dari 6.0, izin kamera dianggap sudah diberikan.
+            return true;
+        }
+    }
+    private void requestCameraPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSIONS_REQUEST_CAMERA) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Izin kamera telah diberikan, lanjutkan dengan intent kamera
+                dispatchTakePictureIntent();
+            } else {
+                // Izin kamera ditolak, beri tahu pengguna atau berikan feedback sesuai kebutuhan
+                Toast.makeText(this, "Izin kamera diperlukan untuk mengambil gambar.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -275,21 +328,29 @@ public class LoanDetailActivity extends AppCompatActivity {
             }
         }
     }
-    private void uploadImageToServer(Bitmap bitmap){
+    private void uploadImageToServer(Bitmap bitmap, String status){
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
-        byte[] imageBytes = byteArrayOutputStream.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        mTry.setText(encodedImage);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
 
         // Konversi byte array menjadi MultipartBody.Part
-        RequestBody requestFile = RequestBody.create(MediaType.parse("image/jpeg"), imageBytes);
-        MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("encodedImage", "image.jpg", requestFile);
-        mManagedLoanViewModel.updateGambar(multipartBody).observe(LoanDetailActivity.this, data ->{
+        byte[] imageBytes = byteArrayOutputStream.toByteArray();
+        // Debug start
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        mTry.setText(encodedImage);
+        // Debug end
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/png"), imageBytes);
+        MultipartBody.Part multipartBody = MultipartBody.Part.createFormData("encodedImage", mIdBooking + "_" + mStatusExtra + ".png", requestFile);
+        Log.d(TAG, "uploadImageToServer: " + multipartBody + status + mIdBooking);
+        ProgressDialog progressDialog = ProgressDialog.show(LoanDetailActivity.this, "", "Loading ...", true);
+        mManagedLoanViewModel.updateGambar(multipartBody,status,Integer.parseInt(mIdBooking)).observe(LoanDetailActivity.this, data ->{
             // Action after upload Image
+            UpdateData(data);
+            progressDialog.dismiss();
         });
     }
+
     private void dispatchTakePictureIntent() {
+        // Fungsi pemanggilan eksplisit intent camera
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -305,14 +366,25 @@ public class LoanDetailActivity extends AppCompatActivity {
         Log.d(TAG, "UpdateData: " + data);
         int colorDiterima = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_diterima);
         int colorDitolak = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_ditolak);
+        int colorPengajuan = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_pengajuan);
+        int colorDipinjam = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_dipinjam);
+        int colorSelesai = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_selesai);
         mStatus.setText(data);
-        if(data.equals("Diterima")){
+        if(data.equals("Pengajuan")){
+            mMaterialCardView.setCardBackgroundColor(colorPengajuan);
+        }else if(data.equals("Diterima")){
             mMaterialCardView.setCardBackgroundColor(colorDiterima);
-        }else {
+        }else if(data.equals("Ditolak")){
             mMaterialCardView.setCardBackgroundColor(colorDitolak);
+        }else if(data.equals("Dipinjam")){
+            mMaterialCardView.setCardBackgroundColor(colorDipinjam);
+        }else if(data.equals("Selesai")){
+            mMaterialCardView.setCardBackgroundColor(colorSelesai);
         }
         mBtnTerima.setVisibility(View.GONE);
         mBtnTolak.setVisibility(View.GONE);
+        mBtnCamera.setVisibility(View.GONE);
+        mUpdateGambar.setVisibility(View.GONE);
     }
     private class BooksDetailAdapter extends RecyclerView.Adapter<BooksDetailAdapter.BooksDetailHolder>{
         private List<Object[]> mBooksList;
@@ -375,19 +447,9 @@ public class LoanDetailActivity extends AppCompatActivity {
             }
         }
     }
-    private File createImageFile() throws IOException {
-        // Membuat nama file berdasarkan timestamp unik
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        // Mendapatkan direktori penyimpanan gambar yang sesuai
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        // Membuat file gambar tempat gambar akan disimpan
-        File imageFile = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
-        // Mengembalikan file gambar yang berhasil dibuat
-        return imageFile;
+    public void onImageViewClicked(View view) {
+        // Kembali ke activity sebelumnya
+        finish();
     }
+
 }

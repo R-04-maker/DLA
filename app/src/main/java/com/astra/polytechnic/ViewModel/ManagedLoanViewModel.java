@@ -1,5 +1,7 @@
 package com.astra.polytechnic.ViewModel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -36,7 +38,8 @@ public class ManagedLoanViewModel extends ViewModel {
     public LiveData<String> updateDetailBooking(int idBooking, String status){
         return mManagedLoanRepository.updateDetailBooking(idBooking, status);
     }
-    public LiveData<String> updateGambar(MultipartBody.Part multipartBody){
-        return mManagedLoanRepository.updateGambar(multipartBody);
+    public LiveData<String> updateGambar(MultipartBody.Part multipartBody, String status, int idBooking){
+        Log.d(TAG, "updateGambar: " + multipartBody + status + idBooking);
+        return mManagedLoanRepository.updateGambar(multipartBody, status, idBooking);
     }
  }

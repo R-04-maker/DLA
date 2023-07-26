@@ -75,13 +75,19 @@ public class UnconfirmedFragment extends Fragment {
     }
 
     private void updateUI(List<Object[]> bookingList){
-        Log.d(TAG, "updateUI: " + bookingList);
+        Log.d(TAG, "updateUI: " + bookingList.size());
         mBookingList = DLAHelper.getUnconBookList(bookingList);
-        mBookingAdapter = new BookingAdapter(mBookingList);
-        mRvUnconfirmedLoan.setAdapter(mBookingAdapter);
+        if (mBookingList != null) {
+            mBookingAdapter = new BookingAdapter(mBookingList);
+            mRvUnconfirmedLoan.setAdapter(mBookingAdapter);
+            mBookingAdapter.notifyDataSetChanged();
+            mEmptyData.setVisibility(mBookingList.size() == 0 ? View.VISIBLE : View.GONE);
+            mRvUnconfirmedLoan.setVisibility(mBookingList.size() == 0 ? View.GONE : View.VISIBLE);
+        }else {
+            mEmptyData.setVisibility(View.VISIBLE);
+            mRvUnconfirmedLoan.setVisibility(View.GONE);
+        }
 
-        mEmptyData.setVisibility(mBookingList.size() == 0 ? View.VISIBLE : View.GONE);
-        mRvUnconfirmedLoan.setVisibility(mBookingList.size() == 0 ? View.GONE : View.VISIBLE);
     }
     private class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingHolder>{
         private List<Object[]> mBookingList;
@@ -125,17 +131,19 @@ public class UnconfirmedFragment extends Fragment {
             }
             public void bind(Object[] booking){
                 mBooking = booking;
-                mEditableTitle = booking[8].toString();
-                if(mEditableTitle.length() > 15 ){
-                    mName.setText(mEditableTitle.substring(0,15));
-                }else {
-                    mName.setText(booking[8].toString());
+                mEditableTitle = booking[10] != null ? booking[10].toString() : "";
+
+                if (mEditableTitle.length() > 15) {
+                    mName.setText(mEditableTitle.substring(0, 15));
+                } else {
+                    mName.setText(mEditableTitle);
                 }
-                mNIM.setText(booking[9].toString());
-                String bookDate = DateConverter.fromDbDateTimeTo(DATE_FORMAT,booking[5].toString());
-                mDate.setText(bookDate.toString());
-                mStatus.setText(booking[3].toString());
-                mBookID.setText(booking[2].toString());
+
+                mNIM.setText(booking[11] != null ? booking[11].toString() : "");
+                String bookDate = booking[5] != null ? DateConverter.fromDbDateTimeTo(DATE_FORMAT, booking[5].toString()) : "";
+                mDate.setText(bookDate);
+                mStatus.setText(booking[3] != null ? booking[3].toString() : "");
+                mBookID.setText(booking[2] != null ? booking[2].toString() : "");
             }
 
             @Override
@@ -151,12 +159,6 @@ public class UnconfirmedFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        Log.d(TAG, "onStart: Called");
-        super.onStart();
-    }
-
-    @Override
     public void onResume() {
         Log.d(TAG, "onResume: Called");
         super.onResume();
@@ -168,11 +170,5 @@ public class UnconfirmedFragment extends Fragment {
     public void onPause() {
         Log.d(TAG, "onPause: Called");
         super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d(TAG, "onDestroy: Called");
-        super.onDestroy();
     }
 }

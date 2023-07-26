@@ -1,8 +1,9 @@
 package com.astra.polytechnic.api;
 
+import com.astra.polytechnic.service.KeranjangService;
 import com.astra.polytechnic.service.KoleksiService;
 import com.astra.polytechnic.service.ManagedLoanService;
-import com.astra.polytechnic.service.msuserService;
+import com.astra.polytechnic.service.*;
 
 public class ApiUtils {
 //    public static final String API_URL = "http://192.168.203.17:8080/";
@@ -20,5 +21,13 @@ public class ApiUtils {
     }
     public static ManagedLoanService getManagedLoanService(){
         return RetrofitClient.getClient(API_URL).create(ManagedLoanService.class);
+    }
+
+    public static msprodiService getAllProdi(){
+        return RetrofitClient.getClient(API_URL).create(msprodiService.class);
+    }
+
+    public static KeranjangService getKeranjang(){
+        return RetrofitClient.getClient(API_URL).create(KeranjangService.class);
     }
 }

@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
 
     // Data
     private KoleksiViewModel mNewestViewModel, mNewestColectionVM,mDashboardVM;
-//    private KoleksiRepository mKoleksiRepository;
+    //    private KoleksiRepository mKoleksiRepository;
     private List<Koleksi> mNewestList, mCollectionList;
     // Get Login Info
     SharedPreferences pref;
@@ -218,10 +218,10 @@ public class HomeFragment extends Fragment {
             }
         }
     }
-    private class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionHolder>{
+    private class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.CollectionHolder> {
         private List<Koleksi> mKoleksis;
 
-        public CollectionAdapter(List<Koleksi> koleksis){
+        public CollectionAdapter(List<Koleksi> koleksis) {
             mKoleksis = koleksis;
         }
 
@@ -246,7 +246,7 @@ public class HomeFragment extends Fragment {
             return mKoleksis.size();
         }
 
-        private class CollectionHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private class CollectionHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             private ImageView mBookImage;
             private TextView mBookTitle;
             private Koleksi mKoleksi;
@@ -259,21 +259,22 @@ public class HomeFragment extends Fragment {
                 mBookTitle = itemView.findViewById(R.id.title_book_newest);
                 itemView.setOnClickListener(this);
             }
-            public void onBindViewHolder(Koleksi koleksi){
+
+            public void onBindViewHolder(Koleksi koleksi) {
                 mKoleksi = koleksi;
-                if(!koleksi.getGambar().equals("KOSONG") && !koleksi.getGambar().equals("IMG_NoImage.jpg")){
+                if (!koleksi.getGambar().equals("KOSONG") && !koleksi.getGambar().equals("IMG_NoImage.jpg")) {
                     Picasso.get()
                             .load(koleksi.getGambar())
                             .placeholder(R.drawable.no_cover_book)
                             .error(R.drawable.no_cover_book)
                             .into(mBookImage);
-                }else {
+                } else {
                     mBookImage.setImageResource(R.drawable.no_cover_book);
                 }
                 mEditableTitle = koleksi.getNama();
-                if(mEditableTitle.length() > 20 ){
-                    mBookTitle.setText(mEditableTitle.substring(0,20));
-                }else {
+                if (mEditableTitle.length() > 20) {
+                    mBookTitle.setText(mEditableTitle.substring(0, 20));
+                } else {
                     mBookTitle.setText(koleksi.getNama());
                 }
             }
@@ -283,7 +284,7 @@ public class HomeFragment extends Fragment {
 //                Toast.makeText(getContext(), mKoleksi.getGambar(), Toast.LENGTH_SHORT).show();
 //                Toast.makeText(getContext(), mKoleksi.getNama(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
-                intent.putExtra(KEY_EXTRA, mKoleksi.getIdKoleksi());
+                intent.putExtra("id_koleksi", mKoleksi.getIdKoleksi());
                 startActivity(intent);
             }
         }

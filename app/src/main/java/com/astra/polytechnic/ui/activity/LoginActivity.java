@@ -15,9 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.UserViewModel;
+import com.astra.polytechnic.ViewModel.msprodiViewModel;
 import com.astra.polytechnic.helper.ValidationHelper;
 import com.astra.polytechnic.model.LoginModel;
+import com.astra.polytechnic.model.msprodi;
 import com.astra.polytechnic.model.response.LoginResponse;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +36,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //private msMemberRepo mMsMemberRepo;
     private UserViewModel mUserViewModel;
     private LoginModel mLoginModel;
+    List<msprodi> mMsprodis;
+    List<String> prodiNames = new ArrayList<>();
+    List<String> prodiIds = new ArrayList<>();
+    private msprodiViewModel mMsprodiViewModel;
+
     String id_role;
     public boolean validate(View v) {
         boolean emailValidation = ValidationHelper.requiredTextInputValidation(mNim);
@@ -52,13 +62,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mNim =(EditText)findViewById(R.id.input_username_login);
         mPassword=(EditText) findViewById(R.id.input_password_login);
         pref = getSharedPreferences("nomor",MODE_PRIVATE);
-
         if(pref.contains("nomor")&& pref.contains("password")){
-            Intent intent = new Intent(LoginActivity.this,DashboardActivity.class);
-            startActivity(intent);
-            finish();
+            if(pref.contains("id_role")){
+                id_role = pref.getString("id_role","");
+                CheckRole();
+            }
         }else{
             mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+            mMsprodiViewModel=new ViewModelProvider(this).get(msprodiViewModel.class);
 
             mbtnSignIn.setOnClickListener(view -> {
                 String nim=mNim.getText().toString();
@@ -75,7 +86,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 editor.putString("nomor",loginResponse.getUser().getNomor());
                                 editor.putString("nama",loginResponse.getUser().getNama());
                                 editor.putString("id_role",loginResponse.getUser().getId_role());
-                                editor.putString("id_prodi",loginResponse.getUser().getId_prodi());
+                                editor.putString("deskripsi",loginResponse.getUser().getDeskripsi());
+                                editor.putString("password", loginResponse.getUser().getPassword());
+                                editor.putString("no_hp", loginResponse.getUser().getHp());
                                 editor.apply();
 
                                 id_role = loginResponse.getUser().getId_role();

@@ -23,7 +23,7 @@ public interface msuserService {
 
         @GET("/login")
         Call <LoginResponse> Login(@Query("nomor")String nim, @Query("password")String password);
-        @POST("/saveUser")
+        @POST("/saveUsers")
         Call<AddResponse> addUser(@Body msuser user);
 
         @PUT("user")

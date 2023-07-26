@@ -41,7 +41,6 @@
                     android:autoSizeMaxTextSize="12sp"
                     android:autoSizeMinTextSize="8sp"
                     android:autoSizeTextType="uniform"
-                    android:maxLines="1"
                     android:textStyle="bold"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/inter_variablefont_slnt_wght"
@@ -49,7 +48,13 @@
                     android:text="Sistem Informasi"
                     android:textColor="#000" />
 
-
+                <ImageView
+                    android:id="@+id/btnDelete"
+                    android:layout_width="50px"
+                    android:layout_height="50px"
+                    android:layout_centerHorizontal="false"
+                    android:layout_marginLeft="370px"
+                    android:src="@drawable/delete" />
 
                 <TextView
                     android:id="@+id/title_book_kategori"

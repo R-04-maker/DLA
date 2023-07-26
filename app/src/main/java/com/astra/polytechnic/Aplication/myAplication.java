@@ -16,5 +16,7 @@ public class myAplication extends Application {
         KoleksiRepository.initialize(this);
         ManagedLoanRepository.initialize(this);
         msuserRepo.initialize(this);
+        msprodiRepository.initialize(this);
+        KeranjangRepository.initialize(this);
     }
 }

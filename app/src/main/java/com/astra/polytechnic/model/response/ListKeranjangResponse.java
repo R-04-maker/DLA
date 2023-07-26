@@ -1,11 +1,12 @@
 package com.astra.polytechnic.model.response;
 
-import com.astra.polytechnic.model.Booking;
+import com.astra.polytechnic.model.Keranjang;
+import com.astra.polytechnic.model.Koleksi;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class BookingResponse {
+public class ListKeranjangResponse {
     @SerializedName("result")
     private int result;
 
@@ -13,7 +14,13 @@ public class BookingResponse {
     private String message;
 
     @SerializedName("data")
-    private List<Object[]> data;
+    private List<Keranjang> data;
+
+    public ListKeranjangResponse(int result, String message, List<Keranjang> data) {
+        this.result = result;
+        this.message = message;
+        this.data = data;
+    }
 
     public int getResult() {
         return result;
@@ -31,20 +38,11 @@ public class BookingResponse {
         this.message = message;
     }
 
-    public List<Object[]> getData() {
+    public List<Keranjang> getData() {
         return data;
     }
 
-    public void setData(List<Object[]> data) {
+    public void setData(List<Keranjang> data) {
         this.data = data;
-    }
-
-    @Override
-    public String toString() {
-        return "BookingResponse{" +
-                "result=" + result +
-                ", message='" + message + '\'' +
-                ", data=" + data +
-                '}';
     }
 }

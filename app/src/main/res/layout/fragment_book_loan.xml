@@ -97,7 +97,7 @@
                 android:maxLength="10"
                 android:background="@drawable/background" />
 
-            <Spinner
+            <EditText
                 android:id="@+id/ediTextProdi"
                 android:layout_width="175dp"
                 android:layout_height="42dp"
@@ -137,17 +137,21 @@
             android:inputType="number"
             android:maxLength="13"
             android:background="@drawable/background" />
+
         <EditText
-            android:id="@+id/ediTextDate"
+            android:id="@+id/btnDate"
             android:layout_width="359dp"
             android:layout_height="40dp"
             android:layout_marginStart="12dp"
             android:layout_marginTop="5dp"
-            android:paddingLeft="5dp"
+            android:focusable="false"
+            android:background="@drawable/background"
             android:drawableLeft="@drawable/baseline_calendar_today_24"
             android:drawableTint="@color/tab_layout_on"
             android:hint="Return Date"
-            android:background="@drawable/background" />
+            android:paddingLeft="5dp"
+            tools:text='Tanggal' />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_cart"
             android:layout_width="359dp"
@@ -173,7 +177,7 @@
         tools:ignore="MissingConstraints" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/btnBooking"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="-5dp"

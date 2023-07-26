@@ -23,12 +23,27 @@ public class LoginModel {
     @Expose
     private String id_prodi;
 
-    public LoginModel(String email, String nomor, String nama, String id_role, String id_prodi) {
+    @SerializedName("password")
+    @Expose
+    private String password;
+
+    @SerializedName("deskripsi")
+    @Expose
+    private String deskripsi;
+
+    @SerializedName("hp")
+    @Expose
+    private String hp;
+
+    public LoginModel(String email, String nomor, String nama, String id_role, String id_prodi, String password, String deskripsi, String hp) {
         this.email = email;
         this.nomor = nomor;
         this.nama = nama;
         this.id_role = id_role;
         this.id_prodi = id_prodi;
+        this.password = password;
+        this.deskripsi = deskripsi;
+        this.hp = hp;
     }
 
     public String getEmail() {
@@ -69,5 +84,29 @@ public class LoginModel {
 
     public void setId_prodi(String id_prodi) {
         this.id_prodi = id_prodi;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getDeskripsi() {
+        return deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
+    }
+
+    public String getHp() {
+        return hp;
+    }
+
+    public void setHp(String hp) {
+        this.hp = hp;
     }
 }

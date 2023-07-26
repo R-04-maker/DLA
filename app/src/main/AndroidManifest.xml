@@ -24,6 +24,9 @@
             android:name=".ui.activity.BookDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activity.BookDetailMemberActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.DashboardActivity"
             android:exported="false" >
 <!--                <intent-filter>
@@ -31,6 +34,10 @@
 
                     <category android:name="android.intent.category.LAUNCHER" />
                 </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".ui.activity.KeranjangActivity"
+            android:exported="false">
         </activity>
         <activity
             android:name=".ui.activity.LoginActivity"

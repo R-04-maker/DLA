@@ -4,25 +4,25 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class AddResponse {
-    @SerializedName("message")
+    @SerializedName("result")
     @Expose
-    private String message;
+    String result;
 
     @SerializedName("status")
     @Expose
     private int status;
 
-    public AddResponse(String message, int status) {
-        this.message = message;
+    public AddResponse(String result, int status) {
+        this.result = result;
         this.status = status;
     }
 
-    public String getMessage() {
-        return message;
+    public String getResult() {
+        return result;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setResult(String result) {
+        this.result = result;
     }
 
     public int getStatus() {
@@ -36,7 +36,6 @@ public class AddResponse {
     @Override
     public String toString() {
         return "AddResponse{" +
-                ", message='" + message + '\'' +
                 ", status=" + status +
                 '}';
     }

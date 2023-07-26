@@ -42,7 +42,7 @@ public class DashboardMemberActivity extends AppCompatActivity {
         // Set Home Fragment by default
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.fragmentContainter, HomeFragment.class, null)
+                .replace(R.id.fragmentContainter, HomeMemberFragment.class, null)
                 .commit();
 
         homeLayout.setOnClickListener(new View.OnClickListener() {

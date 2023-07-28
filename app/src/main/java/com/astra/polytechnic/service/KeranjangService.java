@@ -24,7 +24,4 @@ public interface KeranjangService {
 
     @POST("/deleteKeranjang/{id}")
     Call<AddResponse> deleteKeranjang(@Path("id") String id);
-
-
-
 }

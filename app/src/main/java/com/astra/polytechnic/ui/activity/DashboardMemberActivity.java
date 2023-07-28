@@ -11,10 +11,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.astra.polytechnic.R;
-import com.astra.polytechnic.ui.fragment.HomeFragment;
 import com.astra.polytechnic.ui.fragment.HomeMemberFragment;
 import com.astra.polytechnic.ui.fragment.LoanMemberFragment;
-import com.astra.polytechnic.ui.fragment.SettingsFragment;
+import com.astra.polytechnic.ui.fragment.ProfileFragment;
 
 public class DashboardMemberActivity extends AppCompatActivity {
 
@@ -133,7 +132,7 @@ public class DashboardMemberActivity extends AppCompatActivity {
                     // set settings Fragment
                     getSupportFragmentManager().beginTransaction()
                             .setReorderingAllowed(true)
-                            .replace(R.id.fragmentContainter, SettingsFragment.class, null)
+                            .replace(R.id.fragmentContainter, ProfileFragment.class, null)
                             .commit();
 
                     // unselect other tabs expect settings tab

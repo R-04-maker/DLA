@@ -6,8 +6,8 @@ import com.astra.polytechnic.service.ManagedLoanService;
 import com.astra.polytechnic.service.*;
 
 public class ApiUtils {
-//    public static final String API_URL = "http://192.168.203.17:8080/";
-    public static final String API_URL = "http://10.8.10.173:8080/";
+//    public static final String API_URL = "http://192.168.11.17:8080/";
+    public static final String API_URL = "http://10.8.2.236:8080/";
 
     private ApiUtils(){
 
@@ -22,11 +22,9 @@ public class ApiUtils {
     public static ManagedLoanService getManagedLoanService(){
         return RetrofitClient.getClient(API_URL).create(ManagedLoanService.class);
     }
-
     public static msprodiService getAllProdi(){
         return RetrofitClient.getClient(API_URL).create(msprodiService.class);
     }
-
     public static KeranjangService getKeranjang(){
         return RetrofitClient.getClient(API_URL).create(KeranjangService.class);
     }

@@ -41,14 +41,14 @@ public class HomeMemberFragment extends Fragment {
 
     // Components
     private RecyclerView mRvNewestBooks, mRvPopularBooks;
-    private TextView mNewestSeeAll, mPopularSeeAll, mBookCount, mVisitorCount, mHistoryCount,mLoginName;
-    private LinearLayout mScrollView;
+    private TextView mNewestSeeAll, mPopularSeeAll, mBookCount, mVisitorCount, mHistoryCount,mLoginName, mWelcomeText, mRole;
+    private LinearLayout mLayoutData, mLayoutGuest;
+    private ImageView mCardData;
     private ImageSlider mImageSlider;
     private List<SlideModel> mSlideModelList = new ArrayList<>();
 
     // Data
     private KoleksiViewModel mNewestViewModel, mNewestColectionVM,mDashboardVM;
-    //    private KoleksiRepository mKoleksiRepository;
     private List<Koleksi> mNewestList, mCollectionList;
     // Get Login Info
     SharedPreferences pref;
@@ -72,15 +72,22 @@ public class HomeMemberFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_home_member, container, false);
 
-        pref= getActivity().getSharedPreferences("nomor", getActivity().MODE_PRIVATE);
-        mLoginName = view.findViewById(R.id.login_name);
-        mLoginName.setText(pref.getString("nama", null));
+        pref = getActivity().getSharedPreferences("nomor", getActivity().MODE_PRIVATE);
 
-        mScrollView = view.findViewById(R.id.scroll);
+        mLoginName = view.findViewById(R.id.login_name);
+        mWelcomeText = view.findViewById(R.id.welcome_text1);
+        mRole = view.findViewById(R.id.login_role);
+
+        mLayoutData = view.findViewById(R.id.layout_data);
+        mLayoutGuest = view.findViewById(R.id.layout_data_guest);
+        mCardData = view.findViewById(R.id.card_data);
 
         mBookCount = view.findViewById(R.id.book_count);
         mVisitorCount = view.findViewById(R.id.visitors_count);
         mHistoryCount = view.findViewById(R.id.history_count);
+
+        mNewestSeeAll = view.findViewById(R.id.see_all_newest);
+        mPopularSeeAll = view.findViewById(R.id.see_all_newestcollection);
 
         mRvNewestBooks = view.findViewById(R.id.rv_newest_book);
         mRvNewestBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -90,16 +97,24 @@ public class HomeMemberFragment extends Fragment {
         mRvPopularBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mRvPopularBooks.setAdapter(mPopularAdapater);
 
-        mNewestSeeAll = view.findViewById(R.id.see_all_newest);
-        mPopularSeeAll = view.findViewById(R.id.see_all_newestcollection);
+        String namaSp = pref.getString("nama", null);
+        if(namaSp != null){
+            int firstName = namaSp.indexOf(' ');
+            String nama = (firstName != -1) ? namaSp.substring(0, firstName) : namaSp;
+            mLoginName.setText(nama);
+        }else {
+            mLayoutData.setVisibility(View.GONE);
+            mWelcomeText.setText("Please Sign In to get all features.");
+            mRole.setVisibility(View.GONE);
+            mLayoutGuest.setVisibility(View.VISIBLE);
 
+        }
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mScrollView.setVisibility(View.INVISIBLE);
         mNewestViewModel.getNewest().observe(getViewLifecycleOwner(), this::updateNewestBook);
         mNewestColectionVM.getNewestReleased().observe(getViewLifecycleOwner(), this::updateNewestCollection);
         mDashboardVM.getDataDashboard().observe(getViewLifecycleOwner(), this::updateDashboard);

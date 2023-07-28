@@ -13,6 +13,8 @@ public class KoleksiDao {
     private MutableLiveData<List<Koleksi>> koleksi = new MutableLiveData<>();
     private MutableLiveData<List<Koleksi>> koleksi2 = new MutableLiveData<>();
     private MutableLiveData<Dashboard> dataDashboard = new MutableLiveData<>();
+    private MutableLiveData<List<Koleksi>> search = new MutableLiveData<>();
+
 
     public LiveData<List<Koleksi>> getListKoleksi(){
         return koleksi;
@@ -32,5 +34,8 @@ public class KoleksiDao {
     }
     public void setDataDashboard(Dashboard dataDashboard) {
         this.dataDashboard.setValue(dataDashboard);
+    }
+    public void setBukuByNama(List<Koleksi> koleksi){
+        this.search.setValue(koleksi);
     }
 }

@@ -106,7 +106,7 @@ public class UnconfirmedFragment extends Fragment {
         public void onBindViewHolder(BookingHolder holder, int position) {
             Object[] booking = mBookingList.get(position);
             holder.bind(booking);
-            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), android.R.anim.fade_in);
+            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), android .R.anim.fade_in);
             holder.itemView.startAnimation(animation);
         }
 
@@ -116,7 +116,7 @@ public class UnconfirmedFragment extends Fragment {
         }
 
         private class BookingHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-            private TextView mName, mNIM, mDate, mBookID, mStatus;
+            private TextView mName, mNIM, mDate, mBookID, mStatus;  
             private Object[] mBooking;
             private String mEditableTitle;
             public BookingHolder(LayoutInflater inflater,ViewGroup parent){

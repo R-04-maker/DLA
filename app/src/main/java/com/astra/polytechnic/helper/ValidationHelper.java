@@ -1,23 +1,42 @@
 package com.astra.polytechnic.helper;
 
+import android.text.TextUtils;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 
-public class ValidationHelper {
-    public static boolean requiredTextInputValidation(EditText editText) {
-        String text = editText.getText().toString().trim();
-        if (text.isEmpty()) {
-            editText.setError("Teks diperlukan");
-            return false;
-        }
-        return true;
-    }
+import com.astra.polytechnic.R;
+import com.astra.polytechnic.ui.activity.LoginActivity;
+import com.google.android.material.textfield.TextInputLayout;
 
-    public static boolean confirmationValidation(EditText editText1, EditText editText2) {
-        String text1 = editText1.getText().toString().trim();
-        String text2 = editText2.getText().toString().trim();
+public class ValidationHelper {
+    public static boolean requiredTextInputValidation(TextInputLayout textInputLayout) {
+        String value = textInputLayout.getEditText().getText().toString();
+
+        boolean result = true;
+        if(!TextUtils.isEmpty(value)) {
+            textInputLayout.setErrorEnabled(false);
+        } else {
+            textInputLayout.setError("Input required!");
+            textInputLayout.setErrorEnabled(true);
+            shakeEditText(textInputLayout);
+            result = false;
+        }
+
+        return result;
+    }
+    public static void shakeEditText(TextInputLayout editText) {
+        Animation shakeAnimation = AnimationUtils.loadAnimation(editText.getContext(), R.anim.shake_validation);
+        editText.startAnimation(shakeAnimation);
+    }
+    public static boolean confirmationValidation(TextInputLayout editText1, TextInputLayout editText2) {
+        String text1 = editText1.getEditText().getText().toString().trim();
+        String text2 = editText2.getEditText().getText().toString().trim();
 
         if (!text1.equals(text2)) {
-            editText2.setError("Teks tidak cocok");
+            editText2.setError("Password tidak cocok");
+            editText2.setErrorEnabled(true);
+            shakeEditText(editText2);
             return false;
         }
         return true;

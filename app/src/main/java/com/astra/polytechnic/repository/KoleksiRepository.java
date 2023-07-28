@@ -164,4 +164,47 @@ public class KoleksiRepository {
         });
         return objlist;
     }
+    public LiveData<List<Koleksi>> getBukuByNama(){
+        Log.i(TAG, "getBukuByNama() called");
+
+        Call<ListKoleksiResponse> call = mKoleksiService.getBukuByNama();
+        call.enqueue(new Callback<ListKoleksiResponse>() {
+            @Override
+            public void onResponse(Call<ListKoleksiResponse> call, Response<ListKoleksiResponse> response) {
+                ListKoleksiResponse listKoleksiResponse = response.body();
+                if(listKoleksiResponse.getResult() == 200){
+                    mKoleksiDao.setBukuByNama(listKoleksiResponse.getData());
+                    Log.d(TAG, "getBukuByNama.onResponse() called");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListKoleksiResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+        return mKoleksiDao.getListNewestCollection();
+    }
+
+    public MutableLiveData<List<Koleksi>> getBukuByNamaMt(){
+        Log.i(TAG, "getBukuByNama() called");
+        MutableLiveData<List<Koleksi>> respon = new MutableLiveData<>();
+        Call<ListKoleksiResponse> call = mKoleksiService.getBukuByNama();
+        call.enqueue(new Callback<ListKoleksiResponse>() {
+            @Override
+            public void onResponse(Call<ListKoleksiResponse> call, Response<ListKoleksiResponse> response) {
+                ListKoleksiResponse listKoleksiResponse = response.body();
+                if(listKoleksiResponse.getResult() == 200){
+                    respon.setValue(listKoleksiResponse.getData());
+                    Log.d(TAG, "getBukuByNama.onResponse() called");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ListKoleksiResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+        return respon;
+    }
 }

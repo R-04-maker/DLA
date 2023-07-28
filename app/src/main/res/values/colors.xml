@@ -7,6 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#da676f</color>
+    <color name="gray">#a3a5a8</color>
     <color name="bg_dashboard">#edf0ff</color>
     <color name="navbar_on">#2761ff</color>
     <color name="round_back">#e9efff</color>

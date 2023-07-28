@@ -28,4 +28,6 @@ public interface KoleksiService {
 
     @GET("getKlasifikasiDetail/{id}")
     Call<List<Object[]>> getKlasifikasiDetail(@Path("id") int idKoleksi);
+    @GET("getBukuByNama")
+    Call<ListKoleksiResponse> getBukuByNama();
 }

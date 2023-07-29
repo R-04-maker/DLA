@@ -1,5 +1,6 @@
 package com.astra.polytechnic.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -74,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mbtnSignIn.setOnClickListener(view -> {
                 String nim=mNim.getText().toString();
                 String password=mPassword.getText().toString();
+                ProgressDialog progressDialog = ProgressDialog.show(this, "Sign In", "Signing In...");
 
                 mUserViewModel.login(nim,password).observe(this, new Observer<LoginResponse>() {
                     @Override
@@ -93,12 +95,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                                 id_role = loginResponse.getUser().getId_role();
                                 CheckRole();
+
                             } else{
                                 Toast.makeText(LoginActivity.this, "Data Tidak Ditemukan", Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
                             }
                         } else {
                             Toast.makeText(LoginActivity.this, "Data Tidak Ditemukan", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+
                         }
+                        progressDialog.dismiss();
                     }
                 });
             });

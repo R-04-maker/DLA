@@ -14,7 +14,7 @@ public class Booking {
 
     @SerializedName("bookingonline")
     @Expose
-    private String idbooking;
+    private int idbooking;
 
     @SerializedName("status")
     @Expose
@@ -49,7 +49,7 @@ public class Booking {
     public Booking() {
     }
 
-    public Booking(String idTransaksi, String email, String idbooking, String status, String creaby, String creadate, String modiby, String modidate, String nama, String nomor) {
+    public Booking(String idTransaksi, String email, int idbooking, String status, String creaby, String creadate, String modiby, String modidate, String nama, String nomor) {
         this.idTransaksi = idTransaksi;
         this.email = email;
         this.idbooking = idbooking;
@@ -78,11 +78,11 @@ public class Booking {
         this.email = email;
     }
 
-    public String getIdbooking() {
+    public int getIdbooking() {
         return idbooking;
     }
 
-    public void setIdbooking(String idbooking) {
+    public void setIdbooking(int idbooking) {
         this.idbooking = idbooking;
     }
 

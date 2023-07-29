@@ -17,6 +17,8 @@ public class Keranjang {
     @Expose
     private msuser email;
 
+    public Keranjang() {
+    }
 
     public Keranjang(int id_keranjang, Koleksi idKoleksi, msuser email) {
         this.id_keranjang = id_keranjang;

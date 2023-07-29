@@ -45,6 +45,9 @@ public class BookingDetail {
     @Expose
     private String modidate;
 
+    public BookingDetail() {
+    }
+
     public BookingDetail(String idTransactionDetail, String idTransaction, Koleksi idKoleksi, String tanggalPinjam, String tanggalKembali, String status, String creaby, String creadate, String modiby, String modidate) {
         this.idTransactionDetail = idTransactionDetail;
         this.idTransaction = idTransaction;

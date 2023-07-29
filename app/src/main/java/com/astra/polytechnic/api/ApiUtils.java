@@ -7,7 +7,7 @@ import com.astra.polytechnic.service.*;
 
 public class ApiUtils {
 //    public static final String API_URL = "http://192.168.203.17:8080/";
-    public static final String API_URL = "http://10.8.10.173:8080/";
+    public static final String API_URL = "http://192.168.100.11:8080/";
 
     private ApiUtils(){
 
@@ -29,5 +29,9 @@ public class ApiUtils {
 
     public static KeranjangService getKeranjang(){
         return RetrofitClient.getClient(API_URL).create(KeranjangService.class);
+    }
+
+    public static BookingService getBooking(){
+        return RetrofitClient.getClient(API_URL).create(BookingService.class);
     }
 }

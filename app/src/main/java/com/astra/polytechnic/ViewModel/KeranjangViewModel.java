@@ -27,7 +27,7 @@ public class KeranjangViewModel extends ViewModel {
         return mKeranjangRepository.getAllKeranjang(email);
     }
 
-    public LiveData<AddResponse> deleteKeranjang(String id) {
+    public LiveData<AddResponse> deleteKeranjang(int id) {
         return mKeranjangRepository.DeleteKeranjang(id);
     }
 }

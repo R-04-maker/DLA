@@ -135,10 +135,13 @@ public class SignUpActivity extends AppCompatActivity {
             String creadate= formatter.format(dateTimeNow);
             String modiby="";
             String modidate= formatter.format(dateTimeNow);
-
+            msprodi msprodi=new msprodi();
+            msprodi.setId_prodi(id_prodi);
+            msrole role =new msrole();
+            role.setId_role(id_role);
             UserViewModel userViewModel=new UserViewModel();
             msuser user=new msuser(email,nomor,nama,instansi,alamat,hp,password
-                    ,id_role,id_prodi,status,creaby,creadate,modiby,modidate);
+                    ,role,msprodi,status,creaby,creadate,modiby,modidate);
 
             if (validate(view)) {
                 ProgressDialog progressDialog = ProgressDialog.show(this, "Sign Up", "Signing Up...");

@@ -28,6 +28,9 @@ public class msprodi {
     @Expose
     private Date modidate;
 
+    public msprodi() {
+    }
+
     public msprodi(String id_prodi, String deskripsi, String status, String creaby, Date creadate, String modiby, Date modidate) {
         this.id_prodi = id_prodi;
         this.deskripsi = deskripsi;

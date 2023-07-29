@@ -90,7 +90,7 @@ public class KeranjangRepository {
         return mKeranjangDao.getListKeranjang();
     }
 
-    public LiveData<AddResponse> DeleteKeranjang(String id){
+    public LiveData<AddResponse> DeleteKeranjang(int id){
         MutableLiveData<AddResponse> objlist = new MutableLiveData<>();
         Call<AddResponse> call = mKeranjangService.deleteKeranjang(id);
         call.enqueue(new Callback<AddResponse>() {

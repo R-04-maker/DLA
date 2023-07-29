@@ -23,7 +23,7 @@ public interface KeranjangService {
     Call<ListKeranjangResponse> getAllKeranjang(@Path("email") String email);
 
     @POST("/deleteKeranjang/{id}")
-    Call<AddResponse> deleteKeranjang(@Path("id") String id);
+    Call<AddResponse> deleteKeranjang(@Path("id") int id);
 
 
 

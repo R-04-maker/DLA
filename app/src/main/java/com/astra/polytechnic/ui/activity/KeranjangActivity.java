@@ -22,20 +22,28 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.astra.polytechnic.R;
+import com.astra.polytechnic.ViewModel.BookingViewModel;
 import com.astra.polytechnic.ViewModel.KeranjangViewModel;
 import com.astra.polytechnic.ViewModel.KoleksiViewModel;
 import com.astra.polytechnic.helper.DLAHelper;
+import com.astra.polytechnic.model.Booking;
 import com.astra.polytechnic.model.BookingDetail;
-import com.astra.polytechnic.model.Keranjang;
+import com.astra.polytechnic.model.*;
 import com.astra.polytechnic.model.Koleksi;
+import com.astra.polytechnic.repository.BookingRepository;
+import com.astra.polytechnic.ui.fragment.HomeMemberFragment;
 import com.astra.polytechnic.ui.fragment.LoanMemberFragment;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -51,15 +59,26 @@ public class KeranjangActivity extends AppCompatActivity {
     private KeranjangActivity.KeranjangAdapter mKeranjangAdapter = new KeranjangActivity.KeranjangAdapter(Collections.emptyList());
     RecyclerView cartBuku;
     KeranjangViewModel mKeranjangViewModel;
+    BookingViewModel mBookingViewModel;
     ImageButton btnBooking;
     SharedPreferences pref;
+    List<Booking> mBookings;
     Keranjang mKeranjang;
+    String idTransaksi;
+    BookingRepository mBookingRepository;
+    ArrayList mList=new ArrayList<>();
+    String resultDateStr;
+    int num;
+    int MaksPinjam;
+    int MaksTempo;
+    String datepick;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.fragment_book_loan);
         mKeranjangViewModel = new ViewModelProvider(this).get(KeranjangViewModel.class);
+        mBookingViewModel = new ViewModelProvider(this).get(BookingViewModel.class);
 
         pref = getSharedPreferences("nomor", MODE_PRIVATE);
 
@@ -74,7 +93,6 @@ public class KeranjangActivity extends AppCompatActivity {
         mNama.setText(pref.getString("nama", ""));
         mProdi.setText(pref.getString("deskripsi", ""));
         mNoHp.setText(pref.getString("no_hp", ""));
-        mDate.setText("Pilih Tanggal");
         mDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,17 +103,108 @@ public class KeranjangActivity extends AppCompatActivity {
         cartBuku = findViewById(R.id.recyclerView_cart);
         cartBuku.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mKeranjangViewModel.getKeranjangbyemail(email).observe(KeranjangActivity.this, this::updateNewestBook);
+        mBookingViewModel.getBooking().observe(KeranjangActivity.this, new Observer<List<Booking>>() {
+            @Override
+            public void onChanged(List<Booking> bookings) {
+                for (Booking booking : bookings) {
+                    String prefix = "BOOK";
+                    idTransaksi = booking.getIdTransaksi();
+                    num=Integer.parseInt(booking.getIdTransaksi().substring(prefix.length()));
+                    try {
+                        num = Integer.parseInt(booking.getIdTransaksi().substring(prefix.length()));
+                        System.out.println("num"+num);
+                        Toast.makeText(KeranjangActivity.this, "num"+num, Toast.LENGTH_SHORT).show();
+                    } catch (NumberFormatException e) {
+                        Log.e("Error", "Parsing number error", e);
+                    }
+                }
+            }
+        });
+        Toast.makeText(KeranjangActivity.this, "num"+idTransaksi, Toast.LENGTH_SHORT).show();
+        Date lcl = new Date();
+        DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date inputDate = sdf.parse(datepick);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(inputDate);
+            calendar.add(Calendar.DAY_OF_MONTH, MaksTempo);
+            Date dateAfter14Days = calendar.getTime();
+            resultDateStr = sdf.format(dateAfter14Days);
+            System.out.println("Date 14 days after the input date: " + resultDateStr);
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle the parsing or calculation exception if needed
+        }
         btnBooking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (datepick.equals("")) {
+                    Toast.makeText(KeranjangActivity.this, "Tanggal Ambil Tidak Boleh Kosong", Toast.LENGTH_SHORT).show();
+                }
+                    else{
+                        if (MaksPinjam < mKeranjangList.size()) {
+                            Toast.makeText(KeranjangActivity.this, "Maksimal Peminjaman Buku " + MaksPinjam, Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (mKeranjangList.size() == 0) {
+                                Toast.makeText(KeranjangActivity.this, "Keranjang Kosong", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Booking booking = new Booking();
+                                booking.setIdTransaksi("BOOK" + (num + 1));
+                                booking.setEmail(email);
+                                booking.setIdbooking(1);
+                                booking.setStatus("Pengajuan");
+                                booking.setCreaby(email);
+                                booking.setCreadate(mDate.getText().toString());
+                                booking.setModiby("");
+                                booking.setModidate("");
+                                mBookingViewModel.saveBooking(booking);
+                                for (Keranjang keranjang : mKeranjangList) {
+                                    Koleksi koleksi = new Koleksi();
+                                    koleksi.setIdKoleksi(keranjang.getIdKoleksi().getIdKoleksi());
+                                    BookingDetail bookingDetail = new BookingDetail();
+                                    bookingDetail.setIdTransaction(booking.getIdTransaksi());
+                                    bookingDetail.setIdKoleksi(koleksi);
+                                    bookingDetail.setTanggalPinjam(mDate.getText().toString());
+                                    bookingDetail.setTanggalKembali(resultDateStr);
+                                    bookingDetail.setCreaby(email);
+                                    bookingDetail.setCreadate(sdf.format(lcl));
+                                    bookingDetail.setModiby("");
+                                    bookingDetail.setModidate("");
+                                    mBookingViewModel.saveBookingDetail(bookingDetail);
+                                }
 
-            }
+                                Toast.makeText(KeranjangActivity.this, "Berhasil Booking", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(KeranjangActivity.this, DashboardMemberActivity.class);
+                                intent.putExtra("MaksTempo", MaksTempo);
+                                startActivity(intent);
+                            }
+                        }
+                    }
+                }
         });
     }
 
+//    private static String generateIdBook(int num){
+//        String id = "BOOK";
+//        String date = new SimpleDateFormat("ddMMyy").format(new Date());
+//        String time = new SimpleDateFormat("HHmmss").format(new Date());
+//        int num1=num+1;
+//        String hasil = id+num1;
+//        System.out.println(hasil);
+//        return hasil;
+//    }
+
     private void updateNewestBook(List<Keranjang> keranjangs){
         Log.d("TAG", "updateNewestBook: "+ keranjangs);
+        //perulangan untuk mengambil data dari list ke model keranjang
+        for (Keranjang keranjang : keranjangs) {
+               MaksPinjam = keranjang.getEmail().getId_role().getMaksbuku();
+               MaksTempo  = keranjang.getEmail().getId_role().getMakstempo();
+               System.out.println("Maks Pinjam : " + MaksPinjam);
+            }
+
+
         mKeranjangList = DLAHelper.getKeranjang(keranjangs);
         mKeranjangAdapter = new KeranjangActivity.KeranjangAdapter(mKeranjangList);
         cartBuku.setAdapter(mKeranjangAdapter);
@@ -132,7 +241,7 @@ public class KeranjangActivity extends AppCompatActivity {
         private class KoleksiHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             private ImageView mBookImage, mDeleteImage;
             private TextView mBookTitle;
-            private Keranjang mKoleksi;
+            private Keranjang mKeranjang;
             private TextView deskripsi;
             private String mEditableTitle;
             ImageView imageView;
@@ -148,7 +257,7 @@ public class KeranjangActivity extends AppCompatActivity {
                 mDeleteImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        mKeranjangViewModel.deleteKeranjang(mKoleksi.getIdKoleksi().getIdKoleksi());
+                        mKeranjangViewModel.deleteKeranjang(mKeranjang.getId_keranjang());
                         Toast.makeText(KeranjangActivity.this, "Berhasil Dihapus", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -168,7 +277,7 @@ public class KeranjangActivity extends AppCompatActivity {
                     mBookTitle.setText(koleksi.getIdKoleksi().getNama());
                     deskripsi.setText(koleksi.getIdKoleksi().getDeskripsi());
                 }
-                mKoleksi = koleksi;
+                mKeranjang = koleksi;
 
             }
 
@@ -191,7 +300,9 @@ public class KeranjangActivity extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                 Calendar newdate= Calendar.getInstance();
                 newdate.set(i,i1,i2);
-                mDate.setText(new SimpleDateFormat("dd-MM-yyyy").format(newdate.getTime()));
+                datepick=new SimpleDateFormat("dd/MM/yyyy").format(newdate.getTime());
+                mDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(newdate.getTime()));
+                Toast.makeText(KeranjangActivity.this, "Tanggal Pinjam : "+datepick, Toast.LENGTH_SHORT).show();
             }
         },calendar.get((Calendar.YEAR)),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
         datePickerDialog.show();

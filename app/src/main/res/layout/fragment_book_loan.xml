@@ -148,16 +148,15 @@
             android:background="@drawable/background"
             android:drawableLeft="@drawable/baseline_calendar_today_24"
             android:drawableTint="@color/tab_layout_on"
-            android:hint="Return Date"
-            android:paddingLeft="5dp"
-            tools:text='Tanggal' />
+            android:hint="Tanggal Pengambilan Buku"
+            android:paddingLeft="5dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_cart"
             android:layout_width="359dp"
-            android:layout_marginTop="15dp"
+            android:layout_height="262dp"
             android:layout_marginStart="15dp"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:background="@drawable/card_book_loan"
             android:paddingLeft="30dp"
             android:paddingTop="45dp"

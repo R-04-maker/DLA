@@ -111,8 +111,9 @@ public class BookDetailMemberActivity extends AppCompatActivity {
         });
         mApprove.setOnClickListener(v -> {
             int ids=0;
-            SharedPreferences sharedPreferences = getSharedPreferences("email",MODE_PRIVATE);
+            SharedPreferences sharedPreferences = getSharedPreferences("nomor",MODE_PRIVATE);
             String email = sharedPreferences.getString("email","");
+            System.out.println("email :"+email);
             msuser user = new msuser();
             user.setEmail(email);
             Koleksi koleksi = new Koleksi();

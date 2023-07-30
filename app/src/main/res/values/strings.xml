@@ -16,4 +16,5 @@
     <string name="konfirmasi_tolak">Apakah anda yakin menolak pengajuan ?</string>
     <string name="konfirmasi_title">Konfirmasi</string>
     <string name="konfirmasi_terima">Apakah anda yakin menerima pengajuan ?</string>
+    <string name="terms_condition"><![CDATA[Terms & Condition]]></string>
 </resources>

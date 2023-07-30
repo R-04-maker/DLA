@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -30,6 +31,7 @@ import com.astra.polytechnic.model.Dashboard;
 import com.astra.polytechnic.model.Koleksi;
 import com.astra.polytechnic.repository.KoleksiRepository;
 import com.astra.polytechnic.ui.activity.BookDetailActivity;
+import com.astra.polytechnic.ui.activity.SearchActivity;
 import com.denzcoskun.imageslider.ImageSlider;
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -45,6 +47,7 @@ public class HomeFragment extends Fragment {
 
     // Components
     private RecyclerView mRvNewestBooks, mRvPopularBooks;
+    private EditText searchTxt;
     private TextView mNewestSeeAll, mPopularSeeAll, mBookCount, mVisitorCount, mHistoryCount,mLoginName;
     private LinearLayout mScrollView;
     private ImageSlider mImageSlider;
@@ -78,7 +81,11 @@ public class HomeFragment extends Fragment {
 
         pref= getActivity().getSharedPreferences("nomor", getActivity().MODE_PRIVATE);
         mLoginName = view.findViewById(R.id.login_name);
-        mLoginName.setText(pref.getString("nama", null));
+        String namaSp = pref.getString("nama", null);
+        int firstName = namaSp.indexOf(' ');
+        String nama = (firstName != -1) ? namaSp.substring(0, firstName) : namaSp;
+        Log.d(TAG, "onCreateView: " + nama);
+        mLoginName.setText(nama);
 
         mScrollView = view.findViewById(R.id.scroll);
 
@@ -96,6 +103,17 @@ public class HomeFragment extends Fragment {
 
         mNewestSeeAll = view.findViewById(R.id.see_all_newest);
         mPopularSeeAll = view.findViewById(R.id.see_all_newestcollection);
+
+        searchTxt = view.findViewById(R.id.searchBtn);
+        searchTxt.setFocusable(false);
+        searchTxt.setClickable(false);
+        searchTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

@@ -22,8 +22,6 @@ public interface ManagedLoanService {
     Call<ObjectResponse> getDetailBooking(@Path("id") int id);
     @GET("updatePengajuan/{id}/{status}")
     Call<Responses> updateDetailBooking(@Path("id") int id, @Path("status") String status);
-/*    @POST("updateGambar")
-    Call<Responses> updateGambar(@Query("encodedImage") String encodedImage); */
     @Multipart
     @POST("updateGambar")
     Call<Responses> updateGambar(@Part MultipartBody.Part file, @Part("status") String status, @Part("id") int id);

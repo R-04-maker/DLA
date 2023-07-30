@@ -3,6 +3,10 @@ package com.astra.polytechnic.ui.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +26,7 @@ import com.astra.polytechnic.model.response.AddResponse;
 import com.astra.polytechnic.model.response.ListProdiResponse;
 import com.astra.polytechnic.repository.*;
 import com.astra.polytechnic.ViewModel.*;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.text.SimpleDateFormat;
@@ -35,24 +40,16 @@ import java.util.List;
 import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity {
-    private EditText memail;
-    private EditText mNIM;
-    private EditText mNama;
-    private EditText mnotelp;
+    private TextInputEditText mEmail, mNIM, mNama, mnotelp, mpassword, mReenterPass;
     private ImageView mSignUp;
-    private EditText mpassword;
-    private EditText mReenterPass;
     ProgressDialog loading;
     private msuser mMsuser;
     private msuserRepo mMsuserRepo;
 
     private UserViewModel mUserViewModel;
-    private TextInputLayout mTextInputLayout;
+    private TextInputLayout mProdiLayout, mNameLayout, mNIMLayout, mEmailLayout, mTeleponLayout, mPasswordLayout, mRetypePassLayout;
     private AutoCompleteTextView mAutoCompleteTextView;
     private ArrayAdapter<String> mArrayAdapter;
-
-    //Map<String,String> map=new HashMap<>();
-    //String[] items={"P4","TPM","MI","TO","MK","TAB","TPHP","TKBG"};
     String prodi;
     List<msprodi> mMsprodis;
     Map<String, String> programMap = new HashMap<>();
@@ -67,18 +64,25 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void initComponent(){
-        mTextInputLayout=findViewById(R.id.dropdown_menu);
-        mAutoCompleteTextView=findViewById(R.id.actv_dd_prodi);
-//        map.put("PR001","P4");
-//        map.put("PR002","TPM");
-//        map.put("PR003","MI");
-//        map.put("PR004","TO");
-//        map.put("PR005","MK");
-//        map.put("PR006","TAB");
-//        map.put("PR007","TPHP");
-//        map.put("PR008","TKBG");
-        mMsprodis=new ArrayList<>();
-        mMsprodiViewModel=new ViewModelProvider(this).get(msprodiViewModel.class);
+        mProdiLayout = findViewById(R.id.dropdown_menu);
+        mEmailLayout = findViewById(R.id.txtLayoutEmail);
+        mProdiLayout = findViewById(R.id.dropdown_menu);
+        mNameLayout  = findViewById(R.id.txtLayoutNama);
+        mNIMLayout = findViewById(R.id.txtLayoutNIM);
+        mTeleponLayout = findViewById(R.id.txtLayoutNotel);
+        mPasswordLayout = findViewById(R.id.txtLayoutPassword);
+        mRetypePassLayout = findViewById(R.id.txtLayoutRePassword);
+        mAutoCompleteTextView = findViewById(R.id.actv_dd_prodi);
+        mEmail = findViewById(R.id.input_email_signup);
+        mNIM = findViewById(R.id.input_nomor_signup);
+        mNama = findViewById(R.id.input_nama_signup);
+        mnotelp = findViewById(R.id.input_mobile_phone_signup);
+        mpassword = findViewById(R.id.input_password_signup);
+        mReenterPass = findViewById(R.id.input_retype_password_signup);
+        mSignUp = findViewById(R.id.regist);
+        mMsprodis = new ArrayList<>();
+
+        mMsprodiViewModel = new ViewModelProvider(this).get(msprodiViewModel.class);
         mMsprodiViewModel.getAllProdi().observe(this, new Observer<List<msprodi>>() {
             @Override
             public void onChanged(List<msprodi> msprodis) {
@@ -89,18 +93,36 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
-        mMsuserRepo=msuserRepo.get();
 
-        memail = (EditText) findViewById(R.id.input_email_signup);
-        mNIM=(EditText) findViewById(R.id.input_nomor_signup);
-        mNama=(EditText)findViewById(R.id.input_nama_signup);
-        mnotelp=(EditText) findViewById(R.id.input_mobile_phone_signup);
-        mpassword=(EditText) findViewById(R.id.input_password_signup);
-        mReenterPass=(EditText) findViewById(R.id.input_retype_password_signup);
-        mSignUp= (ImageView) findViewById(R.id.regist);
-
+        mMsuserRepo = msuserRepo.get();
         mArrayAdapter = new ArrayAdapter<>(SignUpActivity.this, R.layout.list_dd_prodi, prodiNames);
         mAutoCompleteTextView.setAdapter(mArrayAdapter);
+        mEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String email = editable.toString().trim();
+                if (TextUtils.isEmpty(email)) {
+                    // Jika email kosong, tampilkan pesan error
+                    mEmailLayout.setError("Email harus diisi");
+                } else if (!isValidEmail(email)) {
+                    // Jika email tidak valid, tampilkan pesan error
+                    mEmailLayout.setError("Email tidak valid");
+                } else {
+                    // Jika email valid, hilangkan pesan error
+                    mEmailLayout.setError(null);
+                }
+            }
+        });
         mAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -108,40 +130,34 @@ public class SignUpActivity extends AppCompatActivity {
                 if (parent != null) {
                     //get prodi id from prodi name
                     prodi = prodiIds.get(i);
-                    Toast.makeText(SignUpActivity.this, prodi, Toast.LENGTH_SHORT).show();
                 }
             }
         });
         //set prodi
-
 
         Date  dateTimeNow = new Date();
 
         SimpleDateFormat  formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         mSignUp.setOnClickListener(view -> {
-            System.out.println(prodi);
-            String email=memail.getText().toString();
-            String nomor=mNIM.getText().toString();
-            String nama=mNama.getText().toString();
-            String instansi="POLITEKNIK ASTRA";
-            String alamat="";
-            String hp=mnotelp.getText().toString();
-            String password=mpassword.getText().toString();
-            String id_role="ROL06";
-            String id_prodi=prodi;
-            Integer status=1;
-            String creaby=mNama.getText().toString();
-            String creadate= formatter.format(dateTimeNow);
-            String modiby="";
-            String modidate= formatter.format(dateTimeNow);
-            msprodi msprodi=new msprodi();
-            msprodi.setId_prodi(id_prodi);
-            msrole role =new msrole();
-            role.setId_role(id_role);
+            String email = mEmail.getText().toString();
+            String nomor = mNIM.getText().toString();
+            String nama = mNama.getText().toString();
+            String instansi = "POLITEKNIK ASTRA";
+            String alamat = "";
+            String hp = mnotelp.getText().toString();
+            String password = mpassword.getText().toString();
+            String id_role = "ROL06";
+            String id_prodi = prodi;
+            Integer status = 1;
+            String creaby = mNama.getText().toString();
+            String creadate = formatter.format(dateTimeNow);
+            String modiby = "";
+            String modidate = formatter.format(dateTimeNow);
+
             UserViewModel userViewModel=new UserViewModel();
             msuser user=new msuser(email,nomor,nama,instansi,alamat,hp,password
-                    ,role,msprodi,status,creaby,creadate,modiby,modidate);
+                    ,id_role,id_prodi,status,creaby,creadate,modiby,modidate);
 
             if (validate(view)) {
                 ProgressDialog progressDialog = ProgressDialog.show(this, "Sign Up", "Signing Up...");
@@ -164,12 +180,18 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
-
+    private boolean isValidEmail(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
     public boolean validate(View view) {
-        boolean nameValidation = ValidationHelper.requiredTextInputValidation(mNama);
-        boolean emailValidation = ValidationHelper.requiredTextInputValidation(memail);
-        boolean passwordValidation = ValidationHelper.requiredTextInputValidation(mpassword);
-        boolean confirmationValidation = ValidationHelper.confirmationValidation(mpassword, mReenterPass);
+        boolean emailValidation = ValidationHelper.requiredTextInputValidation(mEmailLayout);
+        boolean nimValidation = ValidationHelper.requiredTextInputValidation(mNIMLayout);
+        boolean nameValidation = ValidationHelper.requiredTextInputValidation(mNameLayout);
+        boolean phoneValidation = ValidationHelper.requiredTextInputValidation(mTeleponLayout);
+        boolean prodiValidation = ValidationHelper.requiredTextInputValidation(mProdiLayout);
+        boolean passwordValidation = ValidationHelper.requiredTextInputValidation(mPasswordLayout);
+        boolean repasswordValidation = ValidationHelper.requiredTextInputValidation(mRetypePassLayout);
+        boolean confirmationValidation = ValidationHelper.confirmationValidation(mPasswordLayout, mRetypePassLayout);
 
         return nameValidation && emailValidation && passwordValidation && confirmationValidation;
     }

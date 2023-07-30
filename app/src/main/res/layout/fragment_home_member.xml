@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_home"
-    tools:context=".ui.fragment.HomeFragment">
+    tools:context=".ui.fragment.HomeMemberFragment">
 
     <ImageView
         android:id="@+id/imageView7"
@@ -46,7 +46,7 @@
         android:hint="Search"
         android:paddingStart="12dp"
         android:textSize="7pt"
-        android:enabled="false"/>
+        android:enabled="true"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -111,7 +111,6 @@
                     android:textSize="18dp" />
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 
     <ImageView
@@ -128,7 +127,6 @@
         android:id="@+id/layout_data"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginBottom="50dp"
         app:layout_constraintBottom_toBottomOf="@+id/card_data"
         app:layout_constraintEnd_toEndOf="parent"
@@ -137,14 +135,15 @@
 
         <LinearLayout
             android:layout_width="120dp"
-            android:layout_height="60dp">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
             <ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="3dp"
-                android:src="@drawable/card_book" />
+                android:src="@drawable/card_hist" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -168,7 +167,7 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.69"
                     android:fontFamily="@font/inter_bold"
-                    android:text="Book"
+                    android:text="History"
                     android:textColor="#17557E"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -176,20 +175,31 @@
 
         <LinearLayout
             android:layout_width="120dp"
-            android:layout_height="65dp">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
 
-            <ImageView
+            <androidx.cardview.widget.CardView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/tab_layout_on"
+                app:cardCornerRadius="13dp"
                 android:layout_marginRight="3dp"
-                android:src="@drawable/card_person" />
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/book_arrow_down"
+                    android:tint="@color/white" />
+            </androidx.cardview.widget.CardView>
 
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
                 <TextView
                     android:id="@+id/visitors_count"
@@ -208,31 +218,41 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.69"
                     android:fontFamily="@font/inter_bold"
-                    android:text="Visitors"
+                    android:text="Borrowed"
                     android:textColor="#17557E"
-                    android:textSize="15dp" />
+                    android:textSize="13dp" />
             </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="120dp"
-            android:layout_height="65dp">
+            android:layout_width="100dp"
+            android:layout_height="65dp"
+            android:layout_marginLeft="5dp">
 
-            <ImageView
+            <androidx.cardview.widget.CardView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_gravity="center"
+                app:cardBackgroundColor="@color/tab_layout_on"
+                app:cardCornerRadius="13dp"
                 android:layout_marginRight="3dp"
-                android:src="@drawable/card_hist" />
+                android:layout_gravity="center">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/cart_arrow_down"/>
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
                 <TextView
                     android:id="@+id/history_count"
-                    android:layout_width="60dp"
+                    android:layout_width="50dp"
                     android:layout_height="35dp"
                     android:fontFamily="@font/inter_bold"
                     android:text="0"
@@ -247,7 +267,7 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.69"
                     android:fontFamily="@font/inter_bold"
-                    android:text="History"
+                    android:text="Cart"
                     android:textColor="#17557E"
                     android:textSize="15dp" />
             </LinearLayout>
@@ -311,24 +331,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.denzcoskun.imageslider.ImageSlider
+            <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/slider"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
-                app:iss_auto_cycle="true"
-                app:iss_period="1000"
-                app:iss_delay="1000"
-                app:iss_placeholder="@color/black"
-                app:iss_error_image="@color/purple_200"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_marginHorizontal="10dp"/>
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="280dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 app:cardCornerRadius="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -366,7 +377,7 @@
                     android:paddingLeft="20dp"
                     android:paddingTop="45dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="45dp"
+                    android:paddingBottom="20dp"
                     android:scrollbars="horizontal" />
             </androidx.cardview.widget.CardView>
 
@@ -410,7 +421,7 @@
                     android:paddingLeft="20dp"
                     android:paddingTop="45dp"
                     android:paddingRight="20dp"
-                    android:paddingBottom="45dp"
+                    android:paddingBottom="20dp"
                     android:scrollbars="horizontal" />
             </androidx.cardview.widget.CardView>
         </LinearLayout>

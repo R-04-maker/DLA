@@ -29,6 +29,9 @@ public class ManagedLoanViewModel extends ViewModel {
     public LiveData<List<Object[]>> getBorrowedBooking(){
         return mManagedLoanRepository.getBorrowedBooking();
     }
+    public LiveData<List<Object[]>> getAllHistory(){
+        return mManagedLoanRepository.getAllHistory();
+    }
     public LiveData<List<Object[]>> getDetailBooking(int id){
         return mManagedLoanRepository.getDetailBooking(id);
     }

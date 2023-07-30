@@ -38,7 +38,7 @@ import com.astra.polytechnic.model.*;
 import com.astra.polytechnic.model.Koleksi;
 import com.astra.polytechnic.repository.BookingRepository;
 import com.astra.polytechnic.ui.fragment.HomeMemberFragment;
-import com.astra.polytechnic.ui.fragment.LoanMemberFragment;
+import com.astra.polytechnic.model.Keranjang;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -93,6 +93,7 @@ public class KeranjangActivity extends AppCompatActivity {
         mNama.setText(pref.getString("nama", ""));
         mProdi.setText(pref.getString("deskripsi", ""));
         mNoHp.setText(pref.getString("no_hp", ""));
+        mDate.setText("Pilih Tanggal");
         mDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

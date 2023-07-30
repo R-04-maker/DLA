@@ -72,10 +72,18 @@ public class Koleksi {
     @Expose
     private String penyumbang;
 
+    @SerializedName("pengarang")
+    @Expose
+    private String pengarang;
+
+    @SerializedName("penerbit")
+    @Expose
+    private String penerbit;
+
     public Koleksi() {
     }
 
-    public Koleksi(String idKoleksi, String nama, String deskripsi, Kategori idKategori, Rak idRak, Prodi idProdi, String gambar, String tautan, int status, int statuspinjam, int bisapinjam, String creaby, String modiby, String modidate, String tahunTerbit, String penyumbang) {
+    public Koleksi(String idKoleksi, String nama, String deskripsi, Kategori idKategori, Rak idRak, Prodi idProdi, String gambar, String tautan, int status, int statuspinjam, int bisapinjam, String creaby, String creadate, String modiby, String modidate, String tahunTerbit, String penyumbang, String pengarang, String penerbit) {
         this.idKoleksi = idKoleksi;
         this.nama = nama;
         this.deskripsi = deskripsi;
@@ -88,10 +96,13 @@ public class Koleksi {
         this.statuspinjam = statuspinjam;
         this.bisapinjam = bisapinjam;
         this.creaby = creaby;
+        this.creadate = creadate;
         this.modiby = modiby;
         this.modidate = modidate;
         this.tahunTerbit = tahunTerbit;
         this.penyumbang = penyumbang;
+        this.pengarang = pengarang;
+        this.penerbit = penerbit;
     }
 
     public String getIdKoleksi() {
@@ -230,15 +241,31 @@ public class Koleksi {
         this.penyumbang = penyumbang;
     }
 
+    public String getPengarang() {
+        return pengarang;
+    }
+
+    public void setPengarang(String pengarang) {
+        this.pengarang = pengarang;
+    }
+
+    public String getPenerbit() {
+        return penerbit;
+    }
+
+    public void setPenerbit(String penerbit) {
+        this.penerbit = penerbit;
+    }
+
     @Override
     public String toString() {
         return "Koleksi{" +
                 "idKoleksi='" + idKoleksi + '\'' +
                 ", nama='" + nama + '\'' +
                 ", deskripsi='" + deskripsi + '\'' +
-                ", idKategori='" + idKategori + '\'' +
-                ", idRak='" + idRak + '\'' +
-                ", idProdi='" + idProdi + '\'' +
+                ", idKategori=" + idKategori +
+                ", idRak=" + idRak +
+                ", idProdi=" + idProdi +
                 ", gambar='" + gambar + '\'' +
                 ", tautan='" + tautan + '\'' +
                 ", status=" + status +
@@ -250,6 +277,8 @@ public class Koleksi {
                 ", modidate='" + modidate + '\'' +
                 ", tahunTerbit='" + tahunTerbit + '\'' +
                 ", penyumbang='" + penyumbang + '\'' +
+                ", pengarang='" + pengarang + '\'' +
+                ", penerbit='" + penerbit + '\'' +
                 '}';
     }
 }

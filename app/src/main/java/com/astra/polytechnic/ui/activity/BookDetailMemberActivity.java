@@ -1,10 +1,7 @@
 package com.astra.polytechnic.ui.activity;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,9 +13,7 @@ import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.KeranjangViewModel;
 import com.astra.polytechnic.ViewModel.KoleksiViewModel;
 import com.astra.polytechnic.model.*;
-import com.astra.polytechnic.model.response.AddResponse;
 import com.astra.polytechnic.repository.KeranjangRepository;
-import com.astra.polytechnic.ui.fragment.LoanMemberFragment;
 import com.squareup.picasso.Picasso;
 
 public class BookDetailMemberActivity extends AppCompatActivity {

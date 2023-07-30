@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ui.fragment.HomeMemberFragment;
-import com.astra.polytechnic.ui.fragment.LoanMemberFragment;
+import com.astra.polytechnic.ui.fragment.BooksCollectionFragment;
 import com.astra.polytechnic.ui.fragment.ProfileFragment;
 
 public class DashboardMemberActivity extends AppCompatActivity {
@@ -93,7 +93,7 @@ public class DashboardMemberActivity extends AppCompatActivity {
                     // set home Fragment
                     getSupportFragmentManager().beginTransaction()
                             .setReorderingAllowed(true)
-                            .replace(R.id.fragmentContainter, LoanMemberFragment.class, null)
+                            .replace(R.id.fragmentContainter, BooksCollectionFragment.class, null)
                             .commit();
 
                     // unselect other tabs expect loan tab

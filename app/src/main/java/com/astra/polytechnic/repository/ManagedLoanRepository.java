@@ -47,7 +47,7 @@ public class ManagedLoanRepository {
             public void onResponse(Call<ObjectResponse> call, Response<ObjectResponse> response) {
                 ObjectResponse objectResponse = response.body();
                 if(objectResponse.getResult() == 200){
-                    mManagedLoanDao.setListBooking(objectResponse.getListdata());
+                    mManagedLoanDao.setListBooking(objectResponse.getData());
                     Log.d(TAG, "getUnconfirmedBook.onResponse() called");
                 }else {
                     Log.d(TAG, "getUnconfirmedBook.onResponse() called : " + objectResponse.getData());
@@ -69,7 +69,7 @@ public class ManagedLoanRepository {
             public void onResponse(Call<ObjectResponse> call, Response<ObjectResponse> response) {
                 ObjectResponse objectResponse = response.body();
                 if(objectResponse.getResult() == 200){
-                    mManagedLoanDao.setListBooking(objectResponse.getListdata());
+                    mManagedLoanDao.setListBooking(objectResponse.getData());
                     Log.d(TAG, "getConfirmedBook.onResponse() called");
                 }else {
                     Log.d(TAG, "getConfirmedBook.onResponse() called : " + objectResponse.getData());
@@ -91,7 +91,7 @@ public class ManagedLoanRepository {
             public void onResponse(Call<ObjectResponse> call, Response<ObjectResponse> response) {
                 ObjectResponse objectResponse = response.body();
                 if(objectResponse.getResult() == 200){
-                    mManagedLoanDao.setListBooking(objectResponse.getListdata());
+                    mManagedLoanDao.setListBooking(objectResponse.getData());
                     Log.d(TAG, "getBorrowedBooking.onResponse() called");
                 }else {
                     Log.d(TAG, "getBorrowedBooking.onResponse() called : " + objectResponse.getData());
@@ -100,6 +100,28 @@ public class ManagedLoanRepository {
             @Override
             public void onFailure(Call<ObjectResponse> call, Throwable t) {
                 Log.e(TAG, "getBorrowedBooking.onFailure: " + t.getMessage());
+            }
+        });
+        return mManagedLoanDao.getListBooking();
+    }
+    public LiveData<List<Object[]>> getAllHistory(){
+        Log.i(TAG, "getAllHistory() called");
+
+        Call<ObjectResponse> call = mManagedLoanService.getFinishedBooking();
+        call.enqueue(new Callback<ObjectResponse>() {
+            @Override
+            public void onResponse(Call<ObjectResponse> call, Response<ObjectResponse> response) {
+                ObjectResponse objectResponse = response.body();
+                if(objectResponse.getResult() == 200){
+                    mManagedLoanDao.setListBooking(objectResponse.getData());
+                    Log.d(TAG, "getAllHistory.onResponse() called");
+                }else {
+                    Log.d(TAG, "getAllHistory.onResponse() called : " + objectResponse.getData());
+                }
+            }
+            @Override
+            public void onFailure(Call<ObjectResponse> call, Throwable t) {
+                Log.e(TAG, "getAllHistory.onFailure: " + t.getMessage());
             }
         });
         return mManagedLoanDao.getListBooking();

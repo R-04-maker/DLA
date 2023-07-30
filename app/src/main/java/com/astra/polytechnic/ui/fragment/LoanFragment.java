@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.astra.polytechnic.R;
+import com.astra.polytechnic.ui.activity.HistoryActivity;
 import com.astra.polytechnic.ui.activity.SearchActivity;
 
 public class LoanFragment extends Fragment {
@@ -27,7 +29,7 @@ public class LoanFragment extends Fragment {
     private LinearLayout borrowedLayout;
 
     private TextView unconfirmedTxt, confirmedTxt, finishedTxt;
-    private Button mBtnAllTransc;
+    private ImageButton mBtnAllTransc;
 
     public LoanFragment() {
         // Required empty public constructor
@@ -153,7 +155,7 @@ public class LoanFragment extends Fragment {
         mBtnAllTransc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent  = new Intent(getActivity(), SearchActivity.class);
+                Intent intent  = new Intent(getActivity(), HistoryActivity.class);
                 startActivity(intent);
             }
         });

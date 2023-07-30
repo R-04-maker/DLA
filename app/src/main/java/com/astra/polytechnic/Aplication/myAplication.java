@@ -18,6 +18,7 @@ public class myAplication extends Application {
         msuserRepo.initialize(this);
         msprodiRepository.initialize(this);
         KeranjangRepository.initialize(this);
+        BannerRepository.initialize(this);
         BookingRepository.initialize(this);
     }
 }

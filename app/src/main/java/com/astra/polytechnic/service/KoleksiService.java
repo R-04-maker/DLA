@@ -20,6 +20,9 @@ public interface KoleksiService {
     @GET("getDataDashboard")
     Call<List<Object[]>> getDataDashboard();
 
+    @GET("getDataDashboardMember/{email}")
+    Call<List<Object[]>> getDataDashboardMember(@Path("email") String email);
+
     @GET("getDetailKoleksi/{id}")
     Call<List<Object[]>> getDetailBook(@Path("id") int idKoleksi);
 

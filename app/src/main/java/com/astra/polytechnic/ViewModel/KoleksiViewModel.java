@@ -26,6 +26,9 @@ public class KoleksiViewModel extends ViewModel {
     public LiveData<List<Object[]>> getDataDashboard(){
         return mKoleksiRepository.getDataDashboard();
     }
+    public LiveData<List<Object[]>> getDataDashboardMember(String email){
+        return mKoleksiRepository.getDataDashboardMember(email);
+    }
     public LiveData<List<Object[]>> getDetailBook(int id){
         return mKoleksiRepository.getDetailBook(id);
     }

@@ -18,6 +18,8 @@ public interface ManagedLoanService {
     Call<ObjectResponse> getConfirmedBook();
     @GET("getBorrowedBooking")
     Call<ObjectResponse> getBorrowedBooking();
+    @GET("getFinishedBooking")
+    Call<ObjectResponse> getFinishedBooking();
     @GET("getDetailBooking/{id}")
     Call<ObjectResponse> getDetailBooking(@Path("id") int id);
     @GET("updatePengajuan/{id}/{status}")

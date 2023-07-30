@@ -271,21 +271,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-<!--            <com.denzcoskun.imageslider.ImageSlider
-                android:id="@+id/slider_home"
-                android:layout_width="wrap_content"
-                android:layout_height="200dp"
-                android:layout_margin="10dp"
-                app:iss_auto_cycle="true"
-                app:iss_period="1000"
-                app:iss_delay="1000"
-                app:iss_placeholder="@color/black"
-                app:iss_error_image="@color/purple_200"
-                app:cardCornerRadius="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>-->
-
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -309,13 +294,14 @@
                     android:textColor="@color/black" />
 
                 <TextView
-                    android:id="@+id/see_all_newest"
+                    android:id="@+id/see_all_newest_adm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_variablefont_slnt_wght"
                     android:paddingLeft="310dp"
                     android:paddingTop="15dp"
                     android:text="See All"
+                    android:onClick="searchIntent"
                     android:textColor="@color/black"
                     android:textSize="14sp" />
 
@@ -351,17 +337,32 @@
                     android:text="Newest Collection"
                     android:textSize="18sp"
                     android:textColor="@color/black" />
-
-                <TextView
-                    android:id="@+id/see_all_newestcollection"
+                <LinearLayout
+                    android:id="@+id/SeeAllLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <TextView
+                        android:id="@+id/see_all_newestcollection_adm"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fontFamily="@font/inter_variablefont_slnt_wght"
+                        android:paddingLeft="310dp"
+                        android:paddingTop="15dp"
+                        android:text="See All"
+                        android:textColor="@color/black"
+                        android:textSize="14sp" />
+                </LinearLayout>
+<!--                <TextView
+                    android:id="@+id/see_all_newestcollection_adm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fontFamily="@font/inter_variablefont_slnt_wght"
                     android:paddingLeft="310dp"
                     android:paddingTop="15dp"
                     android:text="See All"
+                    android:clickable="true"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="14sp" />-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_popular_books"

@@ -78,7 +78,7 @@
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Manage Loan"
+                android:text="Books Collection"
                 android:layout_marginStart="10dp"
                 android:textSize="16sp"
                 android:textColor="@color/navbar_on"

@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#da676f</color>
     <color name="gray">#a3a5a8</color>
+    <color name="gray_font">#a3a5a8</color>
     <color name="bg_dashboard">#edf0ff</color>
     <color name="navbar_on">#2761ff</color>
     <color name="round_back">#e9efff</color>

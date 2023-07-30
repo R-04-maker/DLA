@@ -4,13 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.astra.polytechnic.R;
+import com.astra.polytechnic.ViewModel.KeranjangViewModel;
 import com.astra.polytechnic.ViewModel.KoleksiViewModel;
+import com.astra.polytechnic.model.Keranjang;
+import com.astra.polytechnic.model.Koleksi;
+import com.astra.polytechnic.model.msuser;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,10 +26,12 @@ import java.util.List;
 public class BookDetailActivity extends AppCompatActivity {
     private static final String TAG = "BookDetailActivity";
     private String mIdKoleksi;
+    private Button mAddtoCart;
     private ImageView mCoverDetail, mBackButton;
     private TextView mBookTitle, mBookAuthor, mBookPublisher, mBookPubYear, mBookDesc, mBookCategory, mBookKlasifikasi, mBookRak, mStatusPinjam;
     private KoleksiViewModel mKoleksiViewModel;
-
+    SharedPreferences pref;
+    KeranjangViewModel mKeranjangViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +51,7 @@ public class BookDetailActivity extends AppCompatActivity {
         mBookKlasifikasi = findViewById(R.id.book_klasifikasi);
         mBookRak = findViewById(R.id.book_rak);
         mStatusPinjam = findViewById(R.id.book_available);
+        mAddtoCart = findViewById(R.id.btn_addtoCart);
 
         mKoleksiViewModel = new ViewModelProvider(this).get(KoleksiViewModel.class);
 
@@ -97,5 +108,35 @@ public class BookDetailActivity extends AppCompatActivity {
                 mBookKlasifikasi.setText(klasifikasi);
             }
         });
+        pref = BookDetailActivity.this.getSharedPreferences("nomor", BookDetailActivity.MODE_PRIVATE);
+        String namaSp = pref.getString("id_role", null);
+        if (namaSp != null) {
+            Log.v("TEST", "ROLE = " + namaSp);
+            if(namaSp.equals("ROL06")){
+                mAddtoCart.setVisibility(View.VISIBLE);
+            }else {
+                mAddtoCart.setVisibility(View.GONE);
+            }
+        }
+
+        mAddtoCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int ids=0;
+                String email = pref.getString("email","");
+                System.out.println("email :" + email);
+                msuser user = new msuser();
+                user.setEmail(email);
+                Koleksi koleksi = new Koleksi();
+                koleksi.setIdKoleksi(mIdKoleksi);
+                Keranjang keranjang = new Keranjang(ids,koleksi,user);
+                mKeranjangViewModel.addKeranjang(keranjang);
+                finish();
+                Toast.makeText(BookDetailActivity.this, "Data Berhasil Dimasukan Ke keranjang", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    public void onBackBtnClicked(View view){
+        finish();
     }
 }

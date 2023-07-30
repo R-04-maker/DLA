@@ -32,26 +32,24 @@ import com.astra.polytechnic.model.Koleksi;
 import com.astra.polytechnic.repository.KoleksiRepository;
 import com.astra.polytechnic.ui.activity.BookDetailActivity;
 import com.astra.polytechnic.ui.activity.SearchActivity;
-import com.denzcoskun.imageslider.ImageSlider;
-import com.denzcoskun.imageslider.constants.ScaleTypes;
-import com.denzcoskun.imageslider.models.SlideModel;
+import com.google.android.material.textview.MaterialTextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = "HomeFragment";
     private static final String KEY_EXTRA = "id_koleksi";
 
     // Components
     private RecyclerView mRvNewestBooks, mRvPopularBooks;
     private EditText searchTxt;
-    private TextView mNewestSeeAll, mPopularSeeAll, mBookCount, mVisitorCount, mHistoryCount,mLoginName;
-    private LinearLayout mScrollView;
-    private ImageSlider mImageSlider;
-    private List<SlideModel> mSlideModelList = new ArrayList<>();
+    private TextView mBookCount, mVisitorCount, mHistoryCount,mLoginName;
+//    private MaterialTextView mSeeAllReleased,mSeeAllCollection;
+    private TextView mSeeAllReleased,mSeeAllCollection;
+    private LinearLayout mScrollView,mSeeAllLayout;
 
     // Data
     private KoleksiViewModel mNewestViewModel, mNewestColectionVM,mDashboardVM;
@@ -79,7 +77,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_home, container, false);
 
-        pref= getActivity().getSharedPreferences("nomor", getActivity().MODE_PRIVATE);
+        pref = getActivity().getSharedPreferences("nomor", getActivity().MODE_PRIVATE);
         mLoginName = view.findViewById(R.id.login_name);
         String namaSp = pref.getString("nama", null);
         int firstName = namaSp.indexOf(' ');
@@ -101,8 +99,20 @@ public class HomeFragment extends Fragment {
         mRvPopularBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mRvPopularBooks.setAdapter(mPopularAdapater);
 
-        mNewestSeeAll = view.findViewById(R.id.see_all_newest);
-        mPopularSeeAll = view.findViewById(R.id.see_all_newestcollection);
+        mSeeAllReleased = view.findViewById(R.id.see_all_newest_adm);
+        mSeeAllCollection = view.findViewById(R.id.see_all_newestcollection_adm);
+        mSeeAllCollection.setOnClickListener(this);
+        mSeeAllReleased.setOnClickListener(this::onClick);
+
+        mSeeAllLayout = view.findViewById(R.id.SeeAllLayout);
+        mSeeAllLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: Released");
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });
 
         searchTxt = view.findViewById(R.id.searchBtn);
         searchTxt.setFocusable(false);
@@ -115,13 +125,29 @@ public class HomeFragment extends Fragment {
             }
         });
 
+/*        mSeeAllReleased.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: Released");
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });*/
+
+/*        mSeeAllCollection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: Collection");
+                Intent intent = new Intent(getActivity(), SearchActivity.class);
+                startActivity(intent);
+            }
+        });*/
+
         return view;
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mScrollView.setVisibility(View.INVISIBLE);
         mNewestViewModel.getNewest().observe(getViewLifecycleOwner(), this::updateNewestBook);
         mNewestColectionVM.getNewestReleased().observe(getViewLifecycleOwner(), this::updateNewestCollection);
         mDashboardVM.getDataDashboard().observe(getViewLifecycleOwner(), this::updateDashboard);
@@ -158,6 +184,13 @@ public class HomeFragment extends Fragment {
         mCollectionList = DLAHelper.getPopularBooks(koleksiNewest);
         mPopularAdapater = new CollectionAdapter(mCollectionList);
         mRvPopularBooks.setAdapter(mPopularAdapater);
+    }
+
+    @Override
+    public void onClick(View v) {
+/*        Log.d(TAG, "onClick: Released");
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        startActivity(intent);*/
     }
 
     private class NewestAdapter extends RecyclerView.Adapter<NewestAdapter.NewestHolder>{
@@ -220,7 +253,6 @@ public class HomeFragment extends Fragment {
             }
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getContext(), mKoleksi.getNama(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 intent.putExtra(KEY_EXTRA, mKoleksi.getIdKoleksi());
                 startActivity(intent);

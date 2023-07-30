@@ -37,6 +37,9 @@ import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.ManagedLoanViewModel;
 import com.astra.polytechnic.helper.DLAHelper;
 import com.astra.polytechnic.helper.DateConverter;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.squareup.picasso.Picasso;
@@ -57,7 +60,6 @@ public class LoanDetailActivity extends AppCompatActivity {
     private static final int PERMISSIONS_REQUEST_CAMERA = 2;
     private String mIdBooking,mStatusExtra;
     private Button mBtnTolak, mBtnTerima, mUpdateGambar,mBtnCamera;
-//    private ImageButton mBtnCamera;
     private MaterialCardView mMaterialCardView;
     private TextView mStatus,mBookingId,mBookingDate,mBookingReturn,mNIM,mName,mProdi,mHp,mTry;
     private TextView mBtnModalFotoSebelum,mBtnModalFotoSetelah;
@@ -66,9 +68,9 @@ public class LoanDetailActivity extends AppCompatActivity {
     private List<Object[]> mDetailBooksList;
     private Bitmap imageBitmap;
     private ImageView imageView,mBackButton;
-
     private BooksDetailAdapter mBooksDetailAdapter = new BooksDetailAdapter(Collections.emptyList());
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
+    private String mFotoSebelum, mFotoSesudah;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +118,9 @@ public class LoanDetailActivity extends AppCompatActivity {
             mName.setText(obj[6].toString());
             mProdi.setText(obj[8].toString());
             mHp.setText(obj[9].toString());
+
+            mFotoSebelum = obj[10].toString();
+            mFotoSesudah = obj[11].toString();
 
             // Set cardView background for status and Button Action with status param
             int colorDiterima = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_diterima);
@@ -265,10 +270,21 @@ public class LoanDetailActivity extends AppCompatActivity {
                         LoanDetailActivity.this, R.style.BottomSheetDialogTheme
                 );
                 View bottomSheetView = LayoutInflater.from(getApplicationContext())
-                        .inflate(
-                                R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer)
-                        );
+                        .inflate(R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer));
+                ImageView mFotoModal = bottomSheetView.findViewById(R.id.fotoPeminjaman);
                 // Masukin resource foto pakai picasso
+                if(!mFotoSebelum.equals(null)){
+                    Log.d(TAG, "foto Sebelum: " + mFotoSebelum);
+                    Glide.with(bottomSheetView)
+                            .load(mFotoSebelum)
+                            .apply(new RequestOptions()
+                                    .placeholder(R.drawable.noimage)
+                                    .error(R.drawable.noimage)
+                            )
+                            .into(mFotoModal);
+                }else {
+                    mFotoModal.setImageResource(R.drawable.noimage);
+                }
                 bottomSheetDialog.setContentView(bottomSheetView);
                 bottomSheetDialog.show();
             }
@@ -284,6 +300,19 @@ public class LoanDetailActivity extends AppCompatActivity {
                                 R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer)
                         );
                 // Masukin resource foto pakai picasso
+                ImageView mFotoModal = bottomSheetView.findViewById(R.id.fotoPeminjaman);
+                if(!mFotoSesudah.equals(null)){
+                    Log.d(TAG, "foto sesudah: " + mFotoSesudah);
+                    Glide.with(bottomSheetView)
+                            .load(mFotoSesudah)
+                            .apply(new RequestOptions()
+                                    .placeholder(R.drawable.noimage)
+                                    .error(R.drawable.noimage)
+                            )
+                            .into(mFotoModal);
+                }else {
+                    mFotoModal.setImageResource(R.drawable.noimage);
+                }
                 bottomSheetDialog.setContentView(bottomSheetView);
                 bottomSheetDialog.show();
             }
@@ -451,5 +480,4 @@ public class LoanDetailActivity extends AppCompatActivity {
         // Kembali ke activity sebelumnya
         finish();
     }
-
 }

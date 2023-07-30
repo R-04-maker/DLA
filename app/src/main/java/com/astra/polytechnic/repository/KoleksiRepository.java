@@ -107,6 +107,25 @@ public class KoleksiRepository {
         });
         return objlist;
     }
+    public LiveData<List<Object[]>> getDataDashboardMember(String email){
+        Log.i(TAG, "getDataDashboardMember() called");
+        MutableLiveData<List<Object[]>> objlist = new MutableLiveData<>();
+        Call<List<Object[]>> call = mKoleksiService.getDataDashboardMember(email);
+        call.enqueue(new Callback<List<Object[]>>() {
+            @Override
+            public void onResponse(Call<List<Object[]>> call, Response<List<Object[]>> response) {
+                if(response.isSuccessful()){
+                    objlist.setValue(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Object[]>> call, Throwable t) {
+
+            }
+        });
+        return objlist;
+    }
     public LiveData<List<Object[]>> getDetailBook(int id){
         Log.i(TAG, "getDetailBook() called");
         MutableLiveData<List<Object[]>> objlist = new MutableLiveData<>();

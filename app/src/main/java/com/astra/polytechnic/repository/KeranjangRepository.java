@@ -43,7 +43,6 @@ public class KeranjangRepository {
         return INSTANCE;
     }
 
-
     public LiveData<AddResponse> SaveKeranjang(Keranjang keranjang) {
         MutableLiveData<AddResponse> keranjangs = new MutableLiveData<>();
 
@@ -53,7 +52,12 @@ public class KeranjangRepository {
             @Override
             public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
                 AddResponse addResponse= response.body();
-                Log.d(TAG, "onResponse: Data Berhasil Disimpan " + addResponse);
+                if(addResponse.getStatus() == 200){
+                    Log.d(TAG, "onResponse: Data Berhasil Disimpan " + addResponse);
+                }else {
+                    Log.d(TAG, "onResponse: Data Gagal Disimpan " + addResponse);
+
+                }
             }
 
             @Override
@@ -61,7 +65,6 @@ public class KeranjangRepository {
                 Log.e(TAG, "onFailure: " + t.getMessage());
             }
         });
-
         return keranjangs;
     }
 

@@ -25,6 +25,9 @@ public class DLAHelper {
     public static List<Object[]> getUnconBookList(List<Object[]> bookingList){
         return bookingList == null ? Collections.emptyList() : bookingList.stream().collect(Collectors.toList());
     }
+    public static List<Object[]> getAllHistory(List<Object[]> historylist){
+        return historylist == null ? Collections.emptyList() : historylist.stream().collect(Collectors.toList());
+    }
     public static List<Object[]> getBookDetailList(List<Object[]> booklistdetail){
         return booklistdetail == null ? Collections.emptyList() : booklistdetail.stream().collect(Collectors.toList());
     }

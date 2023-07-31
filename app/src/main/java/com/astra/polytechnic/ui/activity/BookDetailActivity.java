@@ -31,7 +31,7 @@ public class BookDetailActivity extends AppCompatActivity {
     private TextView mBookTitle, mBookAuthor, mBookPublisher, mBookPubYear, mBookDesc, mBookCategory, mBookKlasifikasi, mBookRak, mStatusPinjam;
     private KoleksiViewModel mKoleksiViewModel;
     SharedPreferences pref;
-    KeranjangViewModel mKeranjangViewModel;
+    private KeranjangViewModel mKeranjangViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +54,7 @@ public class BookDetailActivity extends AppCompatActivity {
         mAddtoCart = findViewById(R.id.btn_addtoCart);
 
         mKoleksiViewModel = new ViewModelProvider(this).get(KoleksiViewModel.class);
+        mKeranjangViewModel = new ViewModelProvider(this).get(KeranjangViewModel.class);
 
         int id = Integer.parseInt(mIdKoleksi);
 
@@ -124,15 +125,22 @@ public class BookDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int ids=0;
                 String email = pref.getString("email","");
+                String idBuku = mIdKoleksi;
                 System.out.println("email :" + email);
-                msuser user = new msuser();
-                user.setEmail(email);
-                Koleksi koleksi = new Koleksi();
-                koleksi.setIdKoleksi(mIdKoleksi);
-                Keranjang keranjang = new Keranjang(ids,koleksi,user);
-                mKeranjangViewModel.addKeranjang(keranjang);
-                finish();
-                Toast.makeText(BookDetailActivity.this, "Data Berhasil Dimasukan Ke keranjang", Toast.LENGTH_SHORT).show();
+//                 Cek keranjang untuk validasi ketika data udah ada di keranjang
+                mKeranjangViewModel.cekKeranjang(email,idBuku).observe(BookDetailActivity.this,obj -> {
+                    if (obj.getStatus() == 500) {
+                        msuser user = new msuser();
+                        user.setEmail(email);
+                        Koleksi koleksi = new Koleksi();
+                        koleksi.setIdKoleksi(mIdKoleksi);
+                        Keranjang keranjang = new Keranjang(ids,koleksi,user);
+                        mKeranjangViewModel.addKeranjang(keranjang);
+                        Toast.makeText(BookDetailActivity.this, "Berhasil ditambahkan ke keranjang", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(BookDetailActivity.this, obj.getResult(), Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
     }

@@ -51,7 +51,7 @@ public class BookingRepository {
             @Override
             public void onResponse(Call<List<Booking>> call, Response<List<Booking>> response) {
                 List<Booking> addResponse= response.body();
-                Log.d(TAG, "onResponse:  " + addResponse);
+                booking.setValue(addResponse);
             }
 
             @Override
@@ -70,7 +70,11 @@ public class BookingRepository {
         call.enqueue(new Callback<AddResponse>() {
             @Override
             public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
-                Log.d(TAG, "onResponse:  " + response.body());
+                AddResponse addResponse = response.body();
+                if(addResponse.getResult().equals("Success")){
+                    booking1.setValue(addResponse);
+                }
+                Log.d(TAG, "onResponse:  " + response.body().getStatus());
             }
 
             @Override

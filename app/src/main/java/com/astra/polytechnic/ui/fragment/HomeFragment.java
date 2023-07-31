@@ -99,21 +99,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         mRvPopularBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mRvPopularBooks.setAdapter(mPopularAdapater);
 
-        mSeeAllReleased = view.findViewById(R.id.see_all_newest_adm);
-        mSeeAllCollection = view.findViewById(R.id.see_all_newestcollection_adm);
-        mSeeAllCollection.setOnClickListener(this);
-        mSeeAllReleased.setOnClickListener(this::onClick);
-
-        mSeeAllLayout = view.findViewById(R.id.SeeAllLayout);
-        mSeeAllLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: Released");
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
-            }
-        });
-
         searchTxt = view.findViewById(R.id.searchBtn);
         searchTxt.setFocusable(false);
         searchTxt.setClickable(false);
@@ -124,24 +109,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 startActivity(intent);
             }
         });
-
-/*        mSeeAllReleased.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: Released");
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
-/*        mSeeAllCollection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: Collection");
-                Intent intent = new Intent(getActivity(), SearchActivity.class);
-                startActivity(intent);
-            }
-        });*/
 
         return view;
     }

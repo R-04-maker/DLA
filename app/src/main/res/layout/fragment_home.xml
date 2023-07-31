@@ -293,7 +293,7 @@
                     android:textSize="18sp"
                     android:textColor="@color/black" />
 
-                <TextView
+<!--                <TextView
                     android:id="@+id/see_all_newest_adm"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -303,7 +303,7 @@
                     android:text="See All"
                     android:onClick="searchIntent"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="14sp" />-->
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_newest_book"
@@ -337,7 +337,7 @@
                     android:text="Newest Collection"
                     android:textSize="18sp"
                     android:textColor="@color/black" />
-                <LinearLayout
+<!--                <LinearLayout
                     android:id="@+id/SeeAllLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -351,7 +351,7 @@
                         android:text="See All"
                         android:textColor="@color/black"
                         android:textSize="14sp" />
-                </LinearLayout>
+                </LinearLayout>-->
 <!--                <TextView
                     android:id="@+id/see_all_newestcollection_adm"
                     android:layout_width="match_parent"

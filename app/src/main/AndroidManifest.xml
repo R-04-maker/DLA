@@ -22,6 +22,11 @@
         android:theme="@style/Theme.DigitalLibraryAstraTech"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/card_view_login"/>
+
+        <meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/purple_700"/>
+
         <activity
             android:name=".ui.activity.HistoryActivity"
             android:exported="false" />
@@ -40,7 +45,6 @@
         <activity
             android:name=".ui.activity.DashboardActivity"
             android:exported="false">
-
             <!--
                     <intent-filter>
                     <action android:name="android.intent.action.MAIN" />
@@ -57,7 +61,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.SignUpActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.activity.DashboardMemberActivity"
             android:exported="false" />
@@ -70,6 +75,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".MyFirebaseMessagingService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

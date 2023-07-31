@@ -100,11 +100,11 @@ public class BooksCollectionFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 //        mScrollView.setVisibility(View.INVISIBLE);
-        mNewestViewModel.getNewest().observe(getViewLifecycleOwner(), this::updateNewestBook);
+        mNewestViewModel.getBukuByNamaMt().observe(getViewLifecycleOwner(), this::updateNewestBook);
     }
     private void updateNewestBook(List<Koleksi> koleksiNewest){
         Log.d(TAG, "updateNewestBook: "+ koleksiNewest);
-        mKoleksiList = DLAHelper.getNewestBook(koleksiNewest);
+        mKoleksiList = koleksiNewest;
         mKoleksiAdapter = new BooksCollectionFragment.KoleksiAdapter(mKoleksiList);
         mRvKoleksi.setAdapter(mKoleksiAdapter);
     }

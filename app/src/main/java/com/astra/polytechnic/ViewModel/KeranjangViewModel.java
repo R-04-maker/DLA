@@ -30,4 +30,8 @@ public class KeranjangViewModel extends ViewModel {
     public LiveData<AddResponse> deleteKeranjang(int id) {
         return mKeranjangRepository.DeleteKeranjang(id);
     }
+
+    public LiveData<AddResponse> cekKeranjang(String email, String idKoleksi) {
+        return mKeranjangRepository.cekKeranjang(email,idKoleksi);
+    }
 }

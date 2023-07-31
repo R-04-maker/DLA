@@ -109,4 +109,23 @@ public class KeranjangRepository {
         });
         return objlist;
     }
+    public LiveData<AddResponse> cekKeranjang(String email, String idKoleksi){
+        MutableLiveData<AddResponse> objlist = new MutableLiveData<>();
+        Call<AddResponse> call = mKeranjangService.cekKeranjang(email, idKoleksi);
+        call.enqueue(new Callback<AddResponse>() {
+            @Override
+            public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
+                AddResponse response1 = response.body();
+                if (response.isSuccessful()) {
+                    objlist.setValue(response1);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AddResponse> call, Throwable t) {
+
+            }
+        });
+        return objlist;
+    }
 }

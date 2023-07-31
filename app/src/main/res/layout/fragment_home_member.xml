@@ -359,17 +359,6 @@
                     android:textSize="18sp"
                     android:textColor="@color/black" />
 
-                <TextView
-                    android:id="@+id/see_all_newest"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_variablefont_slnt_wght"
-                    android:paddingLeft="310dp"
-                    android:paddingTop="15dp"
-                    android:text="See All"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_newest_book"
                     android:layout_width="match_parent"
@@ -403,16 +392,6 @@
                     android:textSize="18sp"
                     android:textColor="@color/black" />
 
-                <TextView
-                    android:id="@+id/see_all_newestcollection"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/inter_variablefont_slnt_wght"
-                    android:paddingLeft="310dp"
-                    android:paddingTop="15dp"
-                    android:text="See All"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_popular_books"

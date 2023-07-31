@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class Booking {
     @SerializedName("id_transaction")
     @Expose
-    private String idTransaksi;
+    private int idTransaksi;
 
     @SerializedName("email")
     @Expose
@@ -14,7 +14,7 @@ public class Booking {
 
     @SerializedName("bookingonline")
     @Expose
-    private int idbooking;
+    private String idbooking;
 
     @SerializedName("status")
     @Expose
@@ -46,10 +46,18 @@ public class Booking {
     @Expose
     private String nomor;
 
+    @SerializedName("gambar")
+    @Expose
+    private String gambar;
+
+    @SerializedName("gambar_sesudah")
+    @Expose
+    private String gambar_sesudah;
+
     public Booking() {
     }
 
-    public Booking(String idTransaksi, String email, int idbooking, String status, String creaby, String creadate, String modiby, String modidate, String nama, String nomor) {
+    public Booking(int idTransaksi, String email, String idbooking, String status, String creaby, String creadate, String modiby, String modidate, String nama, String nomor, String gambar, String gambar_sesudah) {
         this.idTransaksi = idTransaksi;
         this.email = email;
         this.idbooking = idbooking;
@@ -60,13 +68,15 @@ public class Booking {
         this.modidate = modidate;
         this.nama = nama;
         this.nomor = nomor;
+        this.gambar = gambar;
+        this.gambar_sesudah = gambar_sesudah;
     }
 
-    public String getIdTransaksi() {
+    public int getIdTransaksi() {
         return idTransaksi;
     }
 
-    public void setIdTransaksi(String idTransaksi) {
+    public void setIdTransaksi(int idTransaksi) {
         this.idTransaksi = idTransaksi;
     }
 
@@ -78,11 +88,11 @@ public class Booking {
         this.email = email;
     }
 
-    public int getIdbooking() {
+    public String getIdbooking() {
         return idbooking;
     }
 
-    public void setIdbooking(int idbooking) {
+    public void setIdbooking(String idbooking) {
         this.idbooking = idbooking;
     }
 
@@ -140,5 +150,39 @@ public class Booking {
 
     public void setNomor(String nomor) {
         this.nomor = nomor;
+    }
+
+    public String getGambar() {
+        return gambar;
+    }
+
+    public void setGambar(String gambar) {
+        this.gambar = gambar;
+    }
+
+    public String getGambar_sesudah() {
+        return gambar_sesudah;
+    }
+
+    public void setGambar_sesudah(String gambar_sesudah) {
+        this.gambar_sesudah = gambar_sesudah;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "idTransaksi=" + idTransaksi +
+                ", email='" + email + '\'' +
+                ", idbooking='" + idbooking + '\'' +
+                ", status='" + status + '\'' +
+                ", creaby='" + creaby + '\'' +
+                ", creadate='" + creadate + '\'' +
+                ", modiby='" + modiby + '\'' +
+                ", modidate='" + modidate + '\'' +
+                ", nama='" + nama + '\'' +
+                ", nomor='" + nomor + '\'' +
+                ", gambar='" + gambar + '\'' +
+                ", gambar_sesudah='" + gambar_sesudah + '\'' +
+                '}';
     }
 }

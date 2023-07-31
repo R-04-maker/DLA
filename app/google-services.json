@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "487887216981",
+    "project_id": "dlanotification",
+    "storage_bucket": "dlanotification.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:487887216981:android:7d141e67c07d52f1394fdc",
+        "android_client_info": {
+          "package_name": "com.astra.polytechnic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "487887216981-emtbsntrt36e0snekf0h7cusq2tj9nk1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6ZYu-Rr0nOvdUsZhusIXPM3WLG5pmEfg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "487887216981-emtbsntrt36e0snekf0h7cusq2tj9nk1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

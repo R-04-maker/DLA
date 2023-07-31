@@ -101,9 +101,6 @@ public class HomeMemberFragment extends Fragment {
         mVisitorCount = view.findViewById(R.id.visitors_count);
         mHistoryCount = view.findViewById(R.id.history_count);
 
-        mNewestSeeAll = view.findViewById(R.id.see_all_newest);
-        mPopularSeeAll = view.findViewById(R.id.see_all_newestcollection);
-
         mRvNewestBooks = view.findViewById(R.id.rv_newest_book);
         mRvNewestBooks.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         mRvNewestBooks.setAdapter(mNewestAdapter);

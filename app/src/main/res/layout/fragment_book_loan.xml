@@ -5,6 +5,7 @@
     android:background="@color/bg_dashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/imageView11"
         android:layout_width="match_parent"
@@ -69,101 +70,117 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="600dp"
         android:layout_marginTop="185dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="10dp">
 
-            <EditText
-                android:id="@+id/ediTextNIM"
-                android:layout_width="175dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="8dp"
-                android:paddingLeft="5dp"
-                android:drawableLeft="@drawable/baseline_email_24"
-                android:drawableTint="@color/tab_layout_on"
-                android:inputType="number"
-                android:hint="NIM"
-                android:maxLength="10"
-                android:background="@drawable/background" />
+        <EditText
+            android:id="@+id/ediTextNIM"
+            android:layout_width="350dp"
+            android:layout_height="40dp"
+            android:background="@drawable/background"
+            android:clickable="false"
+            android:drawableLeft="@drawable/baseline_email_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/tab_layout_on"
+            android:hint="NIM"
+            android:inputType="none"
+            android:maxLength="10"
+            android:paddingLeft="5dp"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="0320210067" />
 
-            <EditText
-                android:id="@+id/ediTextProdi"
-                android:layout_width="175dp"
-                android:layout_height="42dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="8dp"
-                android:paddingLeft="5dp"
-                android:hint="Program Study"
-                android:background="@drawable/background" />
-        </LinearLayout>
+        <EditText
+            android:id="@+id/ediTextProdi"
+            android:layout_width="350dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background"
+            android:drawableLeft="@drawable/baseline_school_24"
+            android:drawablePadding="10dp"
+            android:drawableTint="@color/tab_layout_on"
+            android:hint="MANAJEMEN INFORMATIKA (MI)"
+            android:maxLines="2"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:textSize="13dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ediTextName" />
 
         <EditText
             android:id="@+id/ediTextName"
-            android:layout_width="359dp"
+            android:layout_width="350dp"
             android:layout_height="40dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="5dp"
-            android:inputType="text"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background"
             android:drawableLeft="@drawable/baseline_person_24"
+            android:drawablePadding="10dp"
             android:drawableTint="@color/tab_layout_on"
             android:hint="Name"
-            android:background="@drawable/background" />
+            android:inputType="text"
+            android:paddingLeft="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ediTextNIM" />
 
         <EditText
             android:id="@+id/ediTextPhoneNumber"
-            android:layout_width="359dp"
+            android:layout_width="350dp"
             android:layout_height="40dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
-            android:paddingLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/background"
             android:drawableLeft="@drawable/baseline_local_phone_24"
+            android:drawablePadding="10dp"
             android:drawableTint="@color/tab_layout_on"
             android:hint="Phone Number"
             android:inputType="number"
             android:maxLength="13"
-            android:background="@drawable/background" />
+            android:paddingLeft="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ediTextProdi" />
 
         <EditText
             android:id="@+id/btnDate"
-            android:layout_width="359dp"
+            android:layout_width="350dp"
             android:layout_height="40dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="5dp"
-            android:focusable="false"
+            android:layout_marginTop="10dp"
             android:background="@drawable/background"
             android:drawableLeft="@drawable/baseline_calendar_today_24"
+            android:drawablePadding="10dp"
             android:drawableTint="@color/tab_layout_on"
+            android:focusable="false"
             android:hint="Tanggal Pengambilan Buku"
-            android:paddingLeft="5dp" />
+            android:paddingLeft="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ediTextPhoneNumber" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView_cart"
-            android:layout_width="359dp"
-            android:layout_height="262dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_width="350dp"
+            android:layout_height="325dp"
+            android:layout_marginTop="25dp"
             android:background="@drawable/card_book_loan"
-            android:paddingLeft="30dp"
-            android:paddingTop="45dp"
-            android:paddingRight="30dp"
-            android:paddingBottom="45dp"
-            android:scrollbars="horizontal" />
-    </LinearLayout>
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="20dp"
+            android:scrollbars="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnDate"
+            tools:listitem="@layout/item_detail_keranjang" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/imageButton"

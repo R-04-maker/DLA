@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.astra.polytechnic.repository.*;
 import com.astra.polytechnic.repository.ManagedLoanRepository;
+import com.google.firebase.FirebaseApp;
 
 public class myAplication extends Application {
     private  static final String TAG =  "UserApplication";
@@ -20,5 +21,6 @@ public class myAplication extends Application {
         KeranjangRepository.initialize(this);
         BannerRepository.initialize(this);
         BookingRepository.initialize(this);
+        FirebaseApp.initializeApp(this);
     }
 }

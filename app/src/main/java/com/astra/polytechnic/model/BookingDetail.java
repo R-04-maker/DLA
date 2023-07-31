@@ -7,11 +7,11 @@ public class BookingDetail {
 
     @SerializedName("id_transactiondetail")
     @Expose
-    private String idTransactionDetail;
+    private int idTransactionDetail;
 
     @SerializedName("id_transaction")
     @Expose
-    private String idTransaction;
+    private Booking idTransaction;
 
     @SerializedName("id_koleksi")
     @Expose
@@ -27,7 +27,7 @@ public class BookingDetail {
 
     @SerializedName("status")
     @Expose
-    private String status;
+    private int status;
 
     @SerializedName("creaby")
     @Expose
@@ -48,7 +48,7 @@ public class BookingDetail {
     public BookingDetail() {
     }
 
-    public BookingDetail(String idTransactionDetail, String idTransaction, Koleksi idKoleksi, String tanggalPinjam, String tanggalKembali, String status, String creaby, String creadate, String modiby, String modidate) {
+    public BookingDetail(int idTransactionDetail, Booking idTransaction, Koleksi idKoleksi, String tanggalPinjam, String tanggalKembali, int status, String creaby, String creadate, String modiby, String modidate) {
         this.idTransactionDetail = idTransactionDetail;
         this.idTransaction = idTransaction;
         this.idKoleksi = idKoleksi;
@@ -61,19 +61,19 @@ public class BookingDetail {
         this.modidate = modidate;
     }
 
-    public String getIdTransactionDetail() {
+    public int getIdTransactionDetail() {
         return idTransactionDetail;
     }
 
-    public void setIdTransactionDetail(String idTransactionDetail) {
+    public void setIdTransactionDetail(int idTransactionDetail) {
         this.idTransactionDetail = idTransactionDetail;
     }
 
-    public String getIdTransaction() {
+    public Booking getIdTransaction() {
         return idTransaction;
     }
 
-    public void setIdTransaction(String idTransaction) {
+    public void setIdTransaction(Booking idTransaction) {
         this.idTransaction = idTransaction;
     }
 
@@ -101,11 +101,11 @@ public class BookingDetail {
         this.tanggalKembali = tanggalKembali;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

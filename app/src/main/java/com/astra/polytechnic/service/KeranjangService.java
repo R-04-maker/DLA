@@ -9,6 +9,7 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -22,6 +23,9 @@ public interface KeranjangService {
     @GET("/getAllKeranjang/{email}")
     Call<ListKeranjangResponse> getAllKeranjang(@Path("email") String email);
 
-    @POST("/deleteKeranjang/{id}")
+    @DELETE("/deleteKeranjang/{id}")
     Call<AddResponse> deleteKeranjang(@Path("id") int id);
+
+    @GET("/cekKeranjang/{email}/{idKoleksi}")
+    Call<AddResponse> cekKeranjang(@Path("email") String email, @Path("idKoleksi") String idKoleksi);
 }

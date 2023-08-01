@@ -40,7 +40,6 @@ import com.astra.polytechnic.ui.fragment.HomeMemberFragment;
 import com.astra.polytechnic.model.Keranjang;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -250,9 +249,9 @@ public class KeranjangActivity extends AppCompatActivity {
         Log.d("TAG", "updateNewestBook: "+ keranjangs);
         //perulangan untuk mengambil data dari list ke model keranjang
         for (Keranjang keranjang : keranjangs) {
-               MaksPinjam = keranjang.getEmail().getId_role().getMaksbuku();
-               MaksTempo  = keranjang.getEmail().getId_role().getMakstempo();
-               System.out.println("Maks Pinjam : " + MaksPinjam);
+            MaksPinjam = keranjang.getEmail().getId_role().getMaksbuku();
+            MaksTempo  = keranjang.getEmail().getId_role().getMakstempo();
+            System.out.println("Maks Pinjam : " + MaksPinjam);
         }
 
         mKeranjangList = DLAHelper.getKeranjang(keranjangs);

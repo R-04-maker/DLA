@@ -203,6 +203,36 @@
                     android:textSize="14sp"
                     android:gravity="end"/>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/denda_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_variablefont_slnt_wght"
+                    android:padding="5dp"
+                    android:text="Denda"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/denda"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/inter_variablefont_slnt_wght"
+                    android:padding="5dp"
+                    android:text="2(hari)*Rp.5.000"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:gravity="end"/>
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

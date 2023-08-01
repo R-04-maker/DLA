@@ -29,6 +29,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,9 +87,11 @@ public class LoginActivity extends AppCompatActivity{
                 String nim = mNim.getText().toString();
                 String password = mPassword.getText().toString();
 
+                String passhash = md5(password);
+
                 if(validate(view)){
                     ProgressDialog progressDialog = ProgressDialog.show(this, "Sign In", "Signing in...");
-                    mUserViewModel.login(nim,password).observe(this, new Observer<LoginResponse>() {
+                    mUserViewModel.login(nim,passhash).observe(this, new Observer<LoginResponse>() {
                         @Override
                         public void onChanged(LoginResponse loginResponse) {
                             if(loginResponse != null){
@@ -101,7 +106,6 @@ public class LoginActivity extends AppCompatActivity{
                                     editor.putString("password", loginResponse.getUser().getPassword());
                                     editor.putString("no_hp", loginResponse.getUser().getHp());
                                     editor.apply();
-                                    Log.d(TAG, "No hp : " + loginResponse.getUser().getHp());
 
                                     id_role = loginResponse.getUser().getId_role();
                                     email = loginResponse.getUser().getEmail();
@@ -147,6 +151,26 @@ public class LoginActivity extends AppCompatActivity{
             Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
             startActivity(intent);
             finish();
+        }
+    }
+    public static String md5(String input) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] digest = md5.digest(input.getBytes());
+
+            // Mengubah hasil digest menjadi format string dalam bentuk hexadecimal
+            BigInteger num = new BigInteger(1, digest);
+            String md5Hash = num.toString(16);
+
+            // Pastikan string hasil MD5 memiliki panjang 32 karakter (prepend dengan "0" jika perlu)
+            while (md5Hash.length() < 32) {
+                md5Hash = "0" + md5Hash;
+            }
+
+            return md5Hash;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
         }
     }
     public void saveFireBaseToken(){

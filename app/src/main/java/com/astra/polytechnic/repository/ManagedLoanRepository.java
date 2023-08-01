@@ -112,11 +112,13 @@ public class ManagedLoanRepository {
             @Override
             public void onResponse(Call<ObjectResponse> call, Response<ObjectResponse> response) {
                 ObjectResponse objectResponse = response.body();
+                Log.i(TAG, "getAllHistory().OnResponse 1 called");
                 if(objectResponse.getResult() == 200){
                     mManagedLoanDao.setListBooking(objectResponse.getData());
-                    Log.d(TAG, "getAllHistory.onResponse() called");
+                    Object[] data = objectResponse.getData().get(0);
+                    Log.d(TAG, "getAllHistory.onResponse() called" + data.toString());
                 }else {
-                    Log.d(TAG, "getAllHistory.onResponse() called : " + objectResponse.getData());
+                    Log.d(TAG, "getAllHistory.onFailure() called : " + objectResponse.getData());
                 }
             }
             @Override
@@ -126,6 +128,30 @@ public class ManagedLoanRepository {
         });
         return mManagedLoanDao.getListBooking();
     }
+
+    public LiveData<List<Object[]>> getHistoryMember(String email){
+        Log.i(TAG, "getAllHistory()Member called");
+
+        Call<ObjectResponse> call = mManagedLoanService.getHistoryMember(email);
+        call.enqueue(new Callback<ObjectResponse>() {
+            @Override
+            public void onResponse(Call<ObjectResponse> call, Response<ObjectResponse> response) {
+                ObjectResponse objectResponse = response.body();
+                if(objectResponse.getResult() == 200){
+                    mManagedLoanDao.setListBooking(objectResponse.getData());
+                    Log.d(TAG, "getHistoryMember.onResponse() called");
+                }else {
+                    Log.d(TAG, "getHistoryMember.onResponse() called : " + objectResponse.getData());
+                }
+            }
+            @Override
+            public void onFailure(Call<ObjectResponse> call, Throwable t) {
+                Log.e(TAG, "getAllHistory.onFailure: " + t.getMessage());
+            }
+        });
+        return mManagedLoanDao.getListBooking();
+    }
+
     public LiveData<List<Object[]>> getDetailBooking(int id){
         Log.i(TAG, "getDetailBooking() called");
 

@@ -22,10 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.KoleksiViewModel;
-import com.astra.polytechnic.helper.DLAHelper;
 import com.astra.polytechnic.model.Koleksi;
 import com.astra.polytechnic.ui.activity.BookDetailActivity;
-import com.astra.polytechnic.ui.activity.BookDetailMemberActivity;
+import com.astra.polytechnic.ui.activity.HistoryMemberActivity;
 import com.astra.polytechnic.ui.activity.KeranjangActivity;
 import com.astra.polytechnic.ui.activity.SearchActivity;
 
@@ -40,7 +39,7 @@ public class BooksCollectionFragment extends Fragment {
     private KoleksiViewModel mNewestViewModel;
     private EditText mSearchBtn;
     SharedPreferences pref;
-    private ImageView mImageView;
+    private ImageView mImageView,mbtnHistory;
     ImageView mKeranjang;
     public BooksCollectionFragment() {
         // Required empty public constructor
@@ -58,10 +57,19 @@ public class BooksCollectionFragment extends Fragment {
         // Inflate the layout for this fragment
         mImageView=view.findViewById(R.id.imageView7);
         mKeranjang= view.findViewById(R.id.icon_cart);
+        mbtnHistory=view.findViewById(R.id.btn_all_transaction);
         mKeranjang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), KeranjangActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mbtnHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), HistoryMemberActivity.class);
                 startActivity(intent);
             }
         });

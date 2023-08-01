@@ -28,6 +28,10 @@ public class DLAHelper {
     public static List<Object[]> getAllHistory(List<Object[]> historylist){
         return historylist == null ? Collections.emptyList() : historylist.stream().collect(Collectors.toList());
     }
+
+    public static List<Object[]> getAllHistoryMember(List<Object[]> historylist){
+        return historylist == null ? Collections.emptyList() : historylist.stream().collect(Collectors.toList());
+    }
     public static List<Object[]> getBookDetailList(List<Object[]> booklistdetail){
         return booklistdetail == null ? Collections.emptyList() : booklistdetail.stream().collect(Collectors.toList());
     }

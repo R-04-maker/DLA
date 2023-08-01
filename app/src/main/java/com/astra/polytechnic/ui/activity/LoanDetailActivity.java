@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -47,8 +48,15 @@ import com.squareup.picasso.Picasso;
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
 import android.util.Base64;
+
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -61,13 +69,16 @@ public class LoanDetailActivity extends AppCompatActivity {
     private String mIdBooking,mStatusExtra;
     private Button mBtnTolak, mBtnTerima, mUpdateGambar,mBtnCamera;
     private MaterialCardView mMaterialCardView;
-    private TextView mStatus,mBookingId,mBookingDate,mBookingReturn,mNIM,mName,mProdi,mHp,mTry;
+    private TextView mStatus,mBookingId,mBookingDate,mBookingReturn,mNIM,mName,mProdi,mHp,mTry,mDendaTitle,mDenda;
     private TextView mBtnModalFotoSebelum,mBtnModalFotoSetelah;
     private RecyclerView mRVDetailBooks;
     private ManagedLoanViewModel mManagedLoanViewModel;
     private List<Object[]> mDetailBooksList;
     private Bitmap imageBitmap;
     private ImageView imageView,mBackButton;
+    String email, id_role;
+    String formattedDate,resultDateStr,formattedDate1,formatedcreadate;
+    Date dateAfter14Days,date1,date,datenow;
     private BooksDetailAdapter mBooksDetailAdapter = new BooksDetailAdapter(Collections.emptyList());
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
     private String mFotoSebelum, mFotoSesudah;
@@ -77,6 +88,9 @@ public class LoanDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loan_detail);
         mIdBooking = getIntent().getStringExtra("id_booking");
+
+
+
         // Initialize Component
         mStatus = findViewById(R.id.loan_status);
         mBookingId = findViewById(R.id.booking_code_req_detail);
@@ -86,7 +100,10 @@ public class LoanDetailActivity extends AppCompatActivity {
         mName = findViewById(R.id.name_profile);
         mProdi = findViewById(R.id.prodi);
         mHp = findViewById(R.id.noHp);
+        mDendaTitle = findViewById(R.id.denda_title);
+        mDenda = findViewById(R.id.denda);
         mMaterialCardView = findViewById(R.id.materialCardView);
+
 
         mBtnTerima = findViewById(R.id.btn_terima);
         mBtnTolak = findViewById(R.id.btn_tolak);
@@ -107,20 +124,56 @@ public class LoanDetailActivity extends AppCompatActivity {
         mBtnModalFotoSetelah = findViewById(R.id.txtFotoSetelah);
 
         mManagedLoanViewModel = new ViewModelProvider(this).get(ManagedLoanViewModel.class);
-
-        mManagedLoanViewModel.getDetailBooking(Integer.parseInt(mIdBooking)).observe(this,objects -> {
+        SharedPreferences pref = getSharedPreferences("nomor", MODE_PRIVATE);
+        String id_role = pref.getString("id_role", null);
+        mManagedLoanViewModel.getDetailBooking(Integer.parseInt(mIdBooking)).observe(this, objects -> {
             Object[] obj = objects.get(0);
-            mBookingId.setText(obj[1].toString());
-            mStatus.setText(obj[2].toString());
-            mBookingDate.setText(DateConverter.fromDbDateTimeTo(DATE_FORMAT, obj[3].toString()).toString());
-            mBookingReturn.setText(DateConverter.fromDbDateTimeTo(DATE_FORMAT,obj[4].toString()).toString());
-            mNIM.setText(obj[5].toString());
-            mName.setText(obj[6].toString());
-            mProdi.setText(obj[8].toString());
-            mHp.setText(obj[9].toString());
+            DateTimeFormatter inputFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+            DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            mNIM.setText(obj[11] != null ? obj[11].toString() : "");
+            String tglkembali =obj[3].toString();
+            String tglambil = obj[4].toString();
+            String creadate = obj[5].toString();
+            OffsetDateTime offsettglambil = OffsetDateTime.parse((String) tglambil, inputFormat);
+            OffsetDateTime offsettglambil1 = OffsetDateTime.parse((String) tglkembali, inputFormat);
+            OffsetDateTime offsetcreadate = OffsetDateTime.parse((String) creadate, inputFormat);
+            Instant instant = offsettglambil.toInstant();
+            Instant instant1 = offsettglambil1.toInstant();
+            Instant instant2 = offsetcreadate.toInstant();
+            date = Date.from(instant);
+            date1 = Date.from(instant1);
+            datenow=Date.from(Instant.now());
 
-            mFotoSebelum = obj[10].toString();
-            mFotoSesudah = obj[11].toString();
+            formattedDate = offsettglambil.format(outputFormat);
+            formattedDate1 = offsettglambil1.format(outputFormat);
+            formatedcreadate = offsetcreadate.format(outputFormat);
+
+            System.out.println("Parsed Tanggal Ambil: " + date1);
+            System.out.println("Parsed Tanggal Kembali: " + date);
+            System.out.println("Parsed Tanggal Sekarang: " + datenow);
+            System.out.println("Parsed Tanggal Buat: " + formatedcreadate);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date1);
+            calendar.add(Calendar.DAY_OF_MONTH, 14);
+             dateAfter14Days = calendar.getTime();
+            resultDateStr = DATE_FORMAT.format(dateAfter14Days);
+            System.out.println("Date 14 days after the input date: " + resultDateStr);
+            long diffInMillis =   datenow.getTime() - dateAfter14Days.getTime();
+
+            // Mengubah selisih milidetik ke dalam satuan hari
+            long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
+            System.out.println("Selisih hari: " + diffInDays);
+            mBookingId.setText(obj[1].toString());
+            mBookingDate.setText(formatedcreadate);
+            mBookingReturn.setText(formattedDate);
+            mNIM.setText(obj[6].toString());
+            mName.setText(obj[7].toString());
+            mProdi.setText(obj[9].toString());
+            mHp.setText(obj[10].toString());
+
+            mFotoSebelum = obj[11].toString();
+            mFotoSesudah = obj[12].toString();
+
 
             // Set cardView background for status and Button Action with status param
             int colorDiterima = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_diterima);
@@ -128,195 +181,258 @@ public class LoanDetailActivity extends AppCompatActivity {
             int colorPengajuan = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_pengajuan);
             int colorDipinjam = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_dipinjam);
             int colorSelesai = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_selesai);
-            mStatus.setText(obj[2].toString());
             mStatusExtra = obj[2].toString();
-            if(mStatusExtra.equals("Pengajuan")){
-                mMaterialCardView.setCardBackgroundColor(colorPengajuan);
-                mBtnTerima.setVisibility(View.VISIBLE);
-                mBtnTolak.setVisibility(View.VISIBLE);
-                mBtnCamera.setVisibility(View.GONE);
-                mUpdateGambar.setVisibility(View.GONE);
-            }else if(mStatusExtra.equals("Diterima")){
-                mMaterialCardView.setCardBackgroundColor(colorDiterima);
-                mBtnTolak.setVisibility(View.GONE);
-                mBtnTerima.setVisibility(View.GONE);
-                mBtnCamera.setVisibility(View.VISIBLE);
-                mUpdateGambar.setVisibility(View.VISIBLE);
-            }else if(mStatusExtra.equals("Ditolak")){
-                mMaterialCardView.setCardBackgroundColor(colorDitolak);
-            }else if(mStatusExtra.equals("Dipinjam")){
-                mMaterialCardView.setCardBackgroundColor(colorDipinjam);
-                mBtnTolak.setVisibility(View.GONE);
-                mBtnTerima.setVisibility(View.GONE);
-                mBtnCamera.setVisibility(View.VISIBLE);
-                mUpdateGambar.setVisibility(View.VISIBLE);
-            }else if(mStatusExtra.equals("Selesai")){
-                mMaterialCardView.setCardBackgroundColor(colorSelesai);
-                mBtnTolak.setVisibility(View.GONE);
-                mBtnTerima.setVisibility(View.GONE);
-                mUpdateGambar.setVisibility(View.GONE);
-                mBtnCamera.setVisibility(View.GONE);
-            }
-        });
+                if (mStatusExtra.equals("Pengajuan")) {
+                    mMaterialCardView.setCardBackgroundColor(colorPengajuan);
+                    mStatus.setText(obj[2].toString());
+                    mDendaTitle.setVisibility(View.GONE);
+                    mDenda.setVisibility(View.GONE);
+                    if (id_role.equals("ROL06")){
+                        mBtnTerima.setVisibility(View.GONE);
+                        mBtnTolak.setVisibility(View.GONE);
+                        mBtnCamera.setVisibility(View.GONE);
+                        mUpdateGambar.setVisibility(View.GONE);
+                    }else {
+                        mBtnTolak.setVisibility(View.VISIBLE);
+                        mBtnTerima.setVisibility(View.VISIBLE);
+                        mBtnCamera.setVisibility(View.GONE);
+                        mUpdateGambar.setVisibility(View.GONE);
+                    }
 
-        mManagedLoanViewModel.getBookDetailBooking().observe(this,this::UpdateDetailBooks);
-        mBtnTolak.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoanDetailActivity.this);
-                builder.setTitle(R.string.konfirmasi_title);
-                builder.setMessage(R.string.konfirmasi_tolak);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ProgressDialog progressDialog = ProgressDialog.show(LoanDetailActivity.this, "", "Loading ...", true);
-                        mManagedLoanViewModel.updateDetailBooking(Integer.parseInt(mIdBooking), "Ditolak").observe(LoanDetailActivity.this, data -> {
-                            progressDialog.dismiss();
-                            UpdateData(data);
-                        });
+                } else if (mStatusExtra.equals("Diterima")) {
+                    mStatus.setText(obj[2].toString());
+                    mMaterialCardView.setCardBackgroundColor(colorDiterima);
+                    if (id_role.equals("ROL06")){
+                        mBtnTerima.setVisibility(View.GONE);
+                        mBtnTolak.setVisibility(View.GONE);
+                        mBtnCamera.setVisibility(View.GONE);
+                        mUpdateGambar.setVisibility(View.GONE);
+                    }else {
+                        mBtnTolak.setVisibility(View.GONE);
+                        mBtnTerima.setVisibility(View.GONE);
+                        mBtnCamera.setVisibility(View.VISIBLE);
+                        mUpdateGambar.setVisibility(View.VISIBLE);
                     }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+
+                } else if (mStatusExtra.equals("Ditolak") && id_role.equals("ROL01")) {
+                    mMaterialCardView.setCardBackgroundColor(colorDitolak);
+                    mStatus.setText(obj[2].toString());
+
+                } else if (mStatusExtra.equals("Dipinjam")) {
+                    mBtnTolak.setVisibility(View.GONE);
+                    if (dateAfter14Days.after(datenow)) {
+                        mStatus.setText(obj[2].toString());
+                        mMaterialCardView.setCardBackgroundColor(colorDipinjam);
+                        mDenda.setVisibility(View.GONE);
+                        mDendaTitle.setVisibility(View.GONE);
+                    }else {
+                        mStatus.setText("Denda");
+                        mDenda.setText(diffInDays+"(Hari)*5000 ="+"Rp. "+diffInDays*5000);
+                        mMaterialCardView.setCardBackgroundColor(colorDitolak);
                     }
-                });
-                // Show Confirmation Dialog
-                AlertDialog dialog = builder.create();
-                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialogInterface) {
-                        Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                        Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                        positiveButton.setTextColor(Color.BLACK);
-                        negativeButton.setTextColor(Color.BLACK);
+                    if (id_role.equals("ROL06")){
+                        mBtnTerima.setVisibility(View.GONE);
+                        mBtnTolak.setVisibility(View.GONE);
+                        mBtnCamera.setVisibility(View.GONE);
+                        mUpdateGambar.setVisibility(View.GONE);
+                    }else {
+                        mBtnTolak.setVisibility(View.GONE);
+                        mBtnTerima.setVisibility(View.GONE);
+                        mBtnCamera.setVisibility(View.VISIBLE);
+                        mUpdateGambar.setVisibility(View.VISIBLE);
                     }
-                });
-                dialog.show();
-            }
-        });
-        mBtnTerima.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoanDetailActivity.this);
-                builder.setTitle(R.string.konfirmasi_title);
-                builder.setMessage(R.string.konfirmasi_terima);
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ProgressDialog progressDialog = ProgressDialog.show(LoanDetailActivity.this, "", "Loading ...", true);
-                        mManagedLoanViewModel.updateDetailBooking(Integer.parseInt(mIdBooking), "Diterima").observe(LoanDetailActivity.this,data -> {
-                            progressDialog.dismiss();
-                            UpdateData(data);
-                        });
-                    }
-                });
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-                // Show Confirmation Dialog
-                AlertDialog dialog = builder.create();
-                dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialogInterface) {
-                        Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                        Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                        positiveButton.setTextColor(Color.BLACK);
-                        negativeButton.setTextColor(Color.BLACK);
-                    }
-                });
-                dialog.show();
-            }
-        });
-        mBtnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: ");
-                // Memeriksa izin kamera sebelum memulai eksplsit intent camera
-                if(checkCameraPermission()){
-                    dispatchTakePictureIntent();
-                }else {
-                    requestCameraPermission();
+                } else if (mStatusExtra.equals("Selesai")) {
+                    mBtnTolak.setVisibility(View.GONE);
+                        if (dateAfter14Days.after(date)) {
+                            mStatus.setText(obj[2].toString());
+                            mMaterialCardView.setCardBackgroundColor(colorSelesai);
+                            mBtnTerima.setVisibility(View.GONE);
+                            mBtnTolak.setVisibility(View.GONE);
+                            mBtnCamera.setVisibility(View.GONE);
+                            mUpdateGambar.setVisibility(View.GONE);
+                            mDenda.setVisibility(View.GONE);
+                            mDendaTitle.setVisibility(View.GONE);
+                        }else {
+                            mStatus.setText("Denda");
+                            mDenda.setText(diffInDays+"(Hari)*5000 ="+"Rp. "+diffInDays*5000);
+                            mMaterialCardView.setCardBackgroundColor(colorDitolak);
+                            mBtnTerima.setVisibility(View.GONE);
+                            mBtnTolak.setVisibility(View.GONE);
+                            mBtnCamera.setVisibility(View.GONE);
+                            mUpdateGambar.setVisibility(View.GONE);
+                        }
+                        mBtnTerima.setVisibility(View.GONE);
+                        mBtnTolak.setVisibility(View.GONE);
+                        mBtnCamera.setVisibility(View.GONE);
+                        mUpdateGambar.setVisibility(View.GONE);
                 }
-            }
         });
-        mUpdateGambar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String status1 = "Dipinjam";
-                String status2 = "Selesai";
-                Log.d(TAG, "onClic1k: " + mStatusExtra);
-                if(imageBitmap != null){
-                    Log.d(TAG, "onClick2: " + imageBitmap);
-                    if (mStatusExtra.equals("Diterima")) {
-                        Log.d(TAG, "onClick3: " + imageBitmap);
-                        // save image to coloumn gambar with status = "Dipinjam"
-                        uploadImageToServer(imageBitmap, status1);
-                    } else if(mStatusExtra.equals("Dipinjam")) {
-                        // save image to coloumn gambar_sesudah with status = "Selesai"
-                        uploadImageToServer(imageBitmap, status2);
+        mManagedLoanViewModel.getBookDetailBooking().observe(this, this::UpdateDetailBooks);
+        if (id_role.equals("ROL06")) {
+            mBtnTerima.setVisibility(View.GONE);
+            mBtnTolak.setVisibility(View.GONE);
+            mBtnCamera.setVisibility(View.GONE);
+            mUpdateGambar.setVisibility(View.GONE);
+
+        } else {
+            mBtnTolak.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoanDetailActivity.this);
+                    builder.setTitle(R.string.konfirmasi_title);
+                    builder.setMessage(R.string.konfirmasi_tolak);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ProgressDialog progressDialog = ProgressDialog.show(LoanDetailActivity.this, "", "Loading ...", true);
+                            mManagedLoanViewModel.updateDetailBooking(Integer.parseInt(mIdBooking), "Ditolak").observe(LoanDetailActivity.this, data -> {
+                                progressDialog.dismiss();
+                                UpdateData(data);
+                            });
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    // Show Confirmation Dialog
+                    AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                            Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                            positiveButton.setTextColor(Color.BLACK);
+                            negativeButton.setTextColor(Color.BLACK);
+                        }
+                    });
+                    dialog.show();
+                }
+            });
+            mBtnTerima.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoanDetailActivity.this);
+                    builder.setTitle(R.string.konfirmasi_title);
+                    builder.setMessage(R.string.konfirmasi_terima);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ProgressDialog progressDialog = ProgressDialog.show(LoanDetailActivity.this, "", "Loading ...", true);
+                            mManagedLoanViewModel.updateDetailBooking(Integer.parseInt(mIdBooking), "Diterima").observe(LoanDetailActivity.this, data -> {
+                                progressDialog.dismiss();
+                                UpdateData(data);
+                            });
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    // Show Confirmation Dialog
+                    AlertDialog dialog = builder.create();
+                    dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialogInterface) {
+                            Button positiveButton = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                            Button negativeButton = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+                            positiveButton.setTextColor(Color.BLACK);
+                            negativeButton.setTextColor(Color.BLACK);
+                        }
+                    });
+                    dialog.show();
+                }
+            });
+            mBtnCamera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "onClick: ");
+                    // Memeriksa izin kamera sebelum memulai eksplsit intent camera
+                    if (checkCameraPermission()) {
+                        dispatchTakePictureIntent();
+                    } else {
+                        requestCameraPermission();
                     }
-                }else {
-                    Toast.makeText(LoanDetailActivity.this, "No image captured!", Toast.LENGTH_SHORT).show();
                 }
-            }
-        });
-        mBtnModalFotoSebelum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                        LoanDetailActivity.this, R.style.BottomSheetDialogTheme
-                );
-                View bottomSheetView = LayoutInflater.from(getApplicationContext())
-                        .inflate(R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer));
-                ImageView mFotoModal = bottomSheetView.findViewById(R.id.fotoPeminjaman);
-                // Masukin resource foto pakai picasso
-                if(!mFotoSebelum.equals(null)){
-                    Log.d(TAG, "foto Sebelum: " + mFotoSebelum);
-                    Glide.with(bottomSheetView)
-                            .load(mFotoSebelum)
-                            .apply(new RequestOptions()
-                                    .placeholder(R.drawable.noimage)
-                                    .error(R.drawable.noimage)
-                            )
-                            .into(mFotoModal);
-                }else {
-                    mFotoModal.setImageResource(R.drawable.noimage);
+            });
+            mUpdateGambar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String status1 = "Dipinjam";
+                    String status2 = "Selesai";
+                    Log.d(TAG, "onClic1k: " + mStatusExtra);
+                    if (imageBitmap != null) {
+                        Log.d(TAG, "onClick2: " + imageBitmap);
+                        if (mStatusExtra.equals("Diterima")) {
+                            Log.d(TAG, "onClick3: " + imageBitmap);
+                            // save image to coloumn gambar with status = "Dipinjam"
+                            uploadImageToServer(imageBitmap, status1);
+                        } else if (mStatusExtra.equals("Dipinjam")) {
+                            // save image to coloumn gambar_sesudah with status = "Selesai"
+                            uploadImageToServer(imageBitmap, status2);
+                        }
+                    } else {
+                        Toast.makeText(LoanDetailActivity.this, "No image captured!", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                bottomSheetDialog.setContentView(bottomSheetView);
-                bottomSheetDialog.show();
-            }
-        });
-        mBtnModalFotoSetelah.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                        LoanDetailActivity.this, R.style.BottomSheetDialogTheme
-                );
-                View bottomSheetView = LayoutInflater.from(getApplicationContext())
-                        .inflate(
-                                R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer)
-                        );
-                // Masukin resource foto pakai picasso
-                ImageView mFotoModal = bottomSheetView.findViewById(R.id.fotoPeminjaman);
-                if(!mFotoSesudah.equals(null)){
-                    Log.d(TAG, "foto sesudah: " + mFotoSesudah);
-                    Glide.with(bottomSheetView)
-                            .load(mFotoSesudah)
-                            .apply(new RequestOptions()
-                                    .placeholder(R.drawable.noimage)
-                                    .error(R.drawable.noimage)
-                            )
-                            .into(mFotoModal);
-                }else {
-                    mFotoModal.setImageResource(R.drawable.noimage);
+            });
+            mBtnModalFotoSebelum.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                            LoanDetailActivity.this, R.style.BottomSheetDialogTheme
+                    );
+                    View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                            .inflate(R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer));
+                    ImageView mFotoModal = bottomSheetView.findViewById(R.id.fotoPeminjaman);
+                    // Masukin resource foto pakai picasso
+                    if (!mFotoSebelum.equals(null)) {
+                        Log.d(TAG, "foto Sebelum: " + mFotoSebelum);
+                        Glide.with(bottomSheetView)
+                                .load(mFotoSebelum)
+                                .apply(new RequestOptions()
+                                        .placeholder(R.drawable.noimage)
+                                        .error(R.drawable.noimage)
+                                )
+                                .into(mFotoModal);
+                    } else {
+                        mFotoModal.setImageResource(R.drawable.noimage);
+                    }
+                    bottomSheetDialog.setContentView(bottomSheetView);
+                    bottomSheetDialog.show();
                 }
-                bottomSheetDialog.setContentView(bottomSheetView);
-                bottomSheetDialog.show();
-            }
-        });
+            });
+            mBtnModalFotoSetelah.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                            LoanDetailActivity.this, R.style.BottomSheetDialogTheme
+                    );
+                    View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                            .inflate(
+                                    R.layout.bottom_image_modal, findViewById(R.id.botomSheetContainer)
+                            );
+                    // Masukin resource foto pakai picasso
+                    ImageView mFotoModal = bottomSheetView.findViewById(R.id.fotoPeminjaman);
+                    if (!mFotoSesudah.equals(null)) {
+                        Log.d(TAG, "foto sesudah: " + mFotoSesudah);
+                        Glide.with(bottomSheetView)
+                                .load(mFotoSesudah)
+                                .apply(new RequestOptions()
+                                        .placeholder(R.drawable.noimage)
+                                        .error(R.drawable.noimage)
+                                )
+                                .into(mFotoModal);
+                    } else {
+                        mFotoModal.setImageResource(R.drawable.noimage);
+                    }
+                    bottomSheetDialog.setContentView(bottomSheetView);
+                    bottomSheetDialog.show();
+                }
+            });
+        }
     }
     private boolean checkCameraPermission() {
         // Periksa izin kamera saat runtime (hanya diperlukan untuk Android 6.0 dan di atas)
@@ -400,15 +516,39 @@ public class LoanDetailActivity extends AppCompatActivity {
         int colorSelesai = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_selesai);
         mStatus.setText(data);
         if(data.equals("Pengajuan")){
-            mMaterialCardView.setCardBackgroundColor(colorPengajuan);
+            if (dateAfter14Days.after(date)) {
+                mStatus.setText(data);
+                mMaterialCardView.setCardBackgroundColor(colorPengajuan);
+            }else {
+                mStatus.setText("Denda");
+                mMaterialCardView.setCardBackgroundColor(colorDitolak);
+            }
         }else if(data.equals("Diterima")){
-            mMaterialCardView.setCardBackgroundColor(colorDiterima);
+            if (dateAfter14Days.after(date1)) {
+                mStatus.setText(data);
+                mMaterialCardView.setCardBackgroundColor(colorDiterima);
+            }else {
+                mStatus.setText("Denda");
+                mMaterialCardView.setCardBackgroundColor(colorDitolak);
+            }
         }else if(data.equals("Ditolak")){
             mMaterialCardView.setCardBackgroundColor(colorDitolak);
         }else if(data.equals("Dipinjam")){
-            mMaterialCardView.setCardBackgroundColor(colorDipinjam);
+            if (dateAfter14Days.after(date)) {
+                mStatus.setText(data);
+                mMaterialCardView.setCardBackgroundColor(colorDipinjam);
+            }else {
+                mStatus.setText("Denda");
+                mMaterialCardView.setCardBackgroundColor(colorDitolak);
+            }
         }else if(data.equals("Selesai")){
-            mMaterialCardView.setCardBackgroundColor(colorSelesai);
+            if (dateAfter14Days.after(date)) {
+                mStatus.setText(data);
+                mMaterialCardView.setCardBackgroundColor(colorSelesai);
+            }else {
+                mStatus.setText("Denda");
+                mMaterialCardView.setCardBackgroundColor(colorDitolak);
+            }
         }
         mBtnTerima.setVisibility(View.GONE);
         mBtnTolak.setVisibility(View.GONE);

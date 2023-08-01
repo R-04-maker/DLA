@@ -1,30 +1,27 @@
-package com.astra.polytechnic.ui.fragment;
+package com.astra.polytechnic.ui.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.ManagedLoanViewModel;
 import com.astra.polytechnic.helper.DLAHelper;
-import com.astra.polytechnic.helper.DateConverter;
-import com.astra.polytechnic.ui.activity.HistoryMemberActivity;
-import com.astra.polytechnic.ui.activity.LoanDetailActivity;
 import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
@@ -37,92 +34,86 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class BorrowedFragment extends Fragment {
-    private static final String TAG = "BorrowedFragment";
-    private RecyclerView mRvFinishedLoan;
+public class HistoryMemberActivity extends AppCompatActivity {
+
+    private static final String TAG = "HistoryActivity";
+    private RecyclerView mRVallBooking;
+    private ManagedLoanViewModel mManagedLoanViewModel;
+    private List<Object[]> mDataList;
     private View mEmptyData;
-    private ManagedLoanViewModel mManagedLoanVM;
+    private ImageView mBackButton;
+    String email, id_role;
     Date date,date1,dateAfter14Days,datenow;
     String formattedDate,resultDateStr,formattedDate1,Denda;
-    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
-    private List<Object[]> mBookingList;
-    private BookingAdapter mBookingAdapter = new BookingAdapter(Collections.emptyList());
-    public static BorrowedFragment newInstance() {
-        return new BorrowedFragment();
-    }
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+    private HistoryMemberActivity.HistoryAdapter mHistoryAdapter = new HistoryMemberActivity.HistoryAdapter(Collections.emptyList());
+
+
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mManagedLoanVM = new ViewModelProvider(this).get(ManagedLoanViewModel.class);
+        setContentView(R.layout.activity_history);
+        mRVallBooking = findViewById(R.id.rv_booking_history);
+
+        mBackButton = findViewById(R.id.back_button);
+
+        mEmptyData = findViewById(R.id.layout_empty_data_hist);
+
+        mRVallBooking.setLayoutManager(new LinearLayoutManager(HistoryMemberActivity.this));
+
+        mManagedLoanViewModel = new ViewModelProvider(this).get(ManagedLoanViewModel.class);
+
+        SharedPreferences pref= getSharedPreferences("nomor", MODE_PRIVATE);
+
+        email = pref.getString("email", null);
+        id_role = pref.getString("id_role", null);
+        mManagedLoanViewModel.getHistoryMember(email).observe(this,this::UpdateData);
 
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_borrowed, container, false);
-        mRvFinishedLoan = view.findViewById(R.id.rv_finished_booking);
-        mRvFinishedLoan.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRvFinishedLoan.setAdapter(mBookingAdapter);
-        mEmptyData = view.findViewById(R.id.layout_empty_data_fin);
+    private void UpdateData(List<Object[]> objectList){
+        Log.d(TAG, "UpdateData: " + objectList);
+        mDataList = DLAHelper.getAllHistoryMember(objectList);
 
-        return view;
-    }
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        refresh();
-    }
-    private void refresh(){
-        mManagedLoanVM.getBorrowedBooking().observe(getViewLifecycleOwner(), this::updateUI);
-    }
-    private void updateUI(List<Object[]> bookingList){
-        Log.d(TAG, "updateUI: " + bookingList);
-        mBookingList = DLAHelper.getUnconBookList(bookingList);
-        if (mBookingList != null) {
-            mBookingAdapter = new BookingAdapter(mBookingList);
-            mRvFinishedLoan.setAdapter(mBookingAdapter);
+        mHistoryAdapter = new HistoryMemberActivity.HistoryAdapter(mDataList);
+        mRVallBooking.setAdapter(mHistoryAdapter);
 
-            mEmptyData.setVisibility(mBookingList.size() == 0 ? View.VISIBLE : View.GONE);
-            mRvFinishedLoan.setVisibility(mBookingList.size() == 0 ? View.GONE : View.VISIBLE);
-        }else {
-            mEmptyData.setVisibility(View.VISIBLE);
-            mRvFinishedLoan.setVisibility(View.GONE);
-        }
+        mEmptyData.setVisibility(mDataList.size() == 0 ? View.VISIBLE : View.GONE);
+        mRVallBooking.setVisibility(mDataList.size() == 0 ? View.GONE : View.VISIBLE);
     }
-    private class BookingAdapter extends RecyclerView.Adapter<BookingAdapter.BookingHolder>{
-        private List<Object[]> mBookingList;
-        public BookingAdapter(List<Object[]> bookings){
-            mBookingList = bookings;
+
+    private class HistoryAdapter extends RecyclerView.Adapter<HistoryMemberActivity.HistoryAdapter.HistoryHolder>{
+        private List<Object[]> mHistoryList;
+        public HistoryAdapter(List<Object[]> historyList){
+            mHistoryList = historyList;
         }
 
         @NonNull
         @Override
-        public BookingAdapter.BookingHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-            return new BookingAdapter.BookingHolder(layoutInflater,parent);
+        public HistoryMemberActivity.HistoryAdapter.HistoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(HistoryMemberActivity.this);
+            return new HistoryMemberActivity.HistoryAdapter.HistoryHolder(layoutInflater,parent);
         }
 
         @Override
-        public void onBindViewHolder(BookingAdapter.BookingHolder holder, int position) {
-            Object[] booking = mBookingList.get(position);
-            holder.bind(booking);
+        public void onBindViewHolder(HistoryMemberActivity.HistoryAdapter.HistoryHolder holder, int position) {
+            Object[] historydata = mHistoryList.get(position);
+            holder.bind(historydata);
             Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), android.R.anim.fade_in);
             holder.itemView.startAnimation(animation);
         }
 
         @Override
         public int getItemCount() {
-            return mBookingList.size();
+            return mHistoryList.size();
         }
 
-        private class BookingHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        private class HistoryHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             private TextView mName, mNIM, mDate, mBookID, mStatus;
             private Object[] mBooking;
             private String mEditableTitle;
             private MaterialCardView mMaterialCardView;
-            public BookingHolder(LayoutInflater inflater,ViewGroup parent){
+            public HistoryHolder(LayoutInflater inflater,ViewGroup parent){
                 super(inflater.inflate(R.layout.item_manage_loan, parent, false));
 
                 mName = itemView.findViewById(R.id.cv_name);
@@ -131,7 +122,6 @@ public class BorrowedFragment extends Fragment {
                 mBookID = itemView.findViewById(R.id.book_id_loan);
                 mStatus = itemView.findViewById(R.id.loan_status);
                 mMaterialCardView = itemView.findViewById(R.id.materialCardView);
-                mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_dipinjam));
                 itemView.setOnClickListener(this);
             }
             public void bind(Object[] booking){
@@ -175,13 +165,28 @@ public class BorrowedFragment extends Fragment {
                 long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
 
                 if (dateAfter14Days.after(datenow)) {
-                    if (booking[3].toString().equals("Dipinjam")) {
-                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.card_dipinjam));
+                    if (booking[3].toString().equals("Ditolak")) {
+                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_ditolak));
+                    }  else if (booking[3].toString().equals("Pengajuan")) {
+                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_pengajuan));
                     }
+
+                    if (booking[3].toString().equals("Dipinjam")) {
+                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_dipinjam));
+                    } else if(booking[3].toString().equals("Diterima")){
+                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_diterima));
+                    }
+                    if (booking[3].toString().equals("Selesai")) {
+                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_selesai));
+                    } else {
+
+                    }
+                    mStatus.setText(booking[3] != null ? booking[3].toString() : "");
+                    mDate.setText(formattedDate);
                 }
                 else {
                     System.out.println("Denda");
-                    mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.card_ditolak));
+                    mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_ditolak));
                     mStatus.setText("Denda");
                     mDate.setText(formattedDate);
                 }
@@ -189,23 +194,13 @@ public class BorrowedFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent  = new Intent(getActivity(), LoanDetailActivity.class);
+                Intent intent  = new Intent(HistoryMemberActivity.this, LoanDetailActivity.class);
                 intent.putExtra("id_booking", mBooking[2].toString());
                 startActivity(intent);
-
             }
         }
     }
-    @Override
-    public void onResume() {
-        Log.d(TAG, "onResume: Called");
-        super.onResume();
-        // Calling Data to Refresh Calling API
-        refresh();
-    }
-    @Override
-    public void onPause() {
-        Log.d(TAG, "onPause: Called");
-        super.onPause();
+    public void onBackButtonClicked(View view) {
+        finish();
     }
 }

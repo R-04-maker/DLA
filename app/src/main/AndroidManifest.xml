@@ -31,6 +31,9 @@
             android:name=".ui.activity.HistoryActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.activity.HistoryMemberActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.SearchActivity"
             android:exported="false" />
         <activity
@@ -38,9 +41,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.activity.BookDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.activity.BookDetailMemberActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.DashboardActivity"

@@ -29,6 +29,9 @@ import com.astra.polytechnic.ViewModel.*;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -147,6 +150,7 @@ public class SignUpActivity extends AppCompatActivity {
             String alamat = "";
             String hp = mnotelp.getText().toString();
             String password = mpassword.getText().toString();
+            String pasHashed = md5(password);
             String id_role = "ROL06";
             String id_prodi = prodi;
             Integer status = 1;
@@ -160,7 +164,7 @@ public class SignUpActivity extends AppCompatActivity {
             role.setId_role(id_role);
 
             UserViewModel userViewModel=new UserViewModel();
-            msuser user=new msuser(email,nomor,nama,instansi,alamat,hp,password,role,msprodi,status,creaby,creadate,modiby,modidate);
+            msuser user=new msuser(email,nomor,nama,instansi,alamat,hp,pasHashed,role,msprodi,status,creaby,creadate,modiby,modidate);
 
             if (validate(view)) {
                 ProgressDialog progressDialog = ProgressDialog.show(this, "Sign Up", "Signing Up...");
@@ -185,6 +189,27 @@ public class SignUpActivity extends AppCompatActivity {
     }
     private boolean isValidEmail(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public static String md5(String input) {
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] digest = md5.digest(input.getBytes());
+
+            // Mengubah hasil digest menjadi format string dalam bentuk hexadecimal
+            BigInteger num = new BigInteger(1, digest);
+            String md5Hash = num.toString(16);
+
+            // Pastikan string hasil MD5 memiliki panjang 32 karakter (prepend dengan "0" jika perlu)
+            while (md5Hash.length() < 32) {
+                md5Hash = "0" + md5Hash;
+            }
+
+            return md5Hash;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     public boolean validate(View view) {
         boolean emailValidation = ValidationHelper.requiredTextInputValidation(mEmailLayout);

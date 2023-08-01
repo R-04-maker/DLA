@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -22,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.astra.polytechnic.R;
+import com.astra.polytechnic.ViewModel.UserViewModel;
 import com.astra.polytechnic.ui.activity.LoginActivity;
 
 public class ProfileFragment extends Fragment {
@@ -30,6 +32,8 @@ public class ProfileFragment extends Fragment {
     private TextView mLoginName, mRoleName;
     private Button mLogout;
     SharedPreferences pref;
+    private String email;
+    private UserViewModel mUserViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,6 +62,7 @@ public class ProfileFragment extends Fragment {
                 showDialog3();
             }
         });
+        mUserViewModel = new ViewModelProvider(this).get(UserViewModel.class);
 
         pref= getActivity().getSharedPreferences("nomor", getActivity().MODE_PRIVATE);
         mLoginName = view.findViewById(R.id.login_layout);
@@ -65,6 +70,7 @@ public class ProfileFragment extends Fragment {
         mLogout = view.findViewById(R.id.btn_logout);
         mRoleName = view.findViewById(R.id.role_name);
         String role = pref.getString("id_role",null);
+        email = pref.getString("email",null);
         if(role!=null){
             if(!role.equals("ROL01")){
                 // kalo misal login sebagai member, defaultnya Librarian
@@ -87,6 +93,8 @@ public class ProfileFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivity(intent);
                 getActivity().finish();
+
+                deleteToken();
             }
         });
         return view;
@@ -122,5 +130,8 @@ public class ProfileFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations=R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+    private void deleteToken(){
+        mUserViewModel.deleteToken(email);
     }
 }

@@ -132,4 +132,46 @@ public class msuserRepo {
         });
             return mUserLogin;
     }
+
+    public LiveData<AddResponse> saveToken(String token, String email) {
+        MutableLiveData<AddResponse> obj = new MutableLiveData<>();
+
+        Log.d(TAG, "addUser: Called");
+        Call<AddResponse> call = mmsuserService.saveToken(token, email);
+        call.enqueue(new Callback<AddResponse>() {
+            @Override
+            public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
+                Log.d(TAG, "onResponse: " + response.body());
+                obj.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<AddResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+        return obj;
+    }
+
+    public LiveData<AddResponse> deleteToken(String email) {
+        MutableLiveData<AddResponse> obj = new MutableLiveData<>();
+
+        Log.d(TAG, "addUser: Called");
+        Call<AddResponse> call = mmsuserService.deleteToken(email);
+        call.enqueue(new Callback<AddResponse>() {
+            @Override
+            public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
+                Log.d(TAG, "onResponse: " + response.body());
+                obj.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<AddResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+
+        return obj;
+    }
 }

@@ -3,22 +3,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Header Container -->
     <RelativeLayout
+        android:id="@+id/headerContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="13dp"
+        android:paddingVertical="10dp">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Title"/>
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:layout_below="@+id/title"/>
+        <!-- App Icon -->
+        <ImageView
+            android:id="@+id/appIcon"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_icon_notif"
+            android:layout_centerVertical="true" />
 
+        <!-- Title and Description Container -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_centerVertical="true"
+            android:paddingBottom="10dp"
+            android:layout_toEndOf="@id/appIcon">
+
+            <!-- Title TextView -->
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <!-- Description TextView -->
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
     </RelativeLayout>
+<!--
+    &lt;!&ndash; Other Content Below Header &ndash;&gt;
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerContainer"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        &lt;!&ndash; Your additional content goes here &ndash;&gt;
+
+    </LinearLayout>-->
 
 </RelativeLayout>

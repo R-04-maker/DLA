@@ -6,9 +6,9 @@ import com.astra.polytechnic.service.ManagedLoanService;
 import com.astra.polytechnic.service.*;
 
 public class ApiUtils {
-//    public static final String API_URL = "http://192.168.208.17:8080/";
+    public static final String API_URL = "http://192.168.208.17:8080/";
 //    public static final String API_URL = "http://10.8.2.236:8080/";
-    public static final String API_URL = "http://192.168.154.17:8080/";
+//    public static final String API_URL = "http://192.168.154.17:8080/";
 
     private ApiUtils(){
 

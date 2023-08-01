@@ -31,7 +31,7 @@ public class LoginModel {
     @Expose
     private String deskripsi;
 
-    @SerializedName("hp")
+    @SerializedName("no_hp")
     @Expose
     private String hp;
 

@@ -27,6 +27,7 @@ import com.astra.polytechnic.model.msprodi;
 import com.astra.polytechnic.model.response.LoginResponse;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,8 +39,8 @@ public class LoginActivity extends AppCompatActivity{
     private TextInputEditText mPassword,mNim;
     private TextInputLayout mPasswordLayout, mUsernameLayout;
     private UserViewModel mUserViewModel;
-
     String id_role,pass;
+    String email;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -100,9 +101,12 @@ public class LoginActivity extends AppCompatActivity{
                                     editor.putString("password", loginResponse.getUser().getPassword());
                                     editor.putString("no_hp", loginResponse.getUser().getHp());
                                     editor.apply();
+                                    Log.d(TAG, "No hp : " + loginResponse.getUser().getHp());
 
                                     id_role = loginResponse.getUser().getId_role();
+                                    email = loginResponse.getUser().getEmail();
                                     CheckRole();
+                                    saveFireBaseToken();
                                 } else{
                                     Toast.makeText(LoginActivity.this, "Data Tidak Ditemukan", Toast.LENGTH_SHORT).show();
                                 }
@@ -144,5 +148,19 @@ public class LoginActivity extends AppCompatActivity{
             startActivity(intent);
             finish();
         }
+    }
+    public void saveFireBaseToken(){
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        // Handle error
+                        return;
+                    }
+                    // Get the token
+                    String token = task.getResult();
+                    Log.d("firebase",token);
+                    mUserViewModel.saveFBtoken(token, email);
+                    // Use the token as needed (e.g., send it to your server)
+                });
     }
 }

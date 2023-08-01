@@ -30,5 +30,10 @@ public class UserViewModel extends ViewModel {
     public LiveData<LoginModel> getUserLogin(){
         return mDetailViewModelMsuser.getUserLogin();
     }
-
+    public LiveData<AddResponse> saveFBtoken(String token, String email){
+        return mUserRepository.saveToken(token,email);
+    }
+    public LiveData<AddResponse> deleteToken(String email){
+        return mUserRepository.deleteToken(email);
+    }
 }

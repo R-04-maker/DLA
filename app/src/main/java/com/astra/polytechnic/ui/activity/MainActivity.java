@@ -38,17 +38,6 @@ public class MainActivity extends AppCompatActivity {
             editor.putBoolean("startup", true);
             editor.commit();
         }
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        // Handle error
-                        return;
-                    }
-                    // Get the token
-                    String token = task.getResult();
-                    Log.d("firebase",token);
-                    // Use the token as needed (e.g., send it to your server)
-                });
 
         mbtnGetStarted = findViewById(R.id.btnGetStarted);
         mbtnGetStarted.setOnClickListener(new View.OnClickListener() {

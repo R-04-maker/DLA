@@ -32,5 +32,9 @@ public interface msuserService {
         @DELETE("user")
         Call<msuser> deleteUserById(@Query("id") String id);
 
+        @POST("/saveToken")
+        Call<AddResponse> saveToken(@Query("token") String token, @Query("email") String email);
 
+        @POST("/deleteToken")
+        Call<AddResponse> deleteToken(@Query("email") String email);
 }

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -23,9 +22,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentResultListener;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -105,10 +101,14 @@ public class KeranjangActivity extends AppCompatActivity {
         mNama.setFocusable(false);
         mNama.setClickable(false);
 
+        mNoHp.setFocusable(false);
+        mNoHp.setClickable(false);
+
         mNim.setText(pref.getString("nomor", ""));
         mNama.setText(pref.getString("nama", ""));
         mProdi.setText(pref.getString("deskripsi", ""));
         mNoHp.setText(pref.getString("no_hp", ""));
+        Log.d("No HP", pref.getString("no_hp", ""));
 
         mDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -282,18 +282,6 @@ public class KeranjangActivity extends AppCompatActivity {
             holder.onBindViewHolder(koleksi);
             Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), android.R.anim.fade_in);
             holder.itemView.startAnimation(animation);
-
-            // checkbox
-            boolean isSelected = selectedItems.get(position, false  );
-            holder.mCheckBox.setChecked(isSelected);
-            holder.itemView.setOnClickListener(v -> {
-                holder.mCheckBox.setChecked(!isSelected);
-                if (holder.mCheckBox.isChecked()) {
-                    selectedItems.put(position, true);
-                } else {
-                    selectedItems.delete(position);
-                }
-            });
         }
 
         @Override
@@ -313,7 +301,6 @@ public class KeranjangActivity extends AppCompatActivity {
             private Keranjang mKeranjang;
             private String mEditableTitle;
             ImageView imageView;
-            private CheckBox mCheckBox;
 
             public KoleksiHolder(LayoutInflater inflater, ViewGroup parent) {
                 super(inflater.inflate(R.layout.item_detail_keranjang, parent, false));
@@ -323,7 +310,6 @@ public class KeranjangActivity extends AppCompatActivity {
                 pengarang = itemView.findViewById(R.id.title_book_kategori);
                 mDeleteImage = itemView.findViewById(R.id.btnDelete);
                 mIdKoleksi = itemView.findViewById(R.id.id_koleksi);
-                mCheckBox = itemView.findViewById(R.id.checkbox_keranjang);
 
                 mDeleteImage.setOnClickListener(new View.OnClickListener() {
                     @Override

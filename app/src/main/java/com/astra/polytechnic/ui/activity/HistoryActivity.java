@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.ManagedLoanViewModel;
 import com.astra.polytechnic.helper.DLAHelper;
-import com.astra.polytechnic.helper.DateConverter;
 import com.astra.polytechnic.ui.fragment.ConfirmedFragment;
 import com.google.android.material.card.MaterialCardView;
 
@@ -47,32 +46,26 @@ public class HistoryActivity extends AppCompatActivity {
     private View mEmptyData;
     private ImageView mBackButton;
     String email, id_role;
-    Date date,date1,dateAfter14Days,datenow;
-    String formattedDate,resultDateStr,formattedDate1,Denda;
+    Date date,date1,dateAfter14Days,datenow,creada;
+    String formattedDate,resultDateStr,formattedDate1,Denda,formattedDate2;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
     private HistoryAdapter mHistoryAdapter = new HistoryAdapter(Collections.emptyList());
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
         mRVallBooking = findViewById(R.id.rv_booking_history);
-
         mBackButton = findViewById(R.id.back_button);
-
         mEmptyData = findViewById(R.id.layout_empty_data_hist);
 
         mRVallBooking.setLayoutManager(new LinearLayoutManager(HistoryActivity.this));
 
         mManagedLoanViewModel = new ViewModelProvider(this).get(ManagedLoanViewModel.class);
-
         mManagedLoanViewModel.getAllHistory().observe(this,this::UpdateData);
-
     }
 
     private void UpdateData(List<Object[]> objectList){
-        Log.d(TAG, "UpdateData: " + objectList);
         mDataList = DLAHelper.getAllHistory(objectList);
         mHistoryAdapter = new HistoryAdapter(mDataList);
         mRVallBooking.setAdapter(mHistoryAdapter);
@@ -133,69 +126,58 @@ public class HistoryActivity extends AppCompatActivity {
                     mName.setText(mEditableTitle);
                 }
                 DateTimeFormatter inputFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-                DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("dd/MMMM/yyyy");
                 mNIM.setText(booking[11] != null ? booking[11].toString() : "");
                 String tglambil = booking[12].toString();
                 String tglkembali =booking[13].toString();
+                String creadate =booking[5].toString();
                 OffsetDateTime offsettglambil = OffsetDateTime.parse((String) tglambil, inputFormat);
                 OffsetDateTime offsettglambil1 = OffsetDateTime.parse((String) tglkembali, inputFormat);
+                OffsetDateTime offsettglcrea = OffsetDateTime.parse((String) creadate, inputFormat);
                 Instant instant = offsettglambil.toInstant();
                 Instant instant1 = offsettglambil1.toInstant();
+                Instant instant2 = offsettglcrea.toInstant();
                 date = Date.from(instant);
                 date1 = Date.from(instant1);
+                creada = Date.from(instant2);
                 datenow=Date.from(Instant.now());
 
                 formattedDate = offsettglambil.format(outputFormat);
                 formattedDate1 = offsettglambil1.format(outputFormat);
+                formattedDate2 = offsettglcrea.format(outputFormat);
                 mBookID.setText(booking[2] != null ? booking[2].toString() : "");
-
-                System.out.println("Parsed Tanggal Ambil: " + date);
-                System.out.println("Parsed Tanggal Kembali: " + date1);
+                mDate.setText(formattedDate2);
+/*                System.out.println("Parsed Tanggal Ambil: " + date);
+                System.out.println("Parsed Tanggal Kembali: " + date1);*/
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(date);
                 calendar.add(Calendar.DAY_OF_MONTH, 14);
                 dateAfter14Days = calendar.getTime();
                 resultDateStr = DATE_FORMAT.format(dateAfter14Days);
-                System.out.println("Date 14 days after the input date: " + resultDateStr);
                 // Menghitung selisih antara dateAfter21Days dan date dalam milidetik
                 long diffInMillis = dateAfter14Days.getTime() - date1.getTime();
 
                 // Mengubah selisih milidetik ke dalam satuan hari
                 long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
 
-                if (dateAfter14Days.after(date1)) {
+                if (date1.equals(dateAfter14Days) || date1.before(dateAfter14Days)) {
                     if (booking[3].toString().equals("Ditolak")) {
                         mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryActivity.this, R.color.card_ditolak));
-                    }  else if (booking[3].toString().equals("Pengajuan")) {
+                    } else if (booking[3].toString().equals("Pengajuan")) {
                         mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryActivity.this, R.color.card_pengajuan));
-                    }
-
-                    if (booking[3].toString().equals("Dipinjam")) {
+                    } else if (booking[3].toString().equals("Dipinjam")) {
                         mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryActivity.this, R.color.card_dipinjam));
-                    } else if(booking[3].toString().equals("Dipinjam") && dateAfter14Days.after(datenow)){
-                        System.out.println("Denda");
-                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryActivity.this, R.color.card_ditolak));
-                        mStatus.setText("Denda");
-                        //mDate.setText("Buku telat dikembalikan"+ diffInDays + "hari dari tanggal"+formattedDate1);
-                        int d=(int)diffInDays*5000;
-                        Denda="Rp. "+ String.valueOf(d);
-                        mDate.setText(formattedDate);
-
-                    }
-
-                    if (booking[3].toString().equals("Selesai")) {
+                    } else if (booking[3].toString().equals("Selesai")) {
                         mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryActivity.this, R.color.card_selesai));
-                    } else {
-
+                    }else if (booking[3].toString().equals("Diterima")){
+                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryActivity.this, R.color.card_diterima));
                     }
                     mStatus.setText(booking[3] != null ? booking[3].toString() : "");
-                    mDate.setText(formattedDate);
-                }
-                else {
-                    System.out.println("Denda");
+                } else {
+                    // Handling the "Denda" case
                     mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryActivity.this, R.color.card_ditolak));
                     mStatus.setText("Denda");
-                    mDate.setText(formattedDate);
+                    mDate.setText(formattedDate2);
                 }
             }
 

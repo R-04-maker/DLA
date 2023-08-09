@@ -68,7 +68,6 @@ public class HomeMemberFragment extends Fragment {
     // Adapter
     private HomeMemberFragment.NewestAdapter mNewestAdapter = new HomeMemberFragment.NewestAdapter(Collections.emptyList());
     private HomeMemberFragment.CollectionAdapter mPopularAdapater = new HomeMemberFragment.CollectionAdapter(Collections.emptyList());
-//    private HomeMemberFragment.BannerAdapter mBannerAdapter = new HomeMemberFragment.BannerAdapter(Collections.emptyList());
 
     public static HomeMemberFragment newInstance() {
         return new HomeMemberFragment();
@@ -174,11 +173,10 @@ public class HomeMemberFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String email = pref.getString("email", null);
-        mNewestViewModel.getNewest().observe(getViewLifecycleOwner(), this::updateNewestBook);
+        mNewestViewModel.getNewestCollection().observe(getViewLifecycleOwner(), this::updateNewestBook);
         mNewestColectionVM.getNewestReleased().observe(getViewLifecycleOwner(), this::updateNewestCollection);
         mDashboardVM.getDataDashboardMember(email).observe(getViewLifecycleOwner(), this::updateDashboard);
         mBannerViewModel.getAllBanner().observe(getViewLifecycleOwner(), this::updateBanner);
-        Log.d(TAG, "onViewCreated: Email :" + pref.getString("email", null));
     }
 
     private Runnable sliderRunnable = new Runnable() {
@@ -189,7 +187,6 @@ public class HomeMemberFragment extends Fragment {
     };
     private void updateDashboard(List<Object[]> object) {
         Object[] obj = object.get(0);
-        Log.d(TAG, "updateDashboard: " + obj[0].toString());
 
         // Parse values as double instead of int to handle decimal numbers
         double bookCount = Double.parseDouble(obj[0].toString());
@@ -207,21 +204,18 @@ public class HomeMemberFragment extends Fragment {
     }
 
     private void updateNewestBook(List<Koleksi> koleksiNewest){
-        Log.d(TAG, "updateNewestBook: "+ koleksiNewest);
         mNewestList = DLAHelper.getNewestBook(koleksiNewest);
         mNewestAdapter = new HomeMemberFragment.NewestAdapter(mNewestList);
         mRvNewestBooks.setAdapter(mNewestAdapter);
     }
 
     private void updateNewestCollection(List<Koleksi> koleksiNewest){
-        Log.d(TAG, "updateNewestCollectionBook: "+ koleksiNewest);
         mCollectionList = DLAHelper.getPopularBooks(koleksiNewest);
         mPopularAdapater = new HomeMemberFragment.CollectionAdapter(mCollectionList);
         mRvPopularBooks.setAdapter(mPopularAdapater);
     }
 
     private void updateBanner(List<Banner> bannerList){
-        Log.d(TAG, "updateNewestCollectionBook: "+ bannerList);
         mBanners = bannerList;
         mViewPager2.setAdapter(new HomeMemberFragment.BannerAdapter(mBanners,mViewPager2));
     }
@@ -286,19 +280,9 @@ public class HomeMemberFragment extends Fragment {
             }
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getContext(), mKoleksi.getNama(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 intent.putExtra(KEY_EXTRA, mKoleksi.getIdKoleksi());
                 startActivity(intent);
-/*                BookDetailFragment bookDetailFragment = new BookDetailFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("id_koleksi", mKoleksi.getIdKoleksi());
-                bookDetailFragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainter, bookDetailFragment)
-                        .addToBackStack(null)
-                        .commit();*/
             }
         }
     }
@@ -364,8 +348,6 @@ public class HomeMemberFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getContext(), mKoleksi.getGambar(), Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getContext(), mKoleksi.getNama(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 intent.putExtra(KEY_EXTRA, mKoleksi.getIdKoleksi());
                 startActivity(intent);
@@ -393,8 +375,6 @@ public class HomeMemberFragment extends Fragment {
         public void onBindViewHolder(@NonNull HomeMemberFragment.BannerAdapter.BannerHolder holder, int position) {
             Banner banner = mBanners.get(position);
             holder.onBindViewHolder(banner);
-/*            Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), android.R.anim.fade_in);
-            holder.itemView.startAnimation(animation);*/
         }
 
         @Override
@@ -410,7 +390,7 @@ public class HomeMemberFragment extends Fragment {
                 super(inflater.inflate(R.layout.slide_item_container, parent, false));
 
                 mBannerImg = itemView.findViewById(R.id.banner_image_view);
-//                itemView.setOnClickListener(this);
+                itemView.setOnClickListener(this);
             }
             public void onBindViewHolder(Banner banner){
                 mBanner = banner;
@@ -418,8 +398,6 @@ public class HomeMemberFragment extends Fragment {
                 if(!banner.getBerkas().equals("KOSONG") && !banner.getBerkas().equals("IMG_NoImage.jpg")){
                     Picasso.get()
                             .load(banner.getBerkas())
-//                            .placeholder(R.drawable.no_cover_book)
-//                            .error(R.drawable.no_cover_book)
                             .into(mBannerImg);
                 }else {
                     mBannerImg.setImageResource(R.drawable.no_cover_book);

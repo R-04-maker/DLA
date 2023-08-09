@@ -69,7 +69,6 @@ public class ConfirmedFragment extends Fragment {
         mManagedLoanVM.getConfirmedBooking().observe(getViewLifecycleOwner(), this::updateUI);
     }
     private void updateUI(List<Object[]> bookingList){
-        Log.d(TAG, "updateUI: " + bookingList);
         mBookingList = DLAHelper.getUnconBookList(bookingList);
         mBookingAdapter = new ConfirmedFragment.BookingAdapter(mBookingList);
         mRvConfirmedLoan.setAdapter(mBookingAdapter);

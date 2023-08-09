@@ -11,8 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +22,6 @@ import com.astra.polytechnic.R;
 import com.astra.polytechnic.helper.ValidationHelper;
 import com.astra.polytechnic.model.*;
 import com.astra.polytechnic.model.response.AddResponse;
-import com.astra.polytechnic.model.response.ListProdiResponse;
 import com.astra.polytechnic.repository.*;
 import com.astra.polytechnic.ViewModel.*;
 import com.google.android.material.textfield.TextInputEditText;
@@ -33,21 +31,20 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
     private TextInputEditText mEmail, mNIM, mNama, mnotelp, mpassword, mReenterPass;
-    private ImageView mSignUp;
+    private Button mSignUp;
     ProgressDialog loading;
     private msuser mMsuser;
-    private msuserRepo mMsuserRepo;
+    private UserRepository mUserRepository;
 
     private UserViewModel mUserViewModel;
     private TextInputLayout mProdiLayout, mNameLayout, mNIMLayout, mEmailLayout, mTeleponLayout, mPasswordLayout, mRetypePassLayout;
@@ -58,7 +55,7 @@ public class SignUpActivity extends AppCompatActivity {
     Map<String, String> programMap = new HashMap<>();
     List<String> prodiNames = new ArrayList<>();
     List<String> prodiIds = new ArrayList<>();
-    private msprodiViewModel mMsprodiViewModel;
+    private ProdiViewModel mProdiViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,19 +82,26 @@ public class SignUpActivity extends AppCompatActivity {
         mSignUp = findViewById(R.id.regist);
         mMsprodis = new ArrayList<>();
 
-        mMsprodiViewModel = new ViewModelProvider(this).get(msprodiViewModel.class);
-        mMsprodiViewModel.getAllProdi().observe(this, new Observer<List<msprodi>>() {
+        mProdiViewModel = new ViewModelProvider(this).get(ProdiViewModel.class);
+        mProdiViewModel.getAllProdi().observe(this, new Observer<List<msprodi>>() {
             @Override
             public void onChanged(List<msprodi> msprodis) {
-                mMsprodis=msprodis;
+                mMsprodis = msprodis;
+                String patternString = "\\((.*?)\\)";
+                Pattern pattern = Pattern.compile(patternString);
                 for (msprodi msprodi:mMsprodis){
-                    prodiNames.add(msprodi.getDeskripsi());
+                    Matcher matcher = pattern.matcher(msprodi.getDeskripsi());
+                    if(matcher.find()){
+                        prodiNames.add(matcher.group(1));
+                    }else{
+                        prodiNames.add(msprodi.getDeskripsi());
+                    }
                     prodiIds.add(msprodi.getId_prodi());
                 }
             }
         });
 
-        mMsuserRepo = msuserRepo.get();
+        mUserRepository = UserRepository.get();
         mArrayAdapter = new ArrayAdapter<>(SignUpActivity.this, R.layout.list_dd_prodi, prodiNames);
         mAutoCompleteTextView.setAdapter(mArrayAdapter);
         mEmail.addTextChangedListener(new TextWatcher() {
@@ -176,8 +180,9 @@ public class SignUpActivity extends AppCompatActivity {
                                 Toast.makeText(SignUpActivity.this, "Register Berhasil", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
                                 startActivity(intent);
-                            } else {
-                                Toast.makeText(SignUpActivity.this, "Register Gagal", Toast.LENGTH_SHORT).show();
+                            } else  {
+                                Toast.makeText(SignUpActivity.this, "Email Sudah Digunakan", Toast.LENGTH_SHORT).show();
+                                //finish();
                             }
                         }
                     }

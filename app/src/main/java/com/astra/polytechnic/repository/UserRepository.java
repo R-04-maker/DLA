@@ -12,7 +12,7 @@ import com.astra.polytechnic.model.LoginModel;
 import com.astra.polytechnic.model.msuser;
 import com.astra.polytechnic.model.response.AddResponse;
 import com.astra.polytechnic.model.response.LoginResponse;
-import com.astra.polytechnic.service.msuserService;
+import com.astra.polytechnic.service.UserService;
 
 import java.util.List;
 
@@ -20,31 +20,31 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class msuserRepo {
+public class UserRepository {
     private static final String TAG = "UserRepository";
 
-    private static msuserRepo INSTANCE;
+    private static UserRepository INSTANCE;
 
-    private msuserService mmsuserService;
+    private UserService mMmsuserService;
     private UserDao mDetailViewModelMsuser;
-    private msuserRepo(Context context) {
-        mmsuserService = ApiUtils.getMemberService();
+    private UserRepository(Context context) {
+        mMmsuserService = ApiUtils.getMemberService();
     }
 
     public static void initialize(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new msuserRepo(context);
+            INSTANCE = new UserRepository(context);
         }
     }
 
-    public static msuserRepo get() {
+    public static UserRepository get() {
         return INSTANCE;
     }
 
     public MutableLiveData<List<msuser>> getUsers() {
         MutableLiveData<List<msuser>> users = new MutableLiveData<>();
 
-        Call<List<msuser>> call = mmsuserService.getUsers();
+        Call<List<msuser>> call = mMmsuserService.getUsers();
         call.enqueue(new Callback<List<msuser>>() {
             @Override
             public void onResponse(Call<List<msuser>> call, Response<List<msuser>> response) {
@@ -66,7 +66,7 @@ public class msuserRepo {
     public MutableLiveData<msuser> getUser(String userId) {
         MutableLiveData<msuser> user = new MutableLiveData<>();
 
-        Call<msuser> call = mmsuserService.getUserById(userId);
+        Call<msuser> call = mMmsuserService.getUserById(userId);
         call.enqueue(new Callback<msuser>() {
             @Override
             public void onResponse(Call<msuser> call, Response<msuser> response) {
@@ -93,7 +93,7 @@ public class msuserRepo {
         MutableLiveData<AddResponse> loginResponseMutableLiveData = new MutableLiveData<>();
 
         Log.d(TAG, "addUser: Called");
-        Call<AddResponse> call = mmsuserService.addUser(user);
+        Call<AddResponse> call = mMmsuserService.addUser(user);
         call.enqueue(new Callback<AddResponse>() {
             @Override
             public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
@@ -114,7 +114,7 @@ public class msuserRepo {
         MutableLiveData <LoginResponse> mUserLogin = new MutableLiveData<>();
 
         Log.i(TAG, "Login() called");
-        Call <LoginResponse> call =mmsuserService.Login(nim,password);
+        Call <LoginResponse> call = mMmsuserService.Login(nim,password);
         call.enqueue(new Callback <LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
@@ -137,7 +137,7 @@ public class msuserRepo {
         MutableLiveData<AddResponse> obj = new MutableLiveData<>();
 
         Log.d(TAG, "addUser: Called");
-        Call<AddResponse> call = mmsuserService.saveToken(token, email);
+        Call<AddResponse> call = mMmsuserService.saveToken(token, email);
         call.enqueue(new Callback<AddResponse>() {
             @Override
             public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {
@@ -158,7 +158,7 @@ public class msuserRepo {
         MutableLiveData<AddResponse> obj = new MutableLiveData<>();
 
         Log.d(TAG, "addUser: Called");
-        Call<AddResponse> call = mmsuserService.deleteToken(email);
+        Call<AddResponse> call = mMmsuserService.deleteToken(email);
         call.enqueue(new Callback<AddResponse>() {
             @Override
             public void onResponse(Call<AddResponse> call, Response<AddResponse> response) {

@@ -49,6 +49,7 @@
             android:background="@android:color/transparent"
             android:src="@drawable/baseline_history_24"
             android:text="All Trans"
+            android:visibility="gone"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

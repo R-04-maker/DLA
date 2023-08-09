@@ -7,8 +7,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.astra.polytechnic.api.ApiUtils;
-import com.astra.polytechnic.model.response.ListProdiResponse;
-import com.astra.polytechnic.model.response.ObjectResponse;
 import com.astra.polytechnic.service.*;
 import com.astra.polytechnic.model.*;
 
@@ -18,25 +16,25 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class msprodiRepository {
+public class ProdiRepository {
 
     private static final String TAG = "msprodiRepository";
 
-    private static msprodiRepository INSTANCE;
+    private static ProdiRepository INSTANCE;
 
-    private msprodiRepository mRepository;
-    private msprodiService mService;
-    private msprodiRepository(Context context) {
+    private ProdiRepository mRepository;
+    private ProdiService mService;
+    private ProdiRepository(Context context) {
         mService = ApiUtils.getAllProdi();
     }
 
     public static void initialize(Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new msprodiRepository(context);
+            INSTANCE = new ProdiRepository(context);
         }
     }
 
-    public static msprodiRepository get() {
+    public static ProdiRepository get() {
         return INSTANCE;
     }
 

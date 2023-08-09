@@ -7,7 +7,7 @@ import com.astra.polytechnic.repository.*;
 import com.astra.polytechnic.repository.ManagedLoanRepository;
 import com.google.firebase.FirebaseApp;
 
-public class myAplication extends Application {
+public class ApplicationDLA extends Application {
     private  static final String TAG =  "UserApplication";
 
     @Override
@@ -16,8 +16,8 @@ public class myAplication extends Application {
         Log.i(TAG, "UserApplication.onCreate() called");
         KoleksiRepository.initialize(this);
         ManagedLoanRepository.initialize(this);
-        msuserRepo.initialize(this);
-        msprodiRepository.initialize(this);
+        UserRepository.initialize(this);
+        ProdiRepository.initialize(this);
         KeranjangRepository.initialize(this);
         BannerRepository.initialize(this);
         BookingRepository.initialize(this);

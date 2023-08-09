@@ -5,13 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.UserViewModel;
-import com.astra.polytechnic.ViewModel.msprodiViewModel;
 import com.astra.polytechnic.helper.ValidationHelper;
-import com.astra.polytechnic.model.LoginModel;
-import com.astra.polytechnic.model.msprodi;
 import com.astra.polytechnic.model.response.LoginResponse;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -32,13 +25,12 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class LoginActivity extends AppCompatActivity{
 
     private static final String TAG = "LoginActivity";
-    private ImageView mbtnSignIn, mbtnSignUp, mbtnGuest;
+    private Button  mbtnSignIn, mbtnSignUp, mbtnGuest;
+//    private ImageView ;
     private TextInputEditText mPassword,mNim;
     private TextInputLayout mPasswordLayout, mUsernameLayout;
     private UserViewModel mUserViewModel;
@@ -73,9 +65,6 @@ public class LoginActivity extends AppCompatActivity{
         });
 
         pref = getSharedPreferences("nomor",MODE_PRIVATE);
-        Log.d(TAG, "nomor: " + pref.getString("nomor", ""));
-        Log.d(TAG, "Role ID : " + pref.getString("id_role", ""));
-        Log.d(TAG, "Role Name : " + pref.getString("deskripsi", ""));
         // Check preferences
         if(pref.contains("nomor")&& pref.contains("id_role")){
             id_role = pref.getString("id_role","");
@@ -133,14 +122,15 @@ public class LoginActivity extends AppCompatActivity{
             });
         }
     }
+
+    //implisit ==> contoh camera,notifikasi
+    //eksplisit ==> langsug ke target contohnya dari login activity ke dasboard member
     public boolean validate(View v) {
         boolean emailValidation = ValidationHelper.requiredTextInputValidation(mUsernameLayout);
         boolean passwordValidation = ValidationHelper.requiredTextInputValidation(mPasswordLayout);
-        Log.d(TAG, "validate: " + emailValidation);
         return passwordValidation && emailValidation;
     }
     public void CheckRole(){
-        Log.d(TAG, "CheckRole: " + id_role);
         if (id_role.equals("ROL06")) {
             // ROL06 is Mahasiswa/Member
             Intent intent = new Intent(LoginActivity.this, DashboardMemberActivity.class);
@@ -153,6 +143,7 @@ public class LoginActivity extends AppCompatActivity{
             finish();
         }
     }
+    //password
     public static String md5(String input) {
         try {
             MessageDigest md5 = MessageDigest.getInstance("MD5");
@@ -173,6 +164,7 @@ public class LoginActivity extends AppCompatActivity{
             return null;
         }
     }
+    //notifikasi firebase
     public void saveFireBaseToken(){
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(task -> {

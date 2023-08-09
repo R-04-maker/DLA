@@ -15,11 +15,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.KoleksiViewModel;
 import com.astra.polytechnic.model.Koleksi;
@@ -27,12 +30,13 @@ import com.astra.polytechnic.ui.activity.BookDetailActivity;
 import com.astra.polytechnic.ui.activity.HistoryMemberActivity;
 import com.astra.polytechnic.ui.activity.KeranjangActivity;
 import com.astra.polytechnic.ui.activity.SearchActivity;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
 
 public class BooksCollectionFragment extends Fragment {
-    private static final String TAG = "Fragment";
+    private static final String TAG = "BooksCollectionFragment";
     private List<Koleksi> mKoleksiList;
     private RecyclerView mRvKoleksi;
     private BooksCollectionFragment.KoleksiAdapter mKoleksiAdapter = new BooksCollectionFragment.KoleksiAdapter(Collections.emptyList());
@@ -40,6 +44,8 @@ public class BooksCollectionFragment extends Fragment {
     private EditText mSearchBtn;
     SharedPreferences pref;
     private ImageView mImageView,mbtnHistory;
+    private LottieAnimationView mLoadingIndicator;
+
     ImageView mKeranjang;
     public BooksCollectionFragment() {
         // Required empty public constructor
@@ -55,9 +61,9 @@ public class BooksCollectionFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_collection, container, false);
 
         // Inflate the layout for this fragment
-        mImageView=view.findViewById(R.id.imageView7);
-        mKeranjang= view.findViewById(R.id.icon_cart);
-        mbtnHistory=view.findViewById(R.id.btn_all_transaction);
+        mImageView = view.findViewById(R.id.imageView7);
+        mKeranjang = view.findViewById(R.id.icon_cart);
+        mbtnHistory = view.findViewById(R.id.btn_all_transaction);
         mKeranjang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +89,9 @@ public class BooksCollectionFragment extends Fragment {
         mSearchBtn = view.findViewById(R.id.searchBtn);
         mSearchBtn.setFocusable(false);
         mSearchBtn.setClickable(false);
+
+        mLoadingIndicator = view.findViewById(R.id.loading_indicator_2);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         mSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,7 +103,6 @@ public class BooksCollectionFragment extends Fragment {
         pref = getActivity().getSharedPreferences("nomor", SearchActivity.MODE_PRIVATE);
         String namaSp = pref.getString("id_role", null);
         if (namaSp != null) {
-            Log.v("TEST", "ROLE = " + namaSp);
             if(namaSp.equals("ROL06")){
                 mKeranjang.setVisibility(View.VISIBLE);
             }else {
@@ -107,14 +115,19 @@ public class BooksCollectionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        mScrollView.setVisibility(View.INVISIBLE);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         mNewestViewModel.getBukuByNamaMt().observe(getViewLifecycleOwner(), this::updateNewestBook);
+        mLoadingIndicator.setVisibility(View.GONE);
+
     }
     private void updateNewestBook(List<Koleksi> koleksiNewest){
-        Log.d(TAG, "updateNewestBook: "+ koleksiNewest);
         mKoleksiList = koleksiNewest;
         mKoleksiAdapter = new BooksCollectionFragment.KoleksiAdapter(mKoleksiList);
         mRvKoleksi.setAdapter(mKoleksiAdapter);
+
+        // Terapkan animasi fade-in pada RecyclerView
+        Animation fadeIn = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_up );
+        mRvKoleksi.startAnimation(fadeIn);
     }
     private class KoleksiAdapter extends RecyclerView.Adapter<BooksCollectionFragment.KoleksiAdapter.KoleksiHolder> {
         private List<Koleksi> mKoleksis;
@@ -146,43 +159,55 @@ public class BooksCollectionFragment extends Fragment {
 
         private class KoleksiHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             private ImageView mBookImage;
-            private TextView mBookTitle;
+            private TextView mBookTitle, mAuthor, mYearBook, mCategoryBook, mRak, mStatus;
             private Koleksi mKoleksi;
-            private TextView deskripsi;
-            private String mEditableTitle;
-            ImageView imageView;
+            private CardView mStatusCard;
 
             public KoleksiHolder(LayoutInflater inflater, ViewGroup parent) {
                 super(inflater.inflate(R.layout.item_detail_books, parent, false));
 
-                mBookImage = itemView.findViewById(R.id.cover_book_newest);
+                mBookImage = itemView.findViewById(R.id.cover_book_list_view);
                 mBookTitle = itemView.findViewById(R.id.title_book);
-                deskripsi=itemView.findViewById(R.id.author_book);
+                mAuthor = itemView.findViewById(R.id.author_book);
+                mYearBook = itemView.findViewById(R.id.year_book);
+                mCategoryBook = itemView.findViewById(R.id.category_book);
+                mRak = itemView.findViewById(R.id.rak_buku_list);
+                mStatus = itemView.findViewById(R.id.status_text);
+                mStatusCard = itemView.findViewById(R.id.status_buku_cardView);
 
                 itemView.setOnClickListener(this);
             }
 
 
             private void onBindViewHolder(Koleksi koleksi) {
-
-                mEditableTitle = koleksi.getNama();
-                if(mEditableTitle.length() > 25 ){
-                    mBookTitle.setText(mEditableTitle.substring(0, 25));
-                    deskripsi.setText(koleksi.getDeskripsi());
-
-                }else {
-                    mBookTitle.setText(koleksi.getNama());
-                    deskripsi.setText(koleksi.getDeskripsi());
-                }
                 mKoleksi = koleksi;
-
+                mBookTitle.setText(koleksi.getNama());
+                mAuthor.setText(koleksi.getPengarang());
+                mYearBook.setText(koleksi.getTahunTerbit());
+                mCategoryBook.setText(koleksi.getIdKategori().getNama());
+                mRak.setText(koleksi.getIdRak().getNama());
+                if(!koleksi.getGambar().equals("KOSONG") && !koleksi.getGambar().equals("IMG_NoImage.jpg")){
+                    Picasso.get()
+                            .load(koleksi.getGambar())
+                            .placeholder(R.drawable.no_cover_book)
+                            .error(R.drawable.no_cover_book)
+                            .into(mBookImage);
+                }else {
+                    mBookImage.setImageResource(R.drawable.no_cover_book);
+                }
+                if(koleksi.getStatuspinjam() == 0){
+                    mStatusCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_ditolak));
+                    mStatus.setText("Tidak Tersedia");
+                }else {
+                    mStatusCard.setCardBackgroundColor(ContextCompat.getColor(getActivity(), R.color.card_dipinjam));
+                    mStatus.setText("Tersedia");
+                }
             }
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(getContext(), BookDetailActivity.class);
                 intent.putExtra("id_koleksi",mKoleksi.getIdKoleksi());
                 startActivity(intent);
-
             }
         }
     }

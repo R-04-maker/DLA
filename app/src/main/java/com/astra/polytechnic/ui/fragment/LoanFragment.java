@@ -21,8 +21,6 @@ import com.astra.polytechnic.ui.activity.SearchActivity;
 
 public class LoanFragment extends Fragment {
 
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     private int selectedTab = 1;
     private LinearLayout unconfirmedLayout;
     private LinearLayout confirmedLayout;

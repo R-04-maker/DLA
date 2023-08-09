@@ -1,6 +1,8 @@
 package com.astra.polytechnic.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,6 +18,7 @@ import android.widget.Toast;
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.KeranjangViewModel;
 import com.astra.polytechnic.ViewModel.KoleksiViewModel;
+import com.astra.polytechnic.ViewModel.ManagedLoanViewModel;
 import com.astra.polytechnic.model.Keranjang;
 import com.astra.polytechnic.model.Koleksi;
 import com.astra.polytechnic.model.msuser;
@@ -26,19 +29,21 @@ import java.util.List;
 public class BookDetailActivity extends AppCompatActivity {
     private static final String TAG = "BookDetailActivity";
     private String mIdKoleksi;
+    private CardView mCardViewStatus;
     private Button mAddtoCart;
     private ImageView mCoverDetail, mBackButton;
     private TextView mBookTitle, mBookAuthor, mBookPublisher, mBookPubYear, mBookDesc, mBookCategory, mBookKlasifikasi, mBookRak, mStatusPinjam;
     private KoleksiViewModel mKoleksiViewModel;
     SharedPreferences pref;
     private KeranjangViewModel mKeranjangViewModel;
+    ManagedLoanViewModel mManagedLoanViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
         mIdKoleksi = getIntent().getStringExtra("id_koleksi");
-        Log.d(TAG, "onCreate: " + mIdKoleksi);
+
         // Initialize Component
         mBackButton = findViewById(R.id.back_button);
         mCoverDetail = findViewById(R.id.book_cover_detail);
@@ -52,27 +57,32 @@ public class BookDetailActivity extends AppCompatActivity {
         mBookRak = findViewById(R.id.book_rak);
         mStatusPinjam = findViewById(R.id.book_available);
         mAddtoCart = findViewById(R.id.btn_addtoCart);
+        mCardViewStatus = findViewById(R.id.card_status_detail);
 
         mKoleksiViewModel = new ViewModelProvider(this).get(KoleksiViewModel.class);
         mKeranjangViewModel = new ViewModelProvider(this).get(KeranjangViewModel.class);
+        mManagedLoanViewModel = new ViewModelProvider(this).get(ManagedLoanViewModel.class);
 
         int id = Integer.parseInt(mIdKoleksi);
 
         mKoleksiViewModel.getDetailBook(id).observe(this,objects -> {
             String status;
             Object[] obj = objects.get(0);
-            Log.d(TAG, "getDetailBook: " + obj[0].toString());
             mBookTitle.setText(obj[1].toString());
             mBookDesc.setText(obj[2].toString());
             mBookPubYear.setText(obj[14].toString());
             mBookCategory.setText(obj[9].toString());
             mBookRak.setText(obj[10].toString());
+            Log.d(TAG, "onCreate: " + obj[8].toString());
             if (obj[8].toString().equals("1.0")) {
                 status = "Tersedia";
+                mStatusPinjam.setText(status);
+                mCardViewStatus.setCardBackgroundColor(ContextCompat.getColor(this, R.color.card_dipinjam));
             }else {
                 status = "Tidak Tersedia";
+                mStatusPinjam.setText(status);
+                mCardViewStatus.setCardBackgroundColor(ContextCompat.getColor(this, R.color.card_ditolak));
             }
-            mStatusPinjam.setText(status);
             if(!obj[5].equals("KOSONG") && !obj[5].equals("IMG_NoImage.jpg")){
                 Picasso.get()
                         .load(obj[5].toString())
@@ -87,14 +97,12 @@ public class BookDetailActivity extends AppCompatActivity {
         mKoleksiViewModel.getDetailAtribut(id).observe(this,objects -> {
             Object[] obj = objects.get(0);
             Object[] obj1 = objects.get(1);
-            Log.d(TAG, "getDetailAtribut: " + obj[0].toString());
             mBookAuthor.setText(obj[2].toString());
             mBookPublisher.setText(obj[2].toString());
         });
 
         mKoleksiViewModel.getKlasifikasiDetail(id).observe(this,objects -> {
             Object[] obj = objects.get(0);
-            Log.d(TAG, "getKlasifikasiDetail: " + objects.size());
             String klasifikasi = obj[2].toString();
             if(objects.size() != 1){
                 for(int i = 2; i < objects.size(); i++){
@@ -103,16 +111,14 @@ public class BookDetailActivity extends AppCompatActivity {
                     klasifikasi += ", " + obj1[2].toString();
                 }
                 mBookKlasifikasi.setText(klasifikasi);
-                Log.d(TAG, "getKlasifikasiDetail: " + objects.size());
             }else {
-                Log.d(TAG, "getKlasifikasiDetail: " + objects.size());
                 mBookKlasifikasi.setText(klasifikasi);
             }
         });
+
         pref = BookDetailActivity.this.getSharedPreferences("nomor", BookDetailActivity.MODE_PRIVATE);
         String namaSp = pref.getString("id_role", null);
         if (namaSp != null) {
-            Log.v("TEST", "ROLE = " + namaSp);
             if(namaSp.equals("ROL06")){
                 mAddtoCart.setVisibility(View.VISIBLE);
             }else {
@@ -127,7 +133,7 @@ public class BookDetailActivity extends AppCompatActivity {
                 String email = pref.getString("email","");
                 String idBuku = mIdKoleksi;
                 System.out.println("email :" + email);
-//                 Cek keranjang untuk validasi ketika data udah ada di keranjang
+                // Cek keranjang untuk validasi ketika data udah ada di keranjang
                 mKeranjangViewModel.cekKeranjang(email,idBuku).observe(BookDetailActivity.this,obj -> {
                     if (obj.getStatus() == 500) {
                         msuser user = new msuser();
@@ -144,6 +150,8 @@ public class BookDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
     public void onBackBtnClicked(View view){
         finish();
     }

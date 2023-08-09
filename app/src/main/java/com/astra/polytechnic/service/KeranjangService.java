@@ -26,6 +26,9 @@ public interface KeranjangService {
     @DELETE("/deleteKeranjang/{id}")
     Call<AddResponse> deleteKeranjang(@Path("id") int id);
 
+    @GET("getValidasiAddKeranjang/{email}")
+    Call<ObjectResponse> getValidasiAddKeranjang(@Path("email") String email );
+
     @GET("/cekKeranjang/{email}/{idKoleksi}")
     Call<AddResponse> cekKeranjang(@Path("email") String email, @Path("idKoleksi") String idKoleksi);
 }

@@ -37,6 +37,10 @@ public class ManagedLoanViewModel extends ViewModel {
         return mManagedLoanRepository.getHistoryMember(email);
     }
 
+    public LiveData<List<Object[]>> getValidasiAddKeranjang(String email){
+        return mManagedLoanRepository.getValidasiAddKeranjang(email);
+    }
+
     public LiveData<List<Object[]>> getDetailBooking(int id){
         return mManagedLoanRepository.getDetailBooking(id);
     }
@@ -47,7 +51,7 @@ public class ManagedLoanViewModel extends ViewModel {
         return mManagedLoanRepository.updateDetailBooking(idBooking, status);
     }
     public LiveData<String> updateGambar(MultipartBody.Part multipartBody, String status, int idBooking){
-        Log.d(TAG, "updateGambar: " + multipartBody + status + idBooking);
+//        Log.d(TAG, "updateGambar: " + multipartBody + status + idBooking);
         return mManagedLoanRepository.updateGambar(multipartBody, status, idBooking);
     }
  }

@@ -17,8 +17,8 @@ public class KoleksiViewModel extends ViewModel {
     public KoleksiViewModel(){
         mKoleksiRepository = KoleksiRepository.get();
     }
-    public LiveData<List<Koleksi>> getNewest(){
-        return mKoleksiRepository.getKoleksiNewest();
+    public LiveData<List<Koleksi>> getNewestCollection(){
+        return mKoleksiRepository.getNewestCollection();
     }
     public LiveData<List<Koleksi>> getNewestReleased(){
         return mKoleksiRepository.getNewestReleased();

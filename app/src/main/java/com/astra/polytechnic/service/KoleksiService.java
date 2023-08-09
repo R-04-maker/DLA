@@ -12,7 +12,7 @@ import retrofit2.http.Path;
 
 public interface KoleksiService {
     @GET("getNewestCollection")
-    Call<ListKoleksiResponse> getNewestKoleksi();
+    Call<ListKoleksiResponse> getNewestCollection();
 
     @GET("getNewestReleased")
     Call<ListKoleksiResponse> getNewestReleased();

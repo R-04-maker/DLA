@@ -14,7 +14,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 
-public interface msuserService {
+public interface UserService {
         @GET("/getAllUser")
         Call<msuser> getUserById(@Query("nim") String nim);
 
@@ -25,7 +25,6 @@ public interface msuserService {
         Call <LoginResponse> Login(@Query("nomor")String nim, @Query("password")String password);
         @POST("/saveUsers")
         Call<AddResponse> addUser(@Body msuser user);
-
         @PUT("user")
         Call<msuser> updateUser(@Body msuser user);
 

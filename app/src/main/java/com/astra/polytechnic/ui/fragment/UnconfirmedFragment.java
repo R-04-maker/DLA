@@ -30,6 +30,8 @@ import com.astra.polytechnic.model.Booking;
 import com.astra.polytechnic.ui.activity.LoanDetailActivity;
 
 import java.text.SimpleDateFormat;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -75,7 +77,6 @@ public class UnconfirmedFragment extends Fragment {
     }
 
     private void updateUI(List<Object[]> bookingList){
-        Log.d(TAG, "updateUI: " + bookingList.size());
         mBookingList = DLAHelper.getUnconBookList(bookingList);
         if (mBookingList != null) {
             mBookingAdapter = new BookingAdapter(mBookingList);
@@ -138,17 +139,21 @@ public class UnconfirmedFragment extends Fragment {
                 } else {
                     mName.setText(mEditableTitle);
                 }
+                DateTimeFormatter inputFormat = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+                DateTimeFormatter outputFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                String date=booking[5].toString();
+                OffsetDateTime offsettglambil = OffsetDateTime.parse((String) date, inputFormat);
+                String formattedDate = offsettglambil.format(outputFormat);
 
                 mNIM.setText(booking[11] != null ? booking[11].toString() : "");
-                String bookDate = booking[5] != null ? DateConverter.fromDbDateTimeTo(DATE_FORMAT, booking[5].toString()) : "";
-                mDate.setText(bookDate);
+                //String bookDate = booking[5] != null ? DateConverter.fromDbDateTimeTo(DATE_FORMAT, booking[5].toString()) : "";
+                mDate.setText(formattedDate);
                 mStatus.setText(booking[3] != null ? booking[3].toString() : "");
                 mBookID.setText(booking[2] != null ? booking[2].toString() : "");
             }
 
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getContext(), mBooking.getIdbooking(), Toast.LENGTH_SHORT).show();
                 Intent intent  = new Intent(getActivity(), LoanDetailActivity.class);
                 intent.putExtra("id_booking", mBooking[2].toString());
                 intent.putExtra("status", mBooking[3].toString());

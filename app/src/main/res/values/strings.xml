@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Digital Library AstraTech</string>
-    <string name="username_login_signup">Username</string>
+    <string name="username_login_signup">Username </string>
     <string name="pass_login_signup">Password</string>
     <string name="pass_desc">At least one Uppercase, one number, one symbol</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -14,6 +14,7 @@
     <string name="sorry_there_are_no_results">Sorry, there are no results.</string>
     <string name="oopss_no_data_found">Oopss! No data found.</string>
     <string name="konfirmasi_tolak">Apakah anda yakin menolak pengajuan ?</string>
+    <string name="konfirmasi_cancel">Apakah anda yakin membatalkan pengajuan ?</string>
     <string name="konfirmasi_title">Konfirmasi</string>
     <string name="konfirmasi_terima">Apakah anda yakin menerima pengajuan ?</string>
     <string name="terms_condition"><![CDATA[Terms & Condition]]></string>

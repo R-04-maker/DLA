@@ -23,6 +23,9 @@ public interface ManagedLoanService {
 
     @GET("getHistoryMember/{email}")
     Call<ObjectResponse> getHistoryMember(@Path("email") String email );
+
+    @GET("getValidasiAddKeranjang/{email}")
+    Call<ObjectResponse> getValidasiAddKeranjang(@Path("email") String email );
     @GET("getDetailBooking/{id}")
     Call<ObjectResponse> getDetailBooking(@Path("id") int id);
     @GET("updatePengajuan/{id}/{status}")

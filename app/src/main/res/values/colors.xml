@@ -11,7 +11,7 @@
     <color name="gray">#a3a5a8</color>
     <color name="gray_font">#a3a5a8</color>
     <color name="bg_dashboard">#edf0ff</color>
-    <color name="navbar_on">#2761ff</color>
+    <color name="navbar_on">#296791</color>
     <color name="round_back">#e9efff</color>
     <color name="tab_layout_on">#0F4C75</color>
     <color name="card_ditolak">#cc4f43</color>
@@ -19,4 +19,5 @@
     <color name="card_dipinjam">#397ccb</color>
     <color name="card_pengajuan">#f69110</color>
     <color name="card_selesai">#323844</color>
+    <color name="card_batal">#a3a5a8</color>
 </resources>

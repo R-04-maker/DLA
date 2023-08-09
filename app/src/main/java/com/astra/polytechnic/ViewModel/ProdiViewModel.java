@@ -3,18 +3,17 @@ package com.astra.polytechnic.ViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.astra.polytechnic.model.response.ListProdiResponse;
-import com.astra.polytechnic.repository.msprodiRepository;
+import com.astra.polytechnic.repository.ProdiRepository;
 import com.astra.polytechnic.model.*;
 
 import java.util.List;
 
-public class msprodiViewModel extends ViewModel {
+public class ProdiViewModel extends ViewModel {
     private static final String TAG = "UserViewModel";
-    private msprodiRepository mRepository;
+    private ProdiRepository mRepository;
 
-    public msprodiViewModel() {
-        mRepository = msprodiRepository.get();
+    public ProdiViewModel() {
+        mRepository = ProdiRepository.get();
     }
 
     public LiveData<List<msprodi>> getAllProdi(){

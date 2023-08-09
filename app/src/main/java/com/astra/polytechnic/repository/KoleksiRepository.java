@@ -42,10 +42,10 @@ public class KoleksiRepository {
         return INSTANCE;
     }
 
-    public LiveData<List<Koleksi>> getKoleksiNewest(){
+    public LiveData<List<Koleksi>> getNewestCollection(){
         Log.i(TAG, "getKoleksiNewest() called");
 
-        Call<ListKoleksiResponse> call = mKoleksiService.getNewestKoleksi();
+        Call<ListKoleksiResponse> call = mKoleksiService.getNewestCollection();
         call.enqueue(new Callback<ListKoleksiResponse>() {
             @Override
             public void onResponse(Call<ListKoleksiResponse> call, Response<ListKoleksiResponse> response) {

@@ -9,19 +9,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.astra.polytechnic.R;
 import com.astra.polytechnic.ViewModel.KoleksiViewModel;
 import com.astra.polytechnic.model.Koleksi;
@@ -53,6 +59,7 @@ public class SearchActivity extends AppCompatActivity {
     private View mLayoutEmpty;
     private GridLayoutManager mGridLayoutManager;
     private ImageButton mToggleBtn;
+    private LottieAnimationView mLoadingIndicator;
 
     // kalau di activity di deklrasiinnya di oncreatenya yaa
     @Override
@@ -67,12 +74,12 @@ public class SearchActivity extends AppCompatActivity {
         mRecyclerViewKoleksi.setAdapter(mKoleksiAdapter);
         mLayoutEmpty = findViewById(R.id.layout_empty_data);
         mSearchLayout = findViewById(R.id.tie_search);
+        mLoadingIndicator = findViewById(R.id.loading_indicator);
 
         mKeranjang = findViewById(R.id.icon_cart);
         pref = SearchActivity.this.getSharedPreferences("nomor", SearchActivity.MODE_PRIVATE);
         String namaSp = pref.getString("id_role", null);
         if (namaSp != null) {
-            Log.v("TEST", "ROLE = " + namaSp);
             if(namaSp.equals("ROL06")){
                 mKeranjang.setVisibility(View.VISIBLE);
             }else {
@@ -82,6 +89,7 @@ public class SearchActivity extends AppCompatActivity {
         }
 
         mToggleBtn = findViewById(R.id.toggle);
+        mToggleBtn.setEnabled(false);
         mToggleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,11 +97,12 @@ public class SearchActivity extends AppCompatActivity {
                 switchIcon();
             }
         });
-
-        // tipe datanya kalau di activity harus pake muttable live data -> check view model , repository , dan servicenya yaa
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+        // tipe datanya kalau di activity harus pake muttable live data -> check view model , repository , dan servicenya
         mKoleksiViewModel.getBukuByNamaMt().observe(this, koleksis -> {
-            Log.v("TEST",koleksis.size()+"");
             updateKoleksi(koleksis);
+            mLoadingIndicator.setVisibility(View.GONE);
+            mToggleBtn.setEnabled(true);
         });
 //        mRecyclerViewKoleksi.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerViewKoleksi.setLayoutManager(mGridLayoutManager);
@@ -148,9 +157,12 @@ public class SearchActivity extends AppCompatActivity {
     }
     private void updateKoleksi(List<Koleksi> koleksis){
         mKoleksiList = koleksis;
-        Log.v("TEST",koleksis.size()+"");
         mKoleksiAdapter = new KoleksiAdapter(mKoleksiList, mGridLayoutManager);
         mRecyclerViewKoleksi.setAdapter(mKoleksiAdapter);
+
+        // Terapkan animasi fade-in pada RecyclerView
+        Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.slide_up );
+        mRecyclerViewKoleksi.startAnimation(fadeIn);
     }
 
     // ini method buat searchnya
@@ -223,10 +235,10 @@ public class SearchActivity extends AppCompatActivity {
 //            LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
             return new KoleksiAdapter.KoleksiHolder(view, viewType);
         }
+        //untuk menyimpan data
         @Override
         public void onBindViewHolder(@NonNull KoleksiAdapter.KoleksiHolder holder, int position) {
             Koleksi koleksi = mKoleksis.get(position);
-            Log.d("TEST",koleksi.getNama());
             holder.bind(koleksi, mViewType);
         }
 
@@ -237,20 +249,10 @@ public class SearchActivity extends AppCompatActivity {
 
         private class KoleksiHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
             private ImageView mBookImage;
-            private TextView mBookTitle, mAuthor, mYearBook, mCategoryBook,mRak;
+            private TextView mBookTitle, mAuthor, mYearBook, mCategoryBook, mRak, mStatus;
+            private CardView mStatusCard;
             private Koleksi mKoleksi;
-/*            public KoleksiHolder(LayoutInflater inflater, ViewGroup parent) {
-                super(inflater.inflate(R.layout.item _detail_books, parent, false));
-                mBookImage = itemView.findViewById(R.id.cover_book_newest);
-                mBookTitle = itemView.findViewById(R.id.title_book);
-                mAuthor = itemView.findViewById(R.id.author_book);
-                mYearBook = itemView.findViewById(R.id.year_book);
-                mCategoryBook = itemView.findViewById(R.id.category_book);
-                mRak = itemView.findViewById(R.id.rak);
-                itemView.setOnClickListener(this);
-            }*/
             public KoleksiHolder(View itemView, int viewType) {
-//                super(inflater.inflate(R.layout.item_detail_books, parent, false));
                 super(itemView);
                 if(viewType == VIEW_ONE){
                     mBookImage = itemView.findViewById(R.id.cover_book_list_view);
@@ -258,7 +260,9 @@ public class SearchActivity extends AppCompatActivity {
                     mAuthor = itemView.findViewById(R.id.author_book);
                     mYearBook = itemView.findViewById(R.id.year_book);
                     mCategoryBook = itemView.findViewById(R.id.category_book);
-                    mRak = itemView.findViewById(R.id.rak);
+                    mRak = itemView.findViewById(R.id.rak_buku_list);
+                    mStatus = itemView.findViewById(R.id.status_text);
+                    mStatusCard = itemView.findViewById(R.id.status_buku_cardView);
                 }else {
                     mBookImage = itemView.findViewById(R.id.cover_book_grid_view);
                     mBookTitle = itemView.findViewById(R.id.title_book_grid_view);
@@ -282,6 +286,13 @@ public class SearchActivity extends AppCompatActivity {
                                 .into(mBookImage);
                     }else {
                         mBookImage.setImageResource(R.drawable.no_cover_book);
+                    }
+                    if(koleksi.getStatuspinjam() == 0){
+                        mStatusCard.setCardBackgroundColor(ContextCompat.getColor(SearchActivity.this, R.color.card_ditolak));
+                        mStatus.setText("Tidak Tersedia");
+                    }else {
+                        mStatusCard.setCardBackgroundColor(ContextCompat.getColor(SearchActivity.this, R.color.card_dipinjam));
+                        mStatus.setText("Tersedia");
                     }
                 }else {
                     mBookTitle.setText(koleksi.getNama());

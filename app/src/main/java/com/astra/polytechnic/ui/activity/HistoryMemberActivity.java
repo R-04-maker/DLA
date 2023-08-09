@@ -36,15 +36,15 @@ import java.util.concurrent.TimeUnit;
 
 public class HistoryMemberActivity extends AppCompatActivity {
 
-    private static final String TAG = "HistoryActivity";
+    private static final String TAG = "HistoryMemberActivity";
     private RecyclerView mRVallBooking;
     private ManagedLoanViewModel mManagedLoanViewModel;
     private List<Object[]> mDataList;
     private View mEmptyData;
     private ImageView mBackButton;
     String email, id_role;
-    Date date,date1,dateAfter14Days,datenow;
-    String formattedDate,resultDateStr,formattedDate1,Denda;
+    Date date,date1,dateAfter14Days,datenow,creada;
+    String formattedDate,resultDateStr,formattedDate1,Denda,formattedDate2;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
     private HistoryMemberActivity.HistoryAdapter mHistoryAdapter = new HistoryMemberActivity.HistoryAdapter(Collections.emptyList());
 
@@ -67,17 +67,16 @@ public class HistoryMemberActivity extends AppCompatActivity {
 
         email = pref.getString("email", null);
         id_role = pref.getString("id_role", null);
-        mManagedLoanViewModel.getHistoryMember(email).observe(this,this::UpdateData);
+    }
 
+    private void getData(){
+        mManagedLoanViewModel.getHistoryMember(email).observe(this,this::UpdateData);
     }
 
     private void UpdateData(List<Object[]> objectList){
-        Log.d(TAG, "UpdateData: " + objectList);
         mDataList = DLAHelper.getAllHistoryMember(objectList);
-
         mHistoryAdapter = new HistoryMemberActivity.HistoryAdapter(mDataList);
         mRVallBooking.setAdapter(mHistoryAdapter);
-
         mEmptyData.setVisibility(mDataList.size() == 0 ? View.VISIBLE : View.GONE);
         mRVallBooking.setVisibility(mDataList.size() == 0 ? View.GONE : View.VISIBLE);
     }
@@ -138,18 +137,23 @@ public class HistoryMemberActivity extends AppCompatActivity {
                 mNIM.setText(booking[11] != null ? booking[11].toString() : "");
                 String tglambil = booking[12].toString();
                 String tglkembali =booking[13].toString();
+                String creadate =booking[5].toString();
                 OffsetDateTime offsettglambil = OffsetDateTime.parse((String) tglambil, inputFormat);
                 OffsetDateTime offsettglambil1 = OffsetDateTime.parse((String) tglkembali, inputFormat);
+                OffsetDateTime offsettglcrea = OffsetDateTime.parse((String) creadate, inputFormat);
                 Instant instant = offsettglambil.toInstant();
                 Instant instant1 = offsettglambil1.toInstant();
+                Instant instant2 = offsettglcrea.toInstant();
                 date = Date.from(instant);
                 date1 = Date.from(instant1);
+                creada = Date.from(instant2);
                 datenow=Date.from(Instant.now());
 
                 formattedDate = offsettglambil.format(outputFormat);
                 formattedDate1 = offsettglambil1.format(outputFormat);
+                formattedDate2 = offsettglcrea.format(outputFormat);
                 mBookID.setText(booking[2] != null ? booking[2].toString() : "");
-
+                mDate.setText(formattedDate2);
                 System.out.println("Parsed Tanggal Ambil: " + date);
                 System.out.println("Parsed Tanggal Kembali: " + date1);
                 Calendar calendar = Calendar.getInstance();
@@ -164,31 +168,26 @@ public class HistoryMemberActivity extends AppCompatActivity {
                 // Mengubah selisih milidetik ke dalam satuan hari
                 long diffInDays = TimeUnit.MILLISECONDS.toDays(diffInMillis);
 
-                if (dateAfter14Days.after(datenow)) {
+                if (date1.equals(dateAfter14Days) || date1.before(dateAfter14Days)) {
                     if (booking[3].toString().equals("Ditolak")) {
                         mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_ditolak));
-                    }  else if (booking[3].toString().equals("Pengajuan")) {
+                    } else if (booking[3].toString().equals("Pengajuan")) {
                         mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_pengajuan));
-                    }
-
-                    if (booking[3].toString().equals("Dipinjam")) {
+                    } else if (booking[3].toString().equals("Dipinjam")) {
                         mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_dipinjam));
-                    } else if(booking[3].toString().equals("Diterima")){
-                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_diterima));
-                    }
-                    if (booking[3].toString().equals("Selesai")) {
+                    } else if (booking[3].toString().equals("Selesai")) {
                         mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_selesai));
-                    } else {
-
+                    }else if (booking[3].toString().equals("Diterima")){
+                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_diterima));
+                    }else if(booking[3].toString().equals("Batal")){
+                        mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_batal));
                     }
                     mStatus.setText(booking[3] != null ? booking[3].toString() : "");
-                    mDate.setText(formattedDate);
-                }
-                else {
-                    System.out.println("Denda");
+                } else {
+                    // Handling the "Denda" case
                     mMaterialCardView.setCardBackgroundColor(ContextCompat.getColor(HistoryMemberActivity.this, R.color.card_ditolak));
                     mStatus.setText("Denda");
-                    mDate.setText(formattedDate);
+                    mDate.setText(formattedDate2);
                 }
             }
 
@@ -202,5 +201,18 @@ public class HistoryMemberActivity extends AppCompatActivity {
     }
     public void onBackButtonClicked(View view) {
         finish();
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d(TAG, "onPause: Called");
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        Log.d(TAG, "onResume: Called");
+        getData();
+        super.onResume();
     }
 }

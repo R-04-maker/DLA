@@ -47,20 +47,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     private RecyclerView mRvNewestBooks, mRvPopularBooks;
     private EditText searchTxt;
     private TextView mBookCount, mVisitorCount, mHistoryCount,mLoginName;
-//    private MaterialTextView mSeeAllReleased,mSeeAllCollection;
-    private TextView mSeeAllReleased,mSeeAllCollection;
-    private LinearLayout mScrollView,mSeeAllLayout;
 
     // Data
     private KoleksiViewModel mNewestViewModel, mNewestColectionVM,mDashboardVM;
-    //    private KoleksiRepository mKoleksiRepository;
     private List<Koleksi> mNewestList, mCollectionList;
     // Get Login Info
     SharedPreferences pref;
     // Adapter
     private NewestAdapter mNewestAdapter = new NewestAdapter(Collections.emptyList());
     private CollectionAdapter mPopularAdapater = new CollectionAdapter(Collections.emptyList());
-
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
@@ -82,10 +77,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
         String namaSp = pref.getString("nama", null);
         int firstName = namaSp.indexOf(' ');
         String nama = (firstName != -1) ? namaSp.substring(0, firstName) : namaSp;
-        Log.d(TAG, "onCreateView: " + nama);
         mLoginName.setText(nama);
-
-        mScrollView = view.findViewById(R.id.scroll);
 
         mBookCount = view.findViewById(R.id.book_count);
         mVisitorCount = view.findViewById(R.id.visitors_count);
@@ -115,14 +107,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mNewestViewModel.getNewest().observe(getViewLifecycleOwner(), this::updateNewestBook);
+        mNewestViewModel.getNewestCollection().observe(getViewLifecycleOwner(), this::updateNewestBook);
         mNewestColectionVM.getNewestReleased().observe(getViewLifecycleOwner(), this::updateNewestCollection);
         mDashboardVM.getDataDashboard().observe(getViewLifecycleOwner(), this::updateDashboard);
     }
 
     private void updateDashboard(List<Object[]> object) {
         Object[] obj = object.get(0);
-        Log.d(TAG, "updateDashboard: " + obj[0].toString());
 
         // Parse values as double instead of int to handle decimal numbers
         double bookCount = Double.parseDouble(obj[0].toString());
@@ -140,14 +131,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
     }
 
     private void updateNewestBook(List<Koleksi> koleksiNewest){
-        Log.d(TAG, "updateNewestBook: "+ koleksiNewest);
         mNewestList = DLAHelper.getNewestBook(koleksiNewest);
         mNewestAdapter = new NewestAdapter(mNewestList);
         mRvNewestBooks.setAdapter(mNewestAdapter);
     }
 
     private void updateNewestCollection(List<Koleksi> koleksiNewest){
-        Log.d(TAG, "updateNewestCollectionBook: "+ koleksiNewest);
         mCollectionList = DLAHelper.getPopularBooks(koleksiNewest);
         mPopularAdapater = new CollectionAdapter(mCollectionList);
         mRvPopularBooks.setAdapter(mPopularAdapater);
@@ -155,9 +144,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-/*        Log.d(TAG, "onClick: Released");
-        Intent intent = new Intent(getActivity(), SearchActivity.class);
-        startActivity(intent);*/
     }
 
     private class NewestAdapter extends RecyclerView.Adapter<NewestAdapter.NewestHolder>{
@@ -223,15 +209,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 intent.putExtra(KEY_EXTRA, mKoleksi.getIdKoleksi());
                 startActivity(intent);
-/*                BookDetailFragment bookDetailFragment = new BookDetailFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("id_koleksi", mKoleksi.getIdKoleksi());
-                bookDetailFragment.setArguments(bundle);
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragmentContainter, bookDetailFragment)
-                        .addToBackStack(null)
-                        .commit();*/
             }
         }
     }
@@ -298,8 +275,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener{
 
             @Override
             public void onClick(View v) {
-//                Toast.makeText(getContext(), mKoleksi.getGambar(), Toast.LENGTH_SHORT).show();
-//                Toast.makeText(getContext(), mKoleksi.getNama(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), BookDetailActivity.class);
                 intent.putExtra("id_koleksi", mKoleksi.getIdKoleksi());
                 startActivity(intent);

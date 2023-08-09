@@ -32,43 +32,48 @@
             </androidx.cardview.widget.CardView>
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="40dp"
                 android:layout_alignBottom="@+id/card_view_book"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
-                android:layout_marginBottom="9dp"
                 android:orientation="vertical"
                 android:gravity="left"
                 android:layout_toEndOf="@+id/card_view_book">
                 <TextView
                     android:id="@+id/title_book_newest"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autoSizeMaxTextSize="15sp"
                     android:autoSizeMinTextSize="10sp"
                     android:autoSizeTextType="uniform"
-                    android:maxLines="1"
+                    android:maxLines="2"
                     android:textStyle="bold"
-                    android:layout_marginTop="10dp"
                     android:layout_marginLeft="10dp"
                     android:fontFamily="@font/inter_variablefont_slnt_wght"
-                    android:gravity="left"
-                    android:text="Sistem Informasi"
+                    android:text="PANDUAN SUKSES KOMUNIKASI BELAJAR-MENGAJAR"
+                    android:textColor="#000000" />
+                <TextView
+                    android:id="@+id/book_id_item_loan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textStyle="italic"
+                    android:textSize="10sp"
+                    android:fontFamily="@font/inter_variablefont_slnt_wght"
+                    android:gravity="center_vertical"
+                    android:text="0120160005"
                     android:textColor="#000" />
-
-
-
                 <TextView
                     android:id="@+id/title_book_kategori"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:autoSizeMaxTextSize="12sp"
                     android:autoSizeMinTextSize="8sp"
                     android:layout_marginLeft="5dp"
                     android:autoSizeTextType="uniform"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:drawableLeft="@drawable/baseline_book_24"
                     android:drawableTint="@color/tab_layout_on"
                     android:fontFamily="@font/inter_variablefont_slnt_wght"

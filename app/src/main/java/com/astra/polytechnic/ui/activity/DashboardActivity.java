@@ -2,7 +2,9 @@ package com.astra.polytechnic.ui.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -17,9 +19,11 @@ import com.astra.polytechnic.ui.fragment.ProfileFragment;
 
 public class DashboardActivity extends AppCompatActivity {
 
+    private static final String TAG = "DashboardActivity";
     // number of selected tab, in this project have 3 tabs so value must lie between 1-3.
     // Default value is 1 because first tab is selected by default.
     private int selectedTab = 1;
+    String role;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +47,11 @@ public class DashboardActivity extends AppCompatActivity {
                 .setReorderingAllowed(true)
                 .replace(R.id.fragmentContainter, HomeFragment.class, null)
                 .commit();
-
+        SharedPreferences pref = getSharedPreferences("nomor", MODE_PRIVATE);
+        role = pref.getString("id_role", null);
+        if(role.equals("ROL01")){
+            loanTxt.setText("Managed Loan");
+        }
         homeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

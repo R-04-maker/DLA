@@ -130,6 +130,33 @@ public class SignUpActivity extends AppCompatActivity {
                 }
             }
         });
+        mnotelp.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String notel = s.toString().trim();
+                String regexPattern = "^(\\d{10,12})?$";
+                if (TextUtils.isEmpty(notel)) {
+                    // Jika notel kosong, tampilkan pesan error
+                    mTeleponLayout.setError("No telepon harus diisi");
+                } else if (!notel.matches(regexPattern)) {
+                    // Jika email tidak valid, tampilkan pesan error
+                    mTeleponLayout.setError("No telepon tidak valid");
+                } else {
+                    // Jika email valid, hilangkan pesan error
+                    mTeleponLayout.setError(null);
+                }
+            }
+        });
         mAutoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -182,7 +209,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else  {
                                 Toast.makeText(SignUpActivity.this, "Email Sudah Digunakan", Toast.LENGTH_SHORT).show();
-                                //finish();
+                                progressDialog.dismiss();
                             }
                         }
                     }

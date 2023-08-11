@@ -96,7 +96,7 @@ public class LoanDetailActivity extends AppCompatActivity {
         colorDitolak = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_ditolak);
         colorPengajuan = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_pengajuan);
         colorDipinjam = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_dipinjam);
-        colorPengajuan = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_selesai);
+        colorSelesai = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_selesai);
         colorBatal = ContextCompat.getColor(LoanDetailActivity.this, R.color.card_batal);
 
         mStatus = findViewById(R.id.loan_status);

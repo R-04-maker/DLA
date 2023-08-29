@@ -16,5 +16,5 @@ Astratech Digital Library - DLA follows a Project-Based Learning approach. This 
 ## Other Information
 - Using MVVM Android Architecture
 - Using Java Spring Boot - Rest API
-&nbsp <p align="left"> <a href="https://github.com/R-04-maker/DLA_api">API Repository</a> </p>
+&nbsp! <p align="left"> <a href="https://github.com/R-04-maker/DLA_api">API Repository</a> </p>
 -  
